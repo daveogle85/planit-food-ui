@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.packageManager": "yarn",
+    "prettier.singleQuote": true,
+    "prettier.endOfLine": "auto",
+    "prettier.arrowParens": "avoid"
+}
