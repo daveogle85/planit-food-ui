@@ -1,13 +1,14 @@
-import React from 'react';
-import { createStore } from 'redux';
 import PropTypes from 'prop-types';
-import { Provider, useSelector } from 'react-redux';
+import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { createStore } from 'redux';
+
+import Auth0Provider, { useAuth0 } from '../../contexts/auth0-context';
 import App from '../App';
 import { Login } from '../Login/Login';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
-import { RootState } from '../../ducks';
 
 const defaultProtectedRouteProps: ProtectedRouteProps = {
   isAuthenticated: false,
@@ -16,16 +17,16 @@ const defaultProtectedRouteProps: ProtectedRouteProps = {
 
 const Root = ({ store }: { store: ReturnType<typeof createStore> }) => (
   <Provider store={store}>
-    <Router>
-      <Routes />
-    </Router>
+    <Auth0Provider>
+      <Router>
+        <Routes />
+      </Router>
+    </Auth0Provider>
   </Provider>
 );
 
 const Routes: React.FC = () => {
-  const isAuthenticated: boolean = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
+  const { isAuthenticated }: { isAuthenticated: boolean } = useAuth0();
   return (
     <>
       <Switch>

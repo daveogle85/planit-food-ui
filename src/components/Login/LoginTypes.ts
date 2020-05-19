@@ -1,1 +1,5 @@
-export type LoginProps = {};
+import { History } from 'history';
+
+export type LoginProps = {
+  history: History;
+};

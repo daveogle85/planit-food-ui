@@ -1,17 +1,27 @@
 import React from 'react';
-import { LoginProps } from './LoginTypes';
 import { useDispatch } from 'react-redux';
-import { setAuth } from '../../ducks/auth/AuthReducer';
-import { useHistory } from 'react-router-dom';
 
-export const Login: React.FC<LoginProps> = () => {
+import { useAuth0 } from '../../contexts/auth0-context';
+import { setAuth } from '../../ducks/auth/AuthReducer';
+import { LoginProps } from './LoginTypes';
+import { withRouter } from 'react-router-dom';
+
+export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const { loginWithRedirect, loading, isAuthenticated } = useAuth0();
+
+  if (isAuthenticated) {
+    props.history.push('/');
+  }
 
   const handleClick = () => {
+    loginWithRedirect({});
     dispatch(setAuth(true));
-    history.push('/');
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -20,3 +30,5 @@ export const Login: React.FC<LoginProps> = () => {
     </div>
   );
 };
+
+export default withRouter(Login);
