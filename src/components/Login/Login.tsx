@@ -24,9 +24,11 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   }
 
   return (
-    <div>
-      <div>This is the login screen</div>
-      <button onClick={handleClick}>Login</button>
+    <div className={props.className}>
+      <div className="login-window">
+        <div className="text">Please login to continue</div>
+        <button onClick={handleClick}>Login</button>
+      </div>
     </div>
   );
 };
