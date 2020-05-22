@@ -1,5 +1,6 @@
 import css from '@emotion/css/macro';
 import styled, { CreateStyled } from '@emotion/styled/macro';
+import { fullScreen } from './common';
 
 export const theme = {
   font: {
@@ -43,8 +44,10 @@ export const theme = {
 
 export const globals = css`
   html,
-  .root body {
+  #root,
+  body {
     height: 100%;
+    ${fullScreen}
   }
 `;
 

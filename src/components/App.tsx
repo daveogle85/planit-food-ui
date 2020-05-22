@@ -1,30 +1,45 @@
-import React from 'react';
-
-import { useAuth0 } from '../contexts/auth0-context';
-import logo from '../logo.svg';
-
 import './App.css';
 
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useAuth0 } from '../contexts/auth0-context';
+import { RootState } from '../ducks';
+import { fetchDayDataForCarousel } from '../ducks/days/DaysReducer';
+import logo from '../logo.svg';
+import NavBar from './NavBar/NavBar';
+
 function App() {
+  const dispatch = useDispatch();
   const { logout, user } = useAuth0();
+  const loadingDays = useSelector((state: RootState) => state.days.loading);
+  const currentDays = useSelector((state: RootState) => state.days.week);
+
+  useEffect(() => {
+    async function fetchDays() {
+      dispatch(fetchDayDataForCarousel());
+    }
+
+    fetchDays();
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
+    <>
+      <NavBar />
+      <div className="App">
         <img src={logo} className="App-logo" alt="logo" />
+        <div>{loadingDays ? `Loading Days!` : 'Loaded Days!'}</div>
+        <br />
+        Current Days are:
+        {currentDays.map(d => (
+          <p>{d}</p>
+        ))}
         <p>
           User {user.name} has been logged in with the email {user.email}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <button onClick={() => logout()}>Logout</button>
-    </div>
+        <button onClick={() => logout()}>Logout</button>
+      </div>
+    </>
   );
 }
 
