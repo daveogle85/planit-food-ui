@@ -24,7 +24,9 @@ export const theme = {
     large: '30px',
   },
   colours: {
+    white: '#fff',
     background: {
+      modalTeal: '#377d73',
       backgroundGrey: '#2b2d2f',
       backgroundWhite: '#fffff7',
       loginButton: '#4db6ac',

@@ -9,8 +9,7 @@ export const styledLogin = (Login: React.ComponentType) => styled(Login)`
   justify-content: center;
   ${fullScreen}
   .login-window {
-    background-color: ${props =>
-      props.theme.colours.background.backgroundWhite};
+    background-color: ${props => props.theme.colours.background.modalTeal};
     border-radius: ${props => props.theme.border.radius.medium};
     display: flex;
     flex-direction: column;
@@ -40,7 +39,7 @@ export const styledLoginButton = (LoginButton: React.ComponentType) => styled(
   ${centerFlex}
   width: 130px;
   height: 30px;
-  background-color: ${props => props.theme.colours.background.loginButton};
+  background-color: ${props => props.theme.colours.background.backgroundGrey};
   border-radius: 7px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -60,17 +59,16 @@ export const styledLoginButton = (LoginButton: React.ComponentType) => styled(
     content: '';
     left: 0;
     justify-content: flex-end;
-    background-color: ${props => props.theme.colours.background.loginButton};
+    background-color: ${props => props.theme.colours.background.backgroundGrey};
   }
   &:after {
     content: '';
     right: 0;
     justify-content: flex-start;
-    background-color: ${props => props.theme.colours.background.loginButton};
+    background-color: ${props => props.theme.colours.background.backgroundGrey};
   }
   &:hover {
-    background-color: ${props =>
-      props.theme.colours.background.loginButtonHover};
+    background-color: ${props => props.theme.colours.white};
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
     span {
       opacity: 0;
