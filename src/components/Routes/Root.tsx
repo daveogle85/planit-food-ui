@@ -11,7 +11,7 @@ import css from '@emotion/css/macro';
 import Auth0Provider, { useAuth0 } from '../../contexts/auth0-context';
 import { theme, globals } from '../../styles/theme';
 import App from '../App';
-import Login from '../Login/StyledLogin';
+import Login from '../Login/Login';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
 

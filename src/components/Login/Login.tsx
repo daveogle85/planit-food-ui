@@ -5,6 +5,9 @@ import { useAuth0 } from '../../contexts/auth0-context';
 import { setAuth } from '../../ducks/auth/AuthReducer';
 import { LoginProps } from './LoginTypes';
 import { withRouter } from 'react-router-dom';
+import { styledLogin, styledLoginButton } from './StyledLogin';
+import Google from '../../images/google';
+import { EmotionProps } from '../../styles/types';
 
 export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const dispatch = useDispatch();
@@ -19,6 +22,17 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
     dispatch(setAuth(true));
   };
 
+  const LoginButtonRaw: React.FC<EmotionProps> = props => (
+    <div className={props.className}>
+      <span>Login With Google</span>
+      <div className="social-link" onClick={handleClick}>
+        <Google />
+      </div>
+    </div>
+  );
+
+  const LoginButton = styledLoginButton(LoginButtonRaw);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -27,10 +41,10 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
     <div className={props.className}>
       <div className="login-window">
         <div className="text">Please login to continue</div>
-        <button onClick={handleClick}>Login</button>
+        <LoginButton />
       </div>
     </div>
   );
 };
 
-export default withRouter(Login);
+export default styledLogin(withRouter(Login));

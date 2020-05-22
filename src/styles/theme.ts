@@ -11,6 +11,9 @@ export const theme = {
       extraBold: 800,
       black: 900,
     },
+    size: {
+      small: '12px',
+    },
   },
   border: {
     radius: {
@@ -24,8 +27,15 @@ export const theme = {
     background: {
       backgroundGrey: '#2b2d2f',
       backgroundWhite: '#fffff7',
+      loginButton: '#4db6ac',
+      loginButtonHover: '#46627f',
+      whitesmoke: '#f5f5f5',
     },
     text: { pink: 'hotpink' },
+  },
+  zIndex: {
+    one: 1,
+    two: 2,
   },
 };
 

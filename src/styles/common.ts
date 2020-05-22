@@ -6,3 +6,9 @@ export const fullScreen = css`
   left: 0;
   right: 0;
 `;
+
+export const centerFlex = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
