@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { useAuth0 } from '../../contexts/auth0-context';
 import { setAuth } from '../../ducks/auth/AuthReducer';
-import { LoginProps } from './LoginTypes';
-import { withRouter } from 'react-router-dom';
-import { styledLogin, styledLoginButton } from './StyledLogin';
 import Google from '../../images/google';
 import { EmotionProps } from '../../styles/types';
+import { LoginProps } from './LoginTypes';
+import { styledLogin, styledLoginButton } from './StyledLogin';
 
 export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const dispatch = useDispatch();

@@ -12,3 +12,7 @@ export const centerFlex = css`
   align-items: center;
   justify-content: center;
 `;
+
+export const pointer = css`
+  cursor: pointer;
+`;

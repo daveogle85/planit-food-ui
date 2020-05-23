@@ -11,7 +11,7 @@ import NavBar from './NavBar/NavBar';
 
 function App() {
   const dispatch = useDispatch();
-  const { logout, user } = useAuth0();
+  const { user } = useAuth0();
   const loadingDays = useSelector((state: RootState) => state.days.loading);
   const currentDays = useSelector((state: RootState) => state.days.week);
 
@@ -37,7 +37,6 @@ function App() {
         <p>
           User {user.name} has been logged in with the email {user.email}
         </p>
-        <button onClick={() => logout()}>Logout</button>
       </div>
     </>
   );

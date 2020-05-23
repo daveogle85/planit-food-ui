@@ -1,7 +1,9 @@
 import styled from '../../styles/theme';
 import { navBar } from '../../styles/heights';
+import { centerFlex } from '../../styles/common';
 
-// TODO tidy this to use vars from theme
+const profilePicSize = '50px';
+
 export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
   position: relative;
   display: flex;
@@ -22,34 +24,43 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
     padding-left: 40px;
     li {
       list-style-type: none;
-      padding: 0 4px;
       height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      min-width: 30px;
+      ${centerFlex}
+    }
+    li:hover:not(.app-title) {
+      background-color: ${props => props.theme.colours.background.hoverGrey};
+    }
+    .dd-profile {
+      position: absolute;
+      right: 40px;
     }
   }
 `;
 
 export const styledProfile = (Profile: React.ComponentType) =>
   styled(Profile)`
-    position: absolute;
     cursor: pointer;
-    right: 40px;
+    display: flex;
+    padding: 0 ${props => props.theme.spacing.small};
     div {
       display: flex;
       align-items: center;
     }
     .details {
+      display: none;
       align-items: flex-start;
       flex-direction: column;
     }
-    img {
-      padding-right: 8px;
-      width: 50px;
-      border-radius: 50%;
+    ${props => props.theme.mediaQueries[0]} {
+      .details {
+        display: flex;
+      }
     }
-    &:hover {
-      background-color: #f1f1f1;
+    img {
+      padding-right: ${props => props.theme.spacing.small};
+      width: ${profilePicSize};
+      height: ${profilePicSize};
+      border-radius: 50%;
     }
   `;
