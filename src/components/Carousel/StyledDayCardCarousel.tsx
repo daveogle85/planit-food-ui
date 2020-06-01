@@ -1,6 +1,5 @@
 import styled from '../../styles/theme';
 import { fullScreen } from '../../styles/common';
-// import css from '@emotion/css/macro';
 
 export const styleDayCardCarousel = (DayCardCarousel: React.ComponentType) =>
   styled(DayCardCarousel)`
