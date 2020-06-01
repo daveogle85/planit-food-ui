@@ -8,6 +8,7 @@ export const colours = {
     loginButtonHover: '#46627f',
     hoverGrey: '#f1f1f1',
     whitesmoke: '#f5f5f5',
+    mealCardBlue: '#e6fcff',
   },
   text: { pink: 'hotpink' },
 };

@@ -1,19 +1,21 @@
-import './App.css';
-
+import classNames from 'classnames';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useAuth0 } from '../contexts/auth0-context';
 import { RootState } from '../ducks';
 import { fetchDayDataForCarousel } from '../ducks/days/DaysReducer';
-import logo from '../logo.svg';
+import { EmotionProps } from '../styles/types';
+import DayCardCarousel from './Carousel/DayCardCarousel';
 import NavBar from './NavBar/NavBar';
+import { styledApp } from './StyledApp';
 
-function App() {
+const App: React.FC<EmotionProps> = props => {
   const dispatch = useDispatch();
-  const { user } = useAuth0();
   const loadingDays = useSelector((state: RootState) => state.days.loading);
-  const currentDays = useSelector((state: RootState) => state.days.week);
+  const days = useSelector(
+    (state: RootState) =>
+      state.days.week.map(d => ({ ...d, date: new Date(d.date) })) // TODO find a nicer way of doing this - posibly with reselect
+  );
 
   useEffect(() => {
     async function fetchDays() {
@@ -22,24 +24,14 @@ function App() {
 
     fetchDays();
   }, [dispatch]);
-
   return (
     <>
       <NavBar />
-      <div className="App">
-        <img src={logo} className="App-logo" alt="logo" />
-        <div>{loadingDays ? `Loading Days!` : 'Loaded Days!'}</div>
-        <br />
-        Current Days are:
-        {currentDays.map(d => (
-          <p>{d}</p>
-        ))}
-        <p>
-          User {user.name} has been logged in with the email {user.email}
-        </p>
+      <div className={classNames('App', props.className)}>
+        {loadingDays ? <div>Loading...</div> : <DayCardCarousel days={days} />}
       </div>
     </>
   );
-}
+};
 
-export default App;
+export default styledApp(App);

@@ -33,7 +33,7 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
     }
     .dd-profile {
       position: absolute;
-      right: 40px;
+      right: ${props => props.theme.spacing.xLarge};
     }
   }
 `;

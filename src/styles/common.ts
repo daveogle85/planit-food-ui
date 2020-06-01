@@ -7,6 +7,15 @@ export const fullScreen = css`
   right: 0;
 `;
 
+export const fullScreenRelative = (
+  heightOffset = '0px',
+  widthOffset = '0px'
+) => css`
+  position: relative;
+  height: calc(100% - ${heightOffset});
+  width: calc(100% - ${widthOffset});
+`;
+
 export const centerFlex = css`
   display: flex;
   align-items: center;

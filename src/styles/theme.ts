@@ -3,7 +3,12 @@ import styled, { CreateStyled } from '@emotion/styled/macro';
 import { fullScreen } from './common';
 import { colours } from './colours';
 
-export const breakpoints = [576, 768, 992, 1200];
+export const breakpoints = {
+  smallMobile: 576,
+  largeMobile: 768,
+  tablet: 992,
+  desktop: 1200,
+};
 
 export const theme = {
   font: {
@@ -27,14 +32,18 @@ export const theme = {
   },
   spacing: {
     small: '8px',
+    medium: '20px',
     large: '30px',
+    xLarge: '40px',
   },
   colours,
   zIndex: {
     one: 1,
     two: 2,
   },
-  mediaQueries: breakpoints.map(bp => `@media (min-width: ${bp}px)`),
+  mediaQueries: Object.values(breakpoints).map(
+    bp => `@media (min-width: ${bp}px)`
+  ),
 };
 
 export const globals = css`

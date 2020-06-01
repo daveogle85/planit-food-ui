@@ -1,8 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppThunk } from '..';
 import getDaysByRange from '../../api/day';
+import { ApiDay } from '../../api/types';
 
-const initialState = {
+type DaysSlice = {
+  loading: boolean;
+  data: Array<ApiDay>;
+  week: Array<ApiDay>;
+};
+
+const initialState: DaysSlice = {
   loading: false,
   data: [],
   week: [],
@@ -32,6 +39,7 @@ export const fetchDayDataForCarousel = (): AppThunk => async dispatch => {
   try {
     const days = await getDaysByRange();
     dispatch(setData(days));
+    dispatch(setWeek(days)); // TODO
     // const repoDetails = await getRepoDetails(org, repo);
     // dispatch(getRepoDetailsSuccess(repoDetails));
   } catch (err) {
