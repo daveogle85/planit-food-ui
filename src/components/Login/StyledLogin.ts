@@ -1,22 +1,19 @@
-import { fullScreen, centerFlex } from '../../styles/common';
-import styled from '../../styles/theme';
+import { centerFlex, fullScreen, pointer } from '../../styles/common';
 import { bounce } from '../../styles/keyframes';
+import styled from '../../styles/theme';
+import { loginButtonDim, loginModalDim } from '../../styles/heights';
 
 export const styledLogin = (Login: React.ComponentType) => styled(Login)`
   background-color: ${props => props.theme.colours.background.backgroundGrey};
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${centerFlex}
   ${fullScreen}
   .login-window {
     background-color: ${props => props.theme.colours.background.modalTeal};
     border-radius: ${props => props.theme.border.radius.medium};
-    display: flex;
+    ${centerFlex}
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 300px;
-    height: 500px;
+    width: ${loginModalDim.width};
+    height: ${loginModalDim.height};
 
     .text {
       margin-bottom: ${props => props.theme.spacing.large};
@@ -34,13 +31,13 @@ export const styledLoginButton = (LoginButton: React.ComponentType) => styled(
     outline: none;
   }
 
-  cursor: pointer;
+  ${pointer};
   position: relative;
   ${centerFlex}
-  width: 130px;
-  height: 30px;
+  width: ${loginButtonDim.width};
+  height: ${loginButtonDim.height};
   background-color: ${props => props.theme.colours.background.backgroundGrey};
-  border-radius: 7px;
+  border-radius: ${props => props.theme.border.radius.medium};
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;

@@ -50,7 +50,6 @@ export class Auth0Provider extends Component<{}, IState> {
 
   // initialize the auth0 library
   initializeAuth0 = async () => {
-    console.log('LOADING');
     const auth0Client = await createAuth0Client(this.config);
     this.setState({ auth0Client });
     // check to see if they have been redirected after login

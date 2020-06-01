@@ -1,5 +1,14 @@
 import css from '@emotion/css/macro';
 import styled, { CreateStyled } from '@emotion/styled/macro';
+import { fullScreen } from './common';
+import { colours } from './colours';
+
+export const breakpoints = {
+  smallMobile: 576,
+  largeMobile: 768,
+  tablet: 992,
+  desktop: 1200,
+};
 
 export const theme = {
   font: {
@@ -19,32 +28,30 @@ export const theme = {
     radius: {
       medium: '0.3em',
     },
+    thin: `1px solid ${colours.background.backgroundGrey}`,
   },
   spacing: {
+    small: '8px',
+    medium: '20px',
     large: '30px',
+    xLarge: '40px',
   },
-  colours: {
-    white: '#fff',
-    background: {
-      modalTeal: '#377d73',
-      backgroundGrey: '#2b2d2f',
-      backgroundWhite: '#fffff7',
-      loginButton: '#4db6ac',
-      loginButtonHover: '#46627f',
-      whitesmoke: '#f5f5f5',
-    },
-    text: { pink: 'hotpink' },
-  },
+  colours,
   zIndex: {
     one: 1,
     two: 2,
   },
+  mediaQueries: Object.values(breakpoints).map(
+    bp => `@media (min-width: ${bp}px)`
+  ),
 };
 
 export const globals = css`
   html,
-  .root body {
+  #root,
+  body {
     height: 100%;
+    ${fullScreen}
   }
 `;
 

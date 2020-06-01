@@ -1,31 +1,37 @@
-import React from 'react';
+import classNames from 'classnames';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useAuth0 } from '../contexts/auth0-context';
-import logo from '../logo.svg';
+import { RootState } from '../ducks';
+import { fetchDayDataForCarousel } from '../ducks/days/DaysReducer';
+import { EmotionProps } from '../styles/types';
+import DayCardCarousel from './Carousel/DayCardCarousel';
+import NavBar from './NavBar/NavBar';
+import { styledApp } from './StyledApp';
 
-import './App.css';
-
-function App() {
-  const { logout, user } = useAuth0();
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          User {user.name} has been logged in with the email {user.email}
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <button onClick={() => logout()}>Logout</button>
-    </div>
+const App: React.FC<EmotionProps> = props => {
+  const dispatch = useDispatch();
+  const loadingDays = useSelector((state: RootState) => state.days.loading);
+  const days = useSelector(
+    (state: RootState) =>
+      state.days.week.map(d => ({ ...d, date: new Date(d.date) })) // TODO find a nicer way of doing this - posibly with reselect
   );
-}
 
-export default App;
+  useEffect(() => {
+    async function fetchDays() {
+      dispatch(fetchDayDataForCarousel());
+    }
+
+    fetchDays();
+  }, [dispatch]);
+  return (
+    <>
+      <NavBar />
+      <div className={classNames('App', props.className)}>
+        {loadingDays ? <div>Loading...</div> : <DayCardCarousel days={days} />}
+      </div>
+    </>
+  );
+};
+
+export default styledApp(App);
