@@ -1,0 +1,440 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Week View renders correctly 1`] = `
+Array [
+  .emotion-4 {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  height: 70px;
+  box-shadow: 4px 0 12px -6px gray,-4px 0 12px -6px gray;
+  list-style-type: none;
+}
+
+.emotion-4 ul {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding-left: 40px;
+}
+
+.emotion-4 ul li {
+  cursor: pointer;
+  list-style-type: none;
+  height: 100%;
+  min-width: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.emotion-4 ul li:hover:not(.app-title) {
+  background-color: #f1f1f1;
+}
+
+.emotion-4 ul .app-title {
+  white-space: nowrap;
+}
+
+.emotion-4 ul .dd-menu-items {
+  position: relative;
+  height: calc(100% - 0px);
+  width: calc(100% - 0px);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+.emotion-4 ul .dd-menu-items li:not(.dd-list-item) {
+  margin-right: 8px;
+}
+
+.emotion-1 {
+  height: 100%;
+  position: relative;
+}
+
+.emotion-1 .dd-header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+}
+
+.emotion-1 .dd-header-title {
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.emotion-1 li:hover {
+  background-color: #46627f;
+}
+
+.emotion-1 .dd-list {
+  z-index: 1;
+  background-color: #fff;
+  position: absolute;
+  padding: 0;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  display: none;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 100%;
+  border: 1px solid #2b2d2f;
+  border-radius: 0.3em;
+}
+
+.emotion-1 .dd-list.dd-open {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.emotion-1 .dd-list.dd-oob {
+  right: 0;
+}
+
+.emotion-1 .dd-list li {
+  cursor: pointer;
+  border-radius: 0.3em;
+  padding: 0 8px;
+  width: -webkit-fill-available;
+  width: -moz-available;
+  width: fill-available;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 30px;
+  line-height: 30px;
+}
+
+.emotion-0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 0 8px;
+}
+
+.emotion-0 .add-text {
+  display: none;
+}
+
+.emotion-0 span {
+  position: relative;
+  display: inline-block;
+  border: 2px solid #9b9797;
+  width: 40px;
+  height: 40px;
+  border-radius: 2em;
+}
+
+@media (min-width:768px) {
+  .emotion-0 span {
+    margin-right: 8px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.emotion-0 span:before {
+  content: '';
+  left: 5px;
+  right: 5px;
+  position: absolute;
+  background-color: #9b9797;
+  top: 50%;
+  height: 2px;
+}
+
+.emotion-0 span:after {
+  content: '';
+  top: 5px;
+  bottom: 5px;
+  position: absolute;
+  background-color: #9b9797;
+  left: 50%;
+  width: 2px;
+}
+
+@media (min-width:768px) {
+  .emotion-0 .add-text {
+    display: block;
+  }
+}
+
+.emotion-2 {
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 8px;
+}
+
+.emotion-2 div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-2 .details {
+  display: none;
+  font-weight: 300;
+  font-size: 15px;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+@media (min-width:768px) {
+  .emotion-2 .details {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+
+.emotion-2 img {
+  width: 40px;
+  height: 40px;
+  border-radius: 2em;
+}
+
+@media (min-width:768px) {
+  .emotion-2 img {
+    margin-right: 8px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+<nav
+    className="emotion-4"
+  >
+    <ul
+      className="menu"
+    >
+      <li
+        className="app-title"
+        onClick={[Function]}
+      >
+        Planit Food App
+      </li>
+      <div
+        className="dd-menu-items"
+      >
+        <li
+          className="dd-add"
+        >
+          <div
+            className="dd-wrapper emotion-1"
+          >
+            <div
+              className="dd-header"
+              onClick={[Function]}
+            >
+              <div
+                className="emotion-0"
+                title="Add Options"
+              >
+                <span />
+                <div
+                  className="add-text"
+                >
+                  Add
+                </div>
+              </div>
+            </div>
+            <div>
+              <ul
+                className="dd-list"
+              >
+                <li
+                  className="dd-list-item"
+                  onClick={[Function]}
+                >
+                  Add A Meal
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li
+          className="dd-profile"
+        >
+          <div
+            className="dd-wrapper emotion-1"
+          >
+            <div
+              className="dd-header"
+              onClick={[Function]}
+            >
+              <div
+                className="emotion-2"
+                title="Logout"
+              >
+                <img
+                  alt="Avatar"
+                  src=""
+                />
+                <div
+                  className="details"
+                >
+                  <span />
+                  <span />
+                </div>
+              </div>
+            </div>
+            <div>
+              <ul
+                className="dd-list"
+              >
+                <li
+                  className="dd-list-item"
+                  onClick={[Function]}
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </div>
+    </ul>
+  </nav>,
+  .emotion-1 {
+  position: relative;
+  height: calc(100% - 70px);
+  width: calc(100% - 0px);
+  position: relative;
+  height: calc(100% - 70px);
+  width: calc(100% - 0px);
+}
+
+.emotion-0 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 20px;
+  border-radius: 0.3em;
+}
+
+.emotion-0 .react-multi-carousel-track {
+  height: 100%;
+}
+
+.emotion-0 .react-multi-carousel-item {
+  height: 90%;
+}
+
+.emotion-0 .react-multiple-carousel__arrow {
+  bottom: 0;
+}
+
+.emotion-0 .react-multiple-carousel__arrow--right {
+  right: 0;
+}
+
+.emotion-0 .react-multiple-carousel__arrow--left {
+  left: 0;
+}
+
+<div
+    className="WeekView emotion-1"
+  >
+    <div
+      className="react-multi-carousel-list carousel-container emotion-0"
+    >
+      <ul
+        className="react-multi-carousel-track "
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseMove={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "overflow": "unset",
+            "transform": "translate3d(0px,0,0)",
+            "transition": "none",
+          }
+        }
+      />
+    </div>
+  </div>,
+]
+`;

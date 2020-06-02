@@ -1,5 +1,5 @@
 import React from 'react';
-import { getDayOfWeek, parseDateAsFormattedString } from './date';
+import { getDayOfWeek, parseDateAsFormattedString } from '../helpers/date';
 
 describe('date', () => {
   test('getDayOfWeek', () => {

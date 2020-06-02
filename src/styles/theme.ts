@@ -10,6 +10,17 @@ export const breakpoints = {
   desktop: 1200,
 };
 
+const getMediaQueries = (): { [k in keyof typeof breakpoints]: string } => {
+  const mq: { [key in keyof typeof breakpoints]: string } = {} as {
+    [k in keyof typeof breakpoints]: string;
+  };
+  Object.keys(breakpoints).forEach((key: string) => {
+    const typedKey = key as keyof typeof breakpoints;
+    mq[typedKey] = `@media (min-width: ${breakpoints[typedKey]}px)`;
+  });
+  return mq;
+};
+
 export const theme = {
   font: {
     weight: {
@@ -22,11 +33,14 @@ export const theme = {
     },
     size: {
       small: '12px',
+      medium: '15px',
+      large: '20px',
     },
   },
   border: {
     radius: {
       medium: '0.3em',
+      full: '2em',
     },
     thin: `1px solid ${colours.background.backgroundGrey}`,
   },
@@ -41,9 +55,7 @@ export const theme = {
     one: 1,
     two: 2,
   },
-  mediaQueries: Object.values(breakpoints).map(
-    bp => `@media (min-width: ${bp}px)`
-  ),
+  mediaQueries: getMediaQueries(),
 };
 
 export const globals = css`
@@ -52,6 +64,10 @@ export const globals = css`
   body {
     height: 100%;
     ${fullScreen}
+  }
+
+  input[type='text'] {
+    border-radius: ${theme.border.radius.medium};
   }
 `;
 

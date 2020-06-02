@@ -5,6 +5,7 @@ import useOutsideAlerter from '../../helpers/clickedOutside';
 import { EmotionProps } from '../../styles/types';
 import { DropdownProps } from './DropdownTypes';
 import { styleDropdown } from './StyledDropdown';
+import { useOutOfBounds } from '../../helpers/outOfBounds';
 
 const useDropdown = (props: DropdownProps) => {
   const { label, defaultState = '', onSelect, options } = props;
@@ -24,6 +25,7 @@ const useDropdown = (props: DropdownProps) => {
   };
   const Dropdownmaker = (props: EmotionProps) => {
     const dropdownRef = useRef(null);
+    const [listRef, isOutOfBounds] = useOutOfBounds();
     useOutsideAlerter(dropdownRef, () => setIsOpen(false));
     return (
       <div
@@ -37,7 +39,9 @@ const useDropdown = (props: DropdownProps) => {
           <ul
             className={classNames('dd-list', {
               'dd-open': isOpen,
+              'dd-oob': isOutOfBounds,
             })}
+            ref={listRef as any}
           >
             {options.map(o => (
               <li className="dd-list-item" onClick={handleItemClick} key={o}>

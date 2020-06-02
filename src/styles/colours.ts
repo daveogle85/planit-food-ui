@@ -3,6 +3,7 @@ export const colours = {
   background: {
     modalTeal: '#377d73',
     backgroundGrey: '#2b2d2f',
+    darkGrey: '#9b9797',
     backgroundWhite: '#fffff7',
     loginButton: '#4db6ac',
     loginButtonHover: '#46627f',

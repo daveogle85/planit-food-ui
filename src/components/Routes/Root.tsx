@@ -10,10 +10,11 @@ import css from '@emotion/css/macro';
 
 import Auth0Provider, { useAuth0 } from '../../contexts/auth0-context';
 import { theme, globals } from '../../styles/theme';
-import App from '../App';
+import WeekView from '../../weekView/WeekView';
 import Login from '../Login/Login';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
+import AddMeal from '../../addMeal/AddMeal';
 
 const defaultProtectedRouteProps: ProtectedRouteProps = {
   isAuthenticated: false,
@@ -48,7 +49,14 @@ const Routes: React.FC = () => {
           isAuthenticated={isAuthenticated}
           exact={true}
           path="/"
-          component={App}
+          component={WeekView}
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          isAuthenticated={isAuthenticated}
+          exact={true}
+          path="/addMeal"
+          component={AddMeal}
         />
         <Route exact path="/login" component={Login} />
         <Route render={() => <div> Sorry, this page does not exist. </div>} />
