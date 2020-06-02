@@ -1,5 +1,6 @@
-import styled, { Theme } from '../../styles/theme';
+import styled from '../../styles/theme';
 import css from '@emotion/css/macro';
+import { CssProps } from '../../styles/types';
 
 const header = css`
   header {
@@ -7,7 +8,7 @@ const header = css`
   }
 `;
 
-const main = (props: { theme: Theme }) => css`
+const main = (props: CssProps) => css`
   .dc-main {
     margin-left: ${props.theme.spacing.large};
   }

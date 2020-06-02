@@ -1,12 +1,13 @@
-import styled, { Theme } from '../../styles/theme';
+import styled from '../../styles/theme';
 import css from '@emotion/css/macro';
 import { pointer } from '../../styles/common';
 import { listItem } from '../../styles/heights';
+import { CssProps } from '../../styles/types';
 
-const dropdownList = (theme: Theme) => css`
+const dropdownList = (props: CssProps) => css`
   .dd-list {
-    z-index: 1;
-    background-color: ${theme.colours.white};
+    z-index: ${props.theme.zIndex.one};
+    background-color: ${props.theme.colours.white};
     position: absolute;
     padding: 0;
     align-items: flex-start;
@@ -14,15 +15,18 @@ const dropdownList = (theme: Theme) => css`
     flex-direction: column;
     width: max-content;
     min-width: 100%;
-    border: ${theme.border.thin};
-    border-radius: ${theme.border.radius.medium};
+    border: ${props.theme.border.thin};
+    border-radius: ${props.theme.border.radius.medium};
     &.dd-open {
       display: flex;
     }
+    &.dd-oob {
+      right: 0;
+    }
     li {
       ${pointer}
-      border-radius: ${theme.border.radius.medium};
-      padding: 0 ${theme.spacing.small};
+      border-radius: ${props.theme.border.radius.medium};
+      padding: 0 ${props.theme.spacing.small};
       width: fill-available;
       display: flex;
       justify-content: flex-start;
@@ -50,5 +54,5 @@ export const styleDropdown = (Dropdown: React.ComponentType) =>
       background-color: ${props =>
         props.theme.colours.background.loginButtonHover};
     }
-    ${props => dropdownList(props.theme)}
+    ${dropdownList}
   `;
