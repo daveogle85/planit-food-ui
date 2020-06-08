@@ -3,19 +3,18 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../ducks';
-import { fetchDayDataForCarousel } from '../ducks/days/DaysReducer';
+import { fetchDayDataForCarousel, selectors } from '../ducks/days/DaysReducer';
 import { EmotionProps } from '../styles/types';
 import DayCardCarousel from '../components/Carousel/DayCardCarousel';
 import NavBar from '../components/NavBar/NavBar';
 import { styledWeekView } from './StyledWeekView';
+import LoadingSpinner from '../components/Spinner/Spinner';
 
 const WeekView: React.FC<EmotionProps> = props => {
   const dispatch = useDispatch();
-  const loadingDays = useSelector((state: RootState) => state.days.loading);
-  const days = useSelector(
-    (state: RootState) =>
-      state.days.week.map(d => ({ ...d, date: new Date(d.date) })) // TODO find a nicer way of doing this - posibly with reselect
-  );
+  const loadingDays = useSelector(selectors.selectLoading);
+  const days = useSelector(selectors.selectWeek);
+  const token = useSelector((state: RootState) => state.auth.token);
 
   useEffect(() => {
     async function fetchDays() {
@@ -23,12 +22,12 @@ const WeekView: React.FC<EmotionProps> = props => {
     }
 
     fetchDays();
-  }, [dispatch]);
+  }, [dispatch, token]);
   return (
     <>
       <NavBar />
       <div className={classNames('WeekView', props.className)}>
-        {loadingDays ? <div>Loading...</div> : <DayCardCarousel days={days} />}
+        {loadingDays ? <LoadingSpinner /> : <DayCardCarousel days={days} />}
       </div>
     </>
   );

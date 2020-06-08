@@ -10,3 +10,5 @@ export const loginModalDim = {
   height: '500px',
   width: '300px',
 };
+export const spinnerBubbleHeight = '13px';
+export const spinnerBoxHeight = '80px';

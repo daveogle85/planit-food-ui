@@ -2,62 +2,73 @@ import { ThemeProvider } from 'emotion-theming';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useHistory,
+} from 'react-router-dom';
 import { createStore } from 'redux';
 
 import { Global } from '@emotion/core';
 import css from '@emotion/css/macro';
 
-import Auth0Provider, { useAuth0 } from '../../contexts/auth0-context';
-import { theme, globals } from '../../styles/theme';
+import AddMeal from '../../addMeal/AddMeal';
+import Auth0Provider from '../../contexts/auth0-context';
+import { globals, theme } from '../../styles/theme';
 import WeekView from '../../weekView/WeekView';
 import Login from '../Login/Login';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
-import AddMeal from '../../addMeal/AddMeal';
+import { CheckAuth } from './CheckAuth';
+
+const CallBack: React.FC = props => {
+  let history = useHistory();
+  setTimeout(() => history.push('/'));
+  return <div>Authorized. Redirecting...</div>;
+};
 
 const defaultProtectedRouteProps: ProtectedRouteProps = {
-  isAuthenticated: false,
   authenticationPath: '/login',
 };
 
 const Root = ({ store }: { store: ReturnType<typeof createStore> }) => (
-  <Provider store={store}>
-    <Global
-      styles={css`
-        font-family: 'Nunito Sans', sans-serif;
-        ${globals}
-      `}
-    />
-    <ThemeProvider theme={theme}>
-      <Auth0Provider>
-        <Router>
-          <Routes />
-        </Router>
-      </Auth0Provider>
-    </ThemeProvider>
-  </Provider>
+  <Auth0Provider>
+    <Provider store={store}>
+      <Global
+        styles={css`
+          font-family: 'Nunito Sans', sans-serif;
+          ${globals}
+        `}
+      />
+      <ThemeProvider theme={theme}>
+        <CheckAuth>
+          <Router>
+            <Routes />
+          </Router>
+        </CheckAuth>
+      </ThemeProvider>
+    </Provider>
+  </Auth0Provider>
 );
 
 const Routes: React.FC = () => {
-  const { isAuthenticated }: { isAuthenticated: boolean } = useAuth0();
   return (
     <>
       <Switch>
         <ProtectedRoute
           {...defaultProtectedRouteProps}
-          isAuthenticated={isAuthenticated}
           exact={true}
           path="/"
           component={WeekView}
         />
         <ProtectedRoute
           {...defaultProtectedRouteProps}
-          isAuthenticated={isAuthenticated}
           exact={true}
           path="/addMeal"
           component={AddMeal}
         />
+        <Route path="/callback" component={CallBack} />
         <Route exact path="/login" component={Login} />
         <Route render={() => <div> Sorry, this page does not exist. </div>} />
       </Switch>

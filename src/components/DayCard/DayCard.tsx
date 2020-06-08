@@ -17,11 +17,11 @@ const DayCard: React.FC<DayCardProps> = (props: DayCardProps) => {
         </h1>
       </header>
       <div className="dc-main">
-        <div>Meal</div>
+        <div>{props.meal.name}</div>
         <ul className="dc-dishes">
-          <li>Dish 1</li>
-          <li>Dish 2</li>
-          <li>Dish 3</li>
+          {props.meal.dishes?.map(dish => (
+            <li key={dish.id}>{dish.name}</li>
+          ))}
         </ul>
       </div>
     </div>

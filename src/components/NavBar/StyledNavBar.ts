@@ -67,9 +67,10 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
   right: 0;
   padding: 0;
   height: ${navBar};
-  box-shadow: 4px 0 12px -6px gray, -4px 0 12px -6px gray;
+  box-shadow: 4px 0 12px -6px ${props => props.theme.colours.black},
+    -4px 0 12px -6px ${props => props.theme.colours.black};
   list-style-type: none;
-
+  z-index: ${props => props.theme.zIndex.one};
   ul {
     display: flex;
     align-items: center;

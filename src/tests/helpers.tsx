@@ -15,3 +15,16 @@ export function renderWithTheme(component: any, store?: Object) {
     </Provider>
   );
 }
+
+export const mockDate = (currentDate: Date) => {
+  global.Date = class extends Date {
+    constructor(date: Date) {
+      if (date) {
+        super(date);
+        return this;
+      }
+
+      return currentDate;
+    }
+  } as DateConstructor;
+};
