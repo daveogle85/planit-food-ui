@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '..';
 import getDaysByRange from '../../api/day';
 import { Day, DayRange } from '../../api/types/DayTypes';
-import requestWithToken from '../../api/auth';
 import { dateToISOString } from '../../helpers/date';
 import { authSelectors } from '../auth/AuthReducer';
 
