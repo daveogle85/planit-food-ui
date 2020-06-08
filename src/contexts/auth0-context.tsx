@@ -25,7 +25,8 @@ interface IState {
   auth0Client: any;
   isLoading: boolean;
   isAuthenticated: boolean;
-  user?: any;
+  token: any;
+  user: any;
 }
 
 export class Auth0Provider extends Component<{}, IState> {
@@ -35,12 +36,14 @@ export class Auth0Provider extends Component<{}, IState> {
       isLoading: true,
       isAuthenticated: false,
       user: null,
+      token: null,
       auth0Client: Auth0Client,
     };
   }
   config: Auth0ClientOptions = {
     domain: `${process.env.REACT_APP_AUTH0_DOMAIN}`,
     client_id: `${process.env.REACT_APP_AUTH0_CLIENT_ID}`,
+    audience: `${process.env.REACT_APP_AUTH0_AUDIENCE}`,
     redirect_uri: `${process.env.REACT_APP_AUTH0_REDIRECT_URI}`,
   };
 
@@ -58,26 +61,35 @@ export class Auth0Provider extends Component<{}, IState> {
     }
     const isAuthenticated = await auth0Client.isAuthenticated();
     const user = isAuthenticated ? await auth0Client.getUser() : null;
-    this.setState({ isLoading: false, isAuthenticated, user });
+    const token = isAuthenticated ? await auth0Client.getTokenSilently() : null;
+    this.setState({ isLoading: false, isAuthenticated, token, user });
   };
 
   handleRedirectCallback = async () => {
     this.setState({ isLoading: true });
     await this.state.auth0Client.handleRedirectCallback();
     const user = await this.state.auth0Client.getUser();
-    this.setState({ user, isAuthenticated: true, isLoading: false });
+    const token = await this.state.auth0Client.getTokenSilently();
+    this.setState({
+      token,
+      user,
+      isAuthenticated: true,
+      isLoading: false,
+    });
     window.history.replaceState({}, document.title, window.location.pathname);
   };
 
   render() {
-    const { auth0Client, isLoading, isAuthenticated, user } = this.state;
+    const { auth0Client, isLoading, isAuthenticated, token, user } = this.state;
     const { children } = this.props;
     const configObject = {
       isLoading,
       isAuthenticated,
+      token,
       user,
       loginWithRedirect: (...p: any) => auth0Client.loginWithRedirect(...p),
-      getTokenSilently: (...p: any) => auth0Client.getTokenSilently(...p),
+      getTokenSilently: (...p: any) =>
+        auth0Client.getTokenSilently(...p, { audience: this.config.audience }),
       getIdTokenClaims: (...p: any) => auth0Client.getIdTokenClaims(...p),
       logout: (...p: any) => auth0Client.logout(...p),
     };

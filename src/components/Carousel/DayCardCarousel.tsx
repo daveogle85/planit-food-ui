@@ -45,9 +45,11 @@ const DayCardCarousel: React.FC<DayCardCarouselProps> = (
     dotListClass="custom-dot-list-style"
     itemClass="carousel-item"
   >
-    {props.days.map(day => (
-      <DayCard key={day.date.toString()} date={day.date} />
-    ))}
+    {props.days
+      .filter(d => d.date != null)
+      .map(day => (
+        <DayCard key={day.id} date={new Date(day.date!)} meal={day.meal} />
+      ))}
   </Carousel>
 );
 

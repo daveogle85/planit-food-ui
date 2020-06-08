@@ -1,15 +1,13 @@
-import { ApiDay } from './types';
+import { Day, DayRange } from './types/DayTypes';
+import { get } from './helpers/http';
 
-const getDaysByRange = (): Promise<Array<ApiDay>> =>
-  new Promise((res, rej) => {
-    let today = new Date();
-    const days: Array<ApiDay> = [{ date: today.toISOString() }];
-    for (let i = 1; i < 7; i++) {
-      today.setDate(today.getDate() + 1);
-      days.push({ date: today.toISOString() });
-    }
+const dayPath = '/days';
 
-    setTimeout(() => res(days), 1000);
-  });
+const getDaysByRange = (range: DayRange) => (
+  token: string
+): Promise<Array<Day>> => {
+  const requestPath = `${dayPath}?startDate=${range.startDate}&endDate=${range.endDate}`;
+  return get<Array<Day>>(requestPath, token);
+};
 
 export default getDaysByRange;

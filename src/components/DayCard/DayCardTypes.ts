@@ -1,8 +1,9 @@
 import { EmotionProps } from '../../styles/types';
+import { Meal } from '../../api/types/MealTypes';
 
 type DayCardProps = EmotionProps & {
   date: Date;
-  meal?: String;
+  meal: Meal;
 };
 
 export default DayCardProps;

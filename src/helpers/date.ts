@@ -20,3 +20,6 @@ export const parseDateAsFormattedString = (date: string | Date) => {
   const newDate = typeof date === 'string' ? new Date(date) : date;
   return newDate.toLocaleString('en-US', parseOptions);
 };
+
+export const dateToISOString = (date: Date): string =>
+  date.toISOString().substring(0, 10);

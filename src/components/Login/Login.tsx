@@ -1,16 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { useAuth0 } from '../../contexts/auth0-context';
-import { setAuth } from '../../ducks/auth/AuthReducer';
 import Google from '../../images/google';
 import { EmotionProps } from '../../styles/types';
 import { LoginProps } from './LoginTypes';
 import { styledLogin, styledLoginButton } from './StyledLogin';
 
 export const Login: React.FC<LoginProps> = (props: LoginProps) => {
-  const dispatch = useDispatch();
   const { loginWithRedirect, loading, isAuthenticated } = useAuth0();
 
   if (isAuthenticated) {
@@ -18,8 +15,7 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   }
 
   const handleClick = () => {
-    loginWithRedirect({});
-    dispatch(setAuth(true));
+    loginWithRedirect();
   };
 
   const LoginButtonRaw: React.FC<EmotionProps> = props => (

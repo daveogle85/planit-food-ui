@@ -13,8 +13,9 @@ Array [
   right: 0;
   padding: 0;
   height: 70px;
-  box-shadow: 4px 0 12px -6px gray,-4px 0 12px -6px gray;
+  box-shadow: 4px 0 12px -6px #000, -4px 0 12px -6px #000;
   list-style-type: none;
+  z-index: 1;
 }
 
 .emotion-4 ul {
@@ -375,9 +376,13 @@ Array [
   position: relative;
   height: calc(100% - 70px);
   width: calc(100% - 0px);
+  background-color: #7f53ac;
+  background-image: linear-gradient(315deg,#7f53ac 0%,#647dee 74%);
   position: relative;
   height: calc(100% - 70px);
   width: calc(100% - 0px);
+  background-color: #7f53ac;
+  background-image: linear-gradient(315deg,#7f53ac 0%,#647dee 74%);
 }
 
 .emotion-0 {
