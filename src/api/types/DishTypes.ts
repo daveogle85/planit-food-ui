@@ -10,7 +10,7 @@ export type Dish = {
   id: string;
   name?: string;
   searchName?: string;
-  dishType: DishType.MAIN;
+  dishType: DishType;
   notes?: string;
   cookingTime?: number;
   ingredients?: Array<Ingredient>;

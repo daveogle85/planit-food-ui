@@ -4,7 +4,7 @@ import { pointer } from '../../styles/common';
 import { listItem } from '../../styles/heights';
 import { CssProps } from '../../styles/types';
 
-const dropdownList = (props: CssProps) => css`
+export const dropdownList = (props: CssProps) => css`
   .dd-list {
     z-index: ${props.theme.zIndex.one};
     background-color: ${props.theme.colours.white};
@@ -15,7 +15,9 @@ const dropdownList = (props: CssProps) => css`
     flex-direction: column;
     width: max-content;
     min-width: 100%;
-    border: ${props.theme.border.thin};
+    border: ${props.theme.border.thin(
+      props.theme.colours.background.backgroundGrey
+    )};
     border-radius: ${props.theme.border.radius.medium};
     &.dd-open {
       display: flex;

@@ -4,37 +4,61 @@ import React, { useState } from 'react';
 import NavBar from '../components/NavBar/NavBar';
 import { EmotionProps } from '../styles/types';
 import { styledAddMeal } from './StyledAddMeal';
-import { DishType, DishProps } from './AddMealTypes';
+import { DishComponentProps } from './AddMealTypes';
+import AutoCompleteInput from '../components/AutoCompleteInput/AutoCompleteInput';
+import { searchForDish } from '../api/dish';
+import { useSelector } from 'react-redux';
+import { authSelectors } from '../ducks/auth/AuthReducer';
+import { Dish, DishType } from '../api/types/DishTypes';
+import { searchForMeal } from '../api/meal';
+import { Meal } from '../api/types/MealTypes';
 
-const Dish = (props: DishProps) => (
-  <>
-    <input type="text" className="dish-name" placeholder="Dish Name"></input>
-    <div>
-      <input
-        name="isMain"
-        type="checkbox"
-        checked={props.dish.main}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          props.handleMainChecked(props.dish.id, e.currentTarget.checked)
-        }
+const DishComponent = (props: DishComponentProps) => {
+  const getDishOptions = (text: string) => searchForDish(text)(props.token);
+  const isFoundDish = !props.dish.id.includes('local');
+  return (
+    <>
+      <AutoCompleteInput
+        className="dish-name"
+        placeholder="Dish Name"
+        getOptions={getDishOptions}
+        initialValue={isFoundDish ? props.dish.name : undefined}
+        onOptionSelect={props.handleDishSelected}
       />
-    </div>
-    <div className="delete-dish">
-      <button onClick={() => props.handleDeleteClick(props.dish.id)}>-</button>
-    </div>
-  </>
-);
+      <div>
+        <input
+          name="isMain"
+          type="checkbox"
+          checked={props.dish.dishType === DishType.MAIN}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            props.handleMainChecked(props.dish.id, e.currentTarget.checked)
+          }
+        />
+      </div>
+      <div className="delete-dish">
+        <button onClick={() => props.handleDeleteClick(props.dish.id)}>
+          -
+        </button>
+      </div>
+    </>
+  );
+};
 
 const AddMeal: React.FC<EmotionProps> = props => {
-  const [dishCount, setDishCount] = useState(0);
-  const defaultDish: DishType = {
-    id: 0,
+  const defaultDish: Dish = {
+    id: 'local-0',
     name: '',
-    main: true,
+    dishType: DishType.MAIN,
   };
-  const [dishes, setDishes] = useState([defaultDish]);
 
-  const handleDeleteDish = (dishId: number) => {
+  const token = useSelector(authSelectors.selectedToken);
+  const [dishCount, setDishCount] = useState(0);
+  const [dishes, setDishes] = useState([defaultDish]);
+  const [meal, setMeal] = useState<Meal | null>(null);
+
+  const getMealOptions = (text: string) => searchForMeal(text)(token);
+
+  const handleDeleteDish = (dishId: string) => {
     const newDishes = dishes.filter(dish => dish.id !== dishId);
     setDishes(newDishes);
   };
@@ -42,15 +66,26 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const handleAddDish = () => {
     const newDishes = [...dishes];
     newDishes.push({
-      id: dishCount + 1,
+      id: `local-${dishCount + 1}`,
       name: '',
-      main: dishes.length === 0,
+      dishType: dishes.length === 0 ? DishType.MAIN : DishType.SIDE,
     });
     setDishCount(dishCount + 1);
     setDishes(newDishes);
   };
 
-  const handleMainChecked = (id: number, checked: boolean) => {
+  const handleDishFound = (oldId: string) => (foundDish: Dish) => {
+    const newDishes = dishes.map(dish =>
+      dish.id === oldId ? foundDish : dish
+    );
+    setDishes(newDishes);
+  };
+
+  const handleMealFound = (foundMeal: Meal) => {
+    setMeal(foundMeal);
+  };
+
+  const handleMainChecked = (id: string, checked: boolean) => {
     const newDishes = dishes.map(dish =>
       dish.id === id ? { ...dish, main: checked } : dish
     );
@@ -65,12 +100,12 @@ const AddMeal: React.FC<EmotionProps> = props => {
         <div>
           <div className="meal">
             <label htmlFor="mealname">Meal name</label>
-            <input
-              type="text"
+            <AutoCompleteInput
               className="meal-name"
-              name="mealname"
               placeholder="Optional"
-            ></input>
+              getOptions={getMealOptions}
+              onOptionSelect={handleMealFound}
+            />
           </div>
           <div className="dishes">
             <h3>Dishes</h3>
@@ -79,10 +114,13 @@ const AddMeal: React.FC<EmotionProps> = props => {
               <div>Main</div>
               <div>Delete</div>
               {dishes.map(dish => (
-                <Dish
+                <DishComponent
+                  key={dish.id}
                   dish={dish}
+                  token={token}
                   handleDeleteClick={handleDeleteDish}
                   handleMainChecked={handleMainChecked}
+                  handleDishSelected={handleDishFound(dish.id)}
                 />
               ))}
             </div>

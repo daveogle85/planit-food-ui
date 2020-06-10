@@ -9,8 +9,13 @@ import createAuth0Client, {
 
 interface ContextValueType {
   isAuthenticated?: boolean;
-  user?: any;
-  isLoading?: boolean;
+  user?: {
+    picture: string;
+    name: string;
+    email: string;
+  };
+  token: string | null;
+  loading?: boolean;
   handleRedirectCallback?: () => void;
   getIdTokenClaims?: (...p: any) => any;
   loginWithRedirect?: (...p: any) => any;
@@ -20,20 +25,20 @@ interface ContextValueType {
 
 // create the context
 export const Auth0Context: any = createContext<ContextValueType | null>(null);
-export const useAuth0: any = () => useContext(Auth0Context);
+export const useAuth0 = (): ContextValueType => useContext(Auth0Context);
 interface IState {
   auth0Client: any;
-  isLoading: boolean;
+  loading: boolean;
   isAuthenticated: boolean;
-  token: any;
-  user: any;
+  token: ContextValueType['token'];
+  user: {} | null;
 }
 
 export class Auth0Provider extends Component<{}, IState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      isLoading: true,
+      loading: true,
       isAuthenticated: false,
       user: null,
       token: null,
@@ -62,11 +67,11 @@ export class Auth0Provider extends Component<{}, IState> {
     const isAuthenticated = await auth0Client.isAuthenticated();
     const user = isAuthenticated ? await auth0Client.getUser() : null;
     const token = isAuthenticated ? await auth0Client.getTokenSilently() : null;
-    this.setState({ isLoading: false, isAuthenticated, token, user });
+    this.setState({ loading: false, isAuthenticated, token, user });
   };
 
   handleRedirectCallback = async () => {
-    this.setState({ isLoading: true });
+    this.setState({ loading: true });
     await this.state.auth0Client.handleRedirectCallback();
     const user = await this.state.auth0Client.getUser();
     const token = await this.state.auth0Client.getTokenSilently();
@@ -74,16 +79,16 @@ export class Auth0Provider extends Component<{}, IState> {
       token,
       user,
       isAuthenticated: true,
-      isLoading: false,
+      loading: false,
     });
     window.history.replaceState({}, document.title, window.location.pathname);
   };
 
   render() {
-    const { auth0Client, isLoading, isAuthenticated, token, user } = this.state;
+    const { auth0Client, loading, isAuthenticated, token, user } = this.state;
     const { children } = this.props;
     const configObject = {
-      isLoading,
+      loading,
       isAuthenticated,
       token,
       user,

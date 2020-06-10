@@ -4,12 +4,12 @@ import React, { useEffect } from 'react';
  * Hook that handles clicks outside of the passed ref
  */
 function useOutsideAlerter(
-  ref: React.MutableRefObject<null>,
+  ref: React.RefObject<HTMLDivElement>,
   onClickOutside: () => void
 ) {
   useEffect(() => {
     function handleClickOutside(event: Event) {
-      if (ref?.current && !(ref.current as any).contains(event.target)) {
+      if (!ref.current?.contains(event.target as Node)) {
         onClickOutside();
       }
     }

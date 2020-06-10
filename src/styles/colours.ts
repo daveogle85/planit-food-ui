@@ -1,6 +1,9 @@
 export const colours = {
   white: '#fff',
   black: '#000',
+  errorRed: '#cc0000',
+  warningAmber: '#ffbf00',
+  infoGreen: '#00703c',
   background: {
     weekViewPurple: '#7f53ac',
     weekViewBlue: '#647dee',

@@ -6,7 +6,7 @@ import css from '@emotion/css/macro';
 const styledDish = (props: CssProps) => css`
   .delete-dish > button {
     height: 100%;
-    width: ${listItem};
+    width: 30px;
   }
 `;
 
@@ -38,6 +38,8 @@ export const styledAddMeal = (AddMeal: React.ComponentType) => styled(AddMeal)`
     grid-template-columns: 4fr 1fr 1fr;
     grid-auto-rows: ${listItem};
     grid-gap: ${props => props.theme.spacing.small};
+    margin-bottom: ${props => props.theme.spacing.medium};
+    padding-bottom: ${props => props.theme.spacing.small};
     ${styledDish}
   }
 `;
