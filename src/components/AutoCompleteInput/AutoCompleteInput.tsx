@@ -8,30 +8,44 @@ import LoadingSpinner from '../../components/Spinner/Spinner';
 import useOutsideAlerter from '../../helpers/clickedOutside';
 import useDebounce from '../../helpers/debounce';
 import { nullOrEmptyString } from '../../helpers/string';
-import FeedbackInput from '../FeedbackInput/FeedbackInput';
-import { AutoCompleteInputProps } from './AutoCompleteInputTypes';
-import { styledAutoCompleteInput } from './StyledAutoCompleteInput';
 import { BorderInfoState } from '../../styles/border';
+import FeedbackInput from '../FeedbackInput/FeedbackInput';
+import {
+  AutoCompleteInputBaseType,
+  AutoCompleteInputProps,
+  AutoCompleteInputApiType,
+} from './AutoCompleteInputTypes';
+import { styledAutoCompleteInput } from './StyledAutoCompleteInput';
 
-export function AutoCompleteInput<T extends { id: string; name?: string }>(
-  props: AutoCompleteInputProps<T>
-) {
-  const { getOptions, onOptionSelect, initialValue } = props;
+export function AutoCompleteInput<
+  T extends AutoCompleteInputBaseType,
+  ApiT extends AutoCompleteInputApiType
+>(props: AutoCompleteInputProps<T, ApiT>) {
+  const {
+    getOptions,
+    updateCurrentValue,
+    currentValue,
+    onDirty,
+    inputError,
+    convertFromApiType,
+  } = props;
   const ID_ATTRIBUTE = 'input-id';
   const defaultOption = ['No Option Found'];
-  const [options, setOptions] = useState<Array<string | T>>(defaultOption);
-  const [text, setText] = useState<string>(initialValue ?? '');
+  const [options, setOptions] = useState<Array<string | ApiT>>(defaultOption);
+
+  const [text, setText] = useState<string>(currentValue.name ?? '');
   const [loading, setLoading] = useState(false);
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   const [optionLocked, setOptionLocked] = useState(
-    !nullOrEmptyString(initialValue)
+    !nullOrEmptyString(currentValue.id)
   );
+  const [dirty, setDirty] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const debouncedSearchTerm = useDebounce(text, 250);
   useOutsideAlerter(ref, () => setDropdownIsOpen(false));
 
   useEffect(() => {
-    if (initialValue !== debouncedSearchTerm) {
+    if (currentValue.name !== debouncedSearchTerm) {
       const fetchOptions = async () => {
         setLoading(true);
         const options = nullOrEmptyString(debouncedSearchTerm)
@@ -42,13 +56,26 @@ export function AutoCompleteInput<T extends { id: string; name?: string }>(
       };
       fetchOptions();
     }
-  }, [debouncedSearchTerm, getOptions, initialValue]);
+  }, [debouncedSearchTerm, getOptions, currentValue]);
+
+  useEffect(() => {
+    setText(currentValue.name ?? '');
+  }, [currentValue]);
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newText = event.currentTarget.value;
     setDropdownIsOpen(newText !== '');
     setText(newText);
-    setOptionLocked(false);
+
+    const newDirty = !nullOrEmptyString(newText);
+    if (newDirty !== dirty) {
+      handleDirtyChange(newDirty);
+      setDirty(newDirty);
+    }
+
+    if (optionLocked) {
+      setOptionLocked(false);
+    }
   };
 
   const handleItemClick = (
@@ -57,14 +84,31 @@ export function AutoCompleteInput<T extends { id: string; name?: string }>(
     const target = event.target as HTMLElement;
     const id = target.getAttribute(ID_ATTRIBUTE);
     const option = options.find(d => typeof d !== 'string' && d.id === id) as
-      | T
+      | ApiT
       | undefined;
+    const newText = option?.name ?? text;
+    setText(newText);
     if (option) {
-      onOptionSelect(option);
       setOptionLocked(true);
+      const localOption = convertFromApiType(option);
+      updateCurrentValue(localOption);
     }
     setDropdownIsOpen(false);
   };
+
+  const handleBlur = () => {
+    if (!dropdownIsOpen) {
+      // This only happens when we are not selecting from the list
+      // So we clear the id
+      updateCurrentValue({
+        ...currentValue,
+        id: undefined,
+        name: debouncedSearchTerm,
+      });
+    }
+  };
+
+  const handleDirtyChange = (dirty: boolean) => onDirty && onDirty(dirty);
 
   return (
     <div
@@ -75,11 +119,23 @@ export function AutoCompleteInput<T extends { id: string; name?: string }>(
         type="text"
         placeholder={props.placeholder}
         value={text}
+        disabled={props.disabled}
         onChange={handleTextChange}
-        borderState={optionLocked ? BorderInfoState.INFO : BorderInfoState.WARN}
+        onBlur={handleBlur}
+        borderState={
+          !nullOrEmptyString(inputError)
+            ? BorderInfoState.ERROR
+            : optionLocked
+            ? BorderInfoState.INFO
+            : BorderInfoState.WARN
+        }
         hideBorder={nullOrEmptyString(debouncedSearchTerm)}
         message={
-          optionLocked ? 'Option Selected' : 'Option will be added to Database'
+          !nullOrEmptyString(inputError)
+            ? inputError
+            : optionLocked
+            ? 'Option Selected'
+            : 'Option will be added to Database'
         }
       />
       <ul className={classNames('dd-list', { 'dd-open': dropdownIsOpen })}>

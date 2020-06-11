@@ -1,7 +1,10 @@
 import React from 'react';
-import { BorderInfoState } from '../../styles/border';
+import classNames from 'classnames';
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+
+import { BorderInfoState } from '../../styles/border';
 import { styledFeedbackInput } from './StyledFeedbackInput';
 
 type FeedbackInputProps = {
@@ -20,11 +23,8 @@ function FeedbackInput(
   const { borderState, message, hideBorder, ...rest } = props;
   return (
     <div
-      css={styledFeedbackInput(
-        props.borderState,
-        Boolean(hideBorder),
-        props.message
-      )}
+      className={classNames(props.className, { 'feedback-hidden': hideBorder })}
+      css={styledFeedbackInput(props.borderState, props.message)}
     >
       <input {...rest} />
       {!props.hideBorder && <div className="feedback-icon">i</div>}

@@ -1,7 +1,8 @@
-import styled from '../../styles/theme';
 import css from '@emotion/css/macro';
+
 import { pointer } from '../../styles/common';
 import { listItem } from '../../styles/heights';
+import styled from '../../styles/theme';
 import { CssProps } from '../../styles/types';
 
 export const dropdownList = (props: CssProps) => css`

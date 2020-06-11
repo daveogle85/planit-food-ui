@@ -24,9 +24,6 @@ export const styledAddMeal = (AddMeal: React.ComponentType) => styled(AddMeal)`
 
   .meal {
     padding-bottom: ${props => props.theme.spacing.small};
-    input {
-      height: ${listItem};
-    }
   }
 
   .dishes {

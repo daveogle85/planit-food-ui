@@ -1,19 +1,18 @@
+import { listItem } from '../../styles/heights';
 import styled from '../../styles/theme';
 import { dropdownList } from '../Dropdown/StyledDropdown';
-import { listItem } from '../../styles/heights';
-import { SerializedStyles } from '@emotion/core';
 
 export const styledAutoCompleteInput = (
-  AutoCompleteInput: React.ComponentType,
-  extraStyles?: SerializedStyles
+  AutoCompleteInput: React.ComponentType
 ) => styled(AutoCompleteInput)`
-  ${extraStyles}
   ${dropdownList}
   display: flex;
   position: relative;
   max-width: 500px;
+  height: ${listItem};
   input {
     width: 100%;
+    height: 100%;
   }
 
   .dd-list {

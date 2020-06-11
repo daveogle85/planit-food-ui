@@ -16,7 +16,6 @@ const getColourFromInfoState = (state: BorderInfoState) => {
 
 export const styledFeedbackInput = (
   state: BorderInfoState = BorderInfoState.INFO,
-  hidden: boolean,
   message?: string
 ) => {
   const borderColour = getColourFromInfoState(state);
@@ -33,13 +32,6 @@ export const styledFeedbackInput = (
       border: 2px solid ${borderColour};
       ${centerFlex};
       ${pointer};
-    }
-  `;
-
-  const inputStyle = css`
-    input {
-      border: none;
-      padding-right: 20px;
     }
   `;
 
@@ -63,19 +55,20 @@ export const styledFeedbackInput = (
   `;
 
   return css`
-    border: ${theme.border.thin(theme.colours.background.hoverGrey)};
-    ${
-      !hidden &&
-      css`
-        border: 2px solid ${borderColour};
-      `
-    };
-    border-radius: ${theme.border.radius.medium};
+    width: 100%;
     display: flex;
     position: relative;
     align-items: center;
+    input {
+      padding-right: 20px;
+      border: 2px solid ${borderColour};
+      border-radius: ${theme.border.radius.medium};
+      height: calc(100% - 6px); // account for border
+    }
+    &.feedback-hidden input {
+      border: ${theme.border.thin(theme.colours.background.hoverGrey)};
+    }
     ${iconStyle}
-    ${inputStyle}
     ${messageStyle}
   `;
 };

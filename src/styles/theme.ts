@@ -65,6 +65,7 @@ export const globals = css`
 
   input[type='text'] {
     border-radius: ${theme.border.radius.medium};
+    padding-left: ${theme.spacing.xSmall};
   }
 `;
 

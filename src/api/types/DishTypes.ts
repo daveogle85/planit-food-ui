@@ -6,12 +6,16 @@ export enum DishType {
   DESSERT,
 }
 
-export type Dish = {
-  id: string;
+export type ApiDish = {
+  id?: string;
   name?: string;
   searchName?: string;
-  dishType: DishType;
+  dishType?: DishType;
   notes?: string;
   cookingTime?: number;
   ingredients?: Array<Ingredient>;
+};
+
+export type Dish = ApiDish & {
+  localId: string;
 };
