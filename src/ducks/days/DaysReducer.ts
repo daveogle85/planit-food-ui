@@ -3,7 +3,7 @@ import { AppThunk, RootState } from '..';
 import getDaysByRange from '../../api/day';
 import { Day, DayRange } from '../../api/types/DayTypes';
 import { dateToISOString } from '../../helpers/date';
-import { authSelectors } from '../auth/AuthReducer';
+import dispatchApiAction from '../loading';
 
 type DaysSlice = {
   loading: boolean;
@@ -34,7 +34,7 @@ const daysSlice = createSlice({
 });
 
 export const { setLoading, setData, setWeek } = daysSlice.actions;
-export const selectors = {
+export const daysSelectors = {
   selectLoading: (state: RootState) => state.days.loading,
   // TODO should just have data and not store duplicate values in week
   selectData: (state: RootState) => state.days.data,
@@ -60,25 +60,11 @@ export const getDayCardRange = (): DayRange => {
 };
 
 // Thunks
-export const fetchDayDataForCarousel = (): AppThunk => async (
-  dispatch,
-  getState: () => RootState
-) => {
-  dispatch(setLoading(true));
-  try {
-    const range = getDayCardRange();
-    const token = authSelectors.selectedToken(getState());
-    const days = token ? await getDaysByRange(range)(token) : [];
-    dispatch(setData(days));
-    dispatch(setWeek(days)); // TODO
-    // const repoDetails = await getRepoDetails(org, repo);
-    // dispatch(getRepoDetailsSuccess(repoDetails));
-  } catch (err) {
-    dispatch(setData([]));
-    // dispatch(getRepoDetailsFailed(err.toString()));
-  } finally {
-    dispatch(setLoading(false));
-  }
+export const fetchDayDataForCarousel = (): AppThunk => async dispatch => {
+  const range = getDayCardRange();
+  const fetchDays = getDaysByRange(range);
+  const apiCall = dispatchApiAction(setLoading);
+  return await dispatch(apiCall(fetchDays, setData, []));
 };
 
 export default daysSlice.reducer;

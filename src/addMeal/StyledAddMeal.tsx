@@ -27,7 +27,25 @@ export const styledAddMeal = (AddMeal: React.ComponentType) => styled(AddMeal)`
   }
 
   .dishes {
-    padding-bottom: ${props => props.theme.spacing.small};
+    padding: ${props => props.theme.spacing.small};
+  }
+
+  .dishes-wrapper .feedback-icon {
+    top: ${props => props.theme.spacing.small};
+
+    &:after {
+      right: -25px;
+    }
+  }
+
+  button {
+    padding-top: ${props => props.theme.spacing.xSmall};
+    padding-bottom: ${props => props.theme.spacing.xSmall};
+  }
+
+  .dishes,
+  .dishes-wrapper {
+    width: 100%;
   }
 
   .dishes-grid {

@@ -9,6 +9,8 @@ const getColourFromInfoState = (state: BorderInfoState) => {
       return theme.colours.errorRed;
     case BorderInfoState.WARN:
       return theme.colours.warningAmber;
+    case BorderInfoState.DISABLED:
+      return theme.colours.background.darkGrey;
     default:
       return theme.colours.infoGreen;
   }
@@ -55,18 +57,15 @@ export const styledFeedbackInput = (
   `;
 
   return css`
-    width: 100%;
+    width: max-content;
     display: flex;
     position: relative;
     align-items: center;
-    input {
-      padding-right: 20px;
+    :not(.feedback-hidden) > *:first-child {
+      padding-right: 25px;
       border: 2px solid ${borderColour};
       border-radius: ${theme.border.radius.medium};
       height: calc(100% - 6px); // account for border
-    }
-    &.feedback-hidden input {
-      border: ${theme.border.thin(theme.colours.background.hoverGrey)};
     }
     ${iconStyle}
     ${messageStyle}

@@ -10,6 +10,8 @@ export enum BorderInfoState {
   ERROR,
   WARN,
   INFO,
+  DISABLED,
+  HIDDEN,
 }
 
 export default borderTheme;

@@ -9,13 +9,14 @@ import useOutsideAlerter from '../../helpers/clickedOutside';
 import useDebounce from '../../helpers/debounce';
 import { nullOrEmptyString } from '../../helpers/string';
 import { BorderInfoState } from '../../styles/border';
-import FeedbackInput from '../FeedbackInput/FeedbackInput';
 import {
   AutoCompleteInputBaseType,
   AutoCompleteInputProps,
   AutoCompleteInputApiType,
 } from './AutoCompleteInputTypes';
 import { styledAutoCompleteInput } from './StyledAutoCompleteInput';
+import FeedbackElement from '../FeedbackInput/FeedbackElement';
+import { FeedbackElementState } from '../FeedbackInput/FeedbackElementTypes';
 
 export function AutoCompleteInput<
   T extends AutoCompleteInputBaseType,
@@ -110,34 +111,46 @@ export function AutoCompleteInput<
 
   const handleDirtyChange = (dirty: boolean) => onDirty && onDirty(dirty);
 
+  const getBorderInfoState = (): FeedbackElementState => {
+    if (nullOrEmptyString(debouncedSearchTerm)) {
+      return {
+        borderState: BorderInfoState.HIDDEN,
+      };
+    }
+
+    if (!nullOrEmptyString(inputError)) {
+      return {
+        borderState: BorderInfoState.ERROR,
+        message: inputError,
+      };
+    }
+
+    return optionLocked
+      ? {
+          borderState: BorderInfoState.INFO,
+          message: 'Option Selected',
+        }
+      : {
+          borderState: BorderInfoState.WARN,
+          message: 'Option will be added to Database',
+        };
+  };
+
   return (
     <div
       className={classNames('auto-complete-input', props.className)}
       ref={ref}
     >
-      <FeedbackInput
-        type="text"
-        placeholder={props.placeholder}
-        value={text}
-        disabled={props.disabled}
-        onChange={handleTextChange}
-        onBlur={handleBlur}
-        borderState={
-          !nullOrEmptyString(inputError)
-            ? BorderInfoState.ERROR
-            : optionLocked
-            ? BorderInfoState.INFO
-            : BorderInfoState.WARN
-        }
-        hideBorder={nullOrEmptyString(debouncedSearchTerm)}
-        message={
-          !nullOrEmptyString(inputError)
-            ? inputError
-            : optionLocked
-            ? 'Option Selected'
-            : 'Option will be added to Database'
-        }
-      />
+      <FeedbackElement state={getBorderInfoState()}>
+        <input
+          type="text"
+          placeholder={props.placeholder}
+          value={text}
+          disabled={props.disabled}
+          onChange={handleTextChange}
+          onBlur={handleBlur}
+        />
+      </FeedbackElement>
       <ul className={classNames('dd-list', { 'dd-open': dropdownIsOpen })}>
         {loading ? (
           <li key="loading">

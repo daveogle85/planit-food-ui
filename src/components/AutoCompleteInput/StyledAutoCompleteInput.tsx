@@ -14,6 +14,16 @@ export const styledAutoCompleteInput = (
     width: 100%;
     height: 100%;
   }
+  .feedback-hidden > input {
+    border: ${props =>
+      props.theme.border.thin(props.theme.colours.background.hoverGrey)};
+    border-radius: ${props => props.theme.border.radius.medium};
+    height: calc(100% - 6px); // account for border
+  }
+
+  & > div {
+    width: 100%;
+  }
 
   .dd-list {
     margin: 0;

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { searchForDish } from '../api/dish';
 import { searchForMeal } from '../api/meal';
@@ -13,6 +13,14 @@ import { EmotionProps } from '../styles/types';
 import { DishComponentProps } from './AddMealTypes';
 import { styledAddMeal } from './StyledAddMeal';
 import { nullOrEmptyString } from '../helpers/string';
+import {
+  fetchLists,
+  listsSelectors,
+  addMealToSelectedList,
+} from '../ducks/lists/ListsReducer';
+import FeedbackElement from '../components/FeedbackInput/FeedbackElement';
+import { BorderInfoState } from '../styles/border';
+import { FeedbackElementState } from '../components/FeedbackInput/FeedbackElementTypes';
 
 // TODO test me
 function generateMealName(dishes: Array<Dish>): string {
@@ -43,11 +51,21 @@ const AddMeal: React.FC<EmotionProps> = props => {
   };
 
   const token = useSelector(authSelectors.selectedToken);
+  const dispatch = useDispatch();
   const [dishCount, setDishCount] = useState(0);
   const [dishes, setDishes] = useState([defaultDish]);
   const [meal, setMeal] = useState<Meal>(defaultMeal);
   const [isMealDirty, setIsMealDirty] = useState(false);
+  const loadingLists = useSelector(listsSelectors.selectLoading);
+  const selectedList = useSelector(listsSelectors.selectSelectedList);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
+
+  useEffect(() => {
+    async function getLists() {
+      dispatch(fetchLists());
+    }
+    getLists();
+  }, [dispatch, token]);
 
   const getMealOptions = (text: string) => searchForMeal(text)(token);
 
@@ -140,12 +158,10 @@ const AddMeal: React.FC<EmotionProps> = props => {
   };
 
   const handleAddMealToList = () => {
-    const dishesToAdd = dishes.filter(d => nullOrEmptyString(d.name));
+    const dishesToAdd = dishes.filter(d => !nullOrEmptyString(d.name));
     const mealToAdd = { ...meal, dishes: dishesToAdd };
-    console.log('adding to list \n', mealToAdd);
+    dispatch(addMealToSelectedList(mealToAdd));
   };
-
-  // const getMealInputErrors = (inputText: string) => [];
 
   const convertFromDishApi = (dish: ApiDish, id?: string) => ({
     ...dish,
@@ -164,7 +180,6 @@ const AddMeal: React.FC<EmotionProps> = props => {
   };
 
   function updateDishErrors() {
-    // Remove old errors
     const errorsToRemove: Array<string> = [];
     const errors = new Map(dishErrors);
     errors.forEach((_, key) => {
@@ -215,11 +230,53 @@ const AddMeal: React.FC<EmotionProps> = props => {
     );
   };
 
+  const getSelectedListText = () =>
+    selectedList == null ? 'No List Available' : selectedList.name;
+
+  const validateMeal = (): FeedbackElementState => {
+    // no dish names and no meal name;
+    const atLeastOneDishName = dishes.reduce(
+      (a, c) => (a = a || !nullOrEmptyString(c.name)),
+      false
+    );
+    const mealHasName = !nullOrEmptyString(meal.name);
+
+    if ((!atLeastOneDishName && !mealHasName) || dishErrors.size > 0) {
+      return {
+        borderState: BorderInfoState.ERROR,
+        message:
+          dishErrors.size > 0
+            ? 'Error in dishes'
+            : 'Meals with no dishes must have a name',
+      };
+    }
+
+    return {
+      borderState: BorderInfoState.HIDDEN,
+    };
+  };
+
+  const dishesDisabledState = () => {
+    if (!nullOrEmptyString(meal.id)) {
+      return {
+        borderState: BorderInfoState.DISABLED,
+        message: 'Dishes associated with a meal cannot be edited',
+      };
+    }
+    return {
+      borderState: BorderInfoState.HIDDEN,
+    };
+  };
+
   return (
     <>
       <NavBar />
       <div className={classNames('AddMeal', props.className)}>
         <h2 className="title">Add A New Meal</h2>
+        <div>
+          Selected List:
+          {loadingLists ? 'loading' : getSelectedListText()}
+        </div>
         <div>
           <div className="meal">
             <label htmlFor="mealname">Meal name</label>
@@ -236,30 +293,41 @@ const AddMeal: React.FC<EmotionProps> = props => {
               <button onClick={handleMealClear}>Clear Meal</button>
             </div>
           </div>
-          <div className="dishes">
-            <h3>Dishes</h3>
-            <div className="dishes-grid">
-              <div>Dish Name</div>
-              <div>Main</div>
-              <div>Delete</div>
-              {dishes.map(dish => (
-                <DishComponent key={dish.localId} dish={dish} />
-              ))}
+          <FeedbackElement
+            className="dishes-wrapper"
+            state={dishesDisabledState()}
+          >
+            <div className="dishes">
+              <h3>Dishes</h3>
+              <div className="dishes-grid">
+                <div>Dish Name</div>
+                <div>Main</div>
+                <div>Delete</div>
+                {dishes.map(dish => (
+                  <DishComponent key={dish.localId} dish={dish} />
+                ))}
+              </div>
+              <button
+                disabled={!nullOrEmptyString(meal.id)}
+                onClick={handleAddDish}
+              >
+                Add Dish
+              </button>
             </div>
-            <button
-              disabled={!nullOrEmptyString(meal.id)}
-              onClick={handleAddDish}
-            >
-              Add Dish
-            </button>
+          </FeedbackElement>
+          <div className="options">
+            <h3>Notes</h3>
+            <textarea />
           </div>
           <div>
-            <button
-              disabled={dishErrors.size > 0}
-              onClick={handleAddMealToList}
-            >
-              Add Meal To List
-            </button>
+            <FeedbackElement state={validateMeal()}>
+              <button
+                disabled={validateMeal().borderState === BorderInfoState.ERROR}
+                onClick={handleAddMealToList}
+              >
+                Add Meal To List
+              </button>
+            </FeedbackElement>
             <button disabled={true}>Add Meal To Calendar</button>
           </div>
         </div>
