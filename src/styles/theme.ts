@@ -2,6 +2,7 @@ import css from '@emotion/css/macro';
 import styled, { CreateStyled } from '@emotion/styled/macro';
 import { fullScreen } from './common';
 import { colours } from './colours';
+import border from './border';
 
 export const breakpoints = {
   smallMobile: 576,
@@ -32,19 +33,15 @@ export const theme = {
       black: 900,
     },
     size: {
+      xSmall: '8px',
       small: '12px',
       medium: '15px',
       large: '20px',
     },
   },
-  border: {
-    radius: {
-      medium: '0.3em',
-      full: '2em',
-    },
-    thin: `1px solid ${colours.background.backgroundGrey}`,
-  },
+  border,
   spacing: {
+    xSmall: '4px',
     small: '8px',
     medium: '20px',
     large: '30px',
@@ -68,6 +65,7 @@ export const globals = css`
 
   input[type='text'] {
     border-radius: ${theme.border.radius.medium};
+    padding-left: ${theme.spacing.xSmall};
   }
 `;
 

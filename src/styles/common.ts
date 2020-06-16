@@ -25,3 +25,7 @@ export const centerFlex = css`
 export const pointer = css`
   cursor: pointer;
 `;
+
+export const unselectable = css`
+  user-select: none;
+`;

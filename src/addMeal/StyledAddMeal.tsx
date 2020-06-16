@@ -6,7 +6,7 @@ import css from '@emotion/css/macro';
 const styledDish = (props: CssProps) => css`
   .delete-dish > button {
     height: 100%;
-    width: ${listItem};
+    width: 30px;
   }
 `;
 
@@ -24,13 +24,36 @@ export const styledAddMeal = (AddMeal: React.ComponentType) => styled(AddMeal)`
 
   .meal {
     padding-bottom: ${props => props.theme.spacing.small};
-    input {
-      height: ${listItem};
-    }
   }
 
   .dishes {
-    padding-bottom: ${props => props.theme.spacing.small};
+    padding: ${props => props.theme.spacing.small};
+  }
+
+  .dishes-wrapper .feedback-icon {
+    top: ${props => props.theme.spacing.small};
+
+    &:after {
+      right: -25px;
+    }
+  }
+
+  button {
+    padding-top: ${props => props.theme.spacing.xSmall};
+    padding-bottom: ${props => props.theme.spacing.xSmall};
+  }
+
+  .options {
+    padding-bottom: ${props => props.theme.spacing.medium};
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  .dishes,
+  .dishes-wrapper {
+    width: 100%;
   }
 
   .dishes-grid {
@@ -38,6 +61,8 @@ export const styledAddMeal = (AddMeal: React.ComponentType) => styled(AddMeal)`
     grid-template-columns: 4fr 1fr 1fr;
     grid-auto-rows: ${listItem};
     grid-gap: ${props => props.theme.spacing.small};
+    margin-bottom: ${props => props.theme.spacing.medium};
+    padding-bottom: ${props => props.theme.spacing.small};
     ${styledDish}
   }
 `;

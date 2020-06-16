@@ -25,9 +25,9 @@ test('Week View renders correctly', () => {
       data: [],
       week: [],
     },
-    auth: { isAuthenticated: true },
+    auth: { isAuthenticated: true, token: '' },
   };
   const TestWeekView = styledWeekView(WeekView as any);
-  const button = renderWithTheme(<TestWeekView />, mockStore).toJSON();
-  expect(button).toMatchSnapshot();
+  const view = renderWithTheme(<TestWeekView />, mockStore).toJSON();
+  expect(view).toMatchSnapshot();
 });

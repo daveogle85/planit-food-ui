@@ -5,21 +5,21 @@ import { setIsAuthenticated, setToken } from '../../ducks/auth/AuthReducer';
 import LoadingSpinner from '../Spinner/Spinner';
 
 export const CheckAuth: React.FC = props => {
-  const { isLoading, isAuthenticated, token } = useAuth0();
+  const { loading, isAuthenticated, token } = useAuth0();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const isAuth = isAuthenticated || isLoading;
-    dispatch(setIsAuthenticated(isAuth));
+    const isAuth = isAuthenticated || loading;
+    dispatch(setIsAuthenticated(Boolean(isAuth)));
 
     if (isAuthenticated) {
       dispatch(setToken(token));
     } else {
       dispatch(setToken(null));
     }
-  }, [isAuthenticated, isLoading, dispatch, token]);
+  }, [isAuthenticated, loading, dispatch, token]);
 
-  if (isLoading) {
+  if (loading) {
     return <LoadingSpinner />;
   }
 

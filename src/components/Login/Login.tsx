@@ -15,7 +15,7 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   }
 
   const handleClick = () => {
-    loginWithRedirect();
+    loginWithRedirect && loginWithRedirect();
   };
 
   const LoginButtonRaw: React.FC<EmotionProps> = props => (

@@ -1,14 +1,17 @@
-import reducer, {
-  getDayCardRange,
-  setLoading,
-  selectors,
-  setData,
-  setWeek,
-} from '../../ducks/days/DaysReducer';
 import MockDate from 'mockdate';
-import { RootState } from '../../ducks';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+
+import { RootState } from '../../ducks';
+import reducer, {
+  daysSelectors,
+  getDayCardRange,
+  setData,
+  setLoading,
+  setWeek,
+} from '../../ducks/days/DaysReducer';
+import { setToastState } from '../../ducks/toast/ToastReducer';
+import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
 
 describe('DaysReducer', () => {
   describe('getDayCardRange', () => {
@@ -44,6 +47,7 @@ describe('DaysReducer', () => {
       data: [],
       week: [],
     };
+
     it('should return the initial state on first run', () => {
       const result = reducer(undefined, {} as any);
       expect(result).toEqual(initialState);
@@ -54,7 +58,7 @@ describe('DaysReducer', () => {
 
       const result = reducer(initialState, setLoading(loading));
       const rootState = { days: result };
-      expect(selectors.selectLoading(rootState as RootState)).toBe(loading);
+      expect(daysSelectors.selectLoading(rootState as RootState)).toBe(loading);
     });
 
     it('should set the data correctly', () => {
@@ -66,7 +70,7 @@ describe('DaysReducer', () => {
 
       const result = reducer(initialState, setData(data));
       const rootState = { days: result };
-      expect(selectors.selectData(rootState as RootState)).toBe(data);
+      expect(daysSelectors.selectData(rootState as RootState)).toBe(data);
     });
 
     it('should correctly get the data for the week when requested', () => {
@@ -78,7 +82,7 @@ describe('DaysReducer', () => {
 
       const result = reducer(initialState, setWeek(week));
       const rootState = { days: result };
-      expect(selectors.selectWeek(rootState as RootState)).toBe(week);
+      expect(daysSelectors.selectWeek(rootState as RootState)).toBe(week);
     });
   });
 
@@ -111,7 +115,6 @@ describe('DaysReducer', () => {
         const expectedActions = [
           setLoading(true),
           setData([{ id: 'testId' }]),
-          setWeek([{ id: 'testId' }]),
           setLoading(false),
         ];
         expect(store.getActions()).toEqual(expectedActions);
@@ -142,6 +145,10 @@ describe('DaysReducer', () => {
         const expectedActions = [
           setLoading(true),
           setData([]),
+          setToastState({
+            status: FeedbackStatus.ERROR,
+            message: 'test exception',
+          }),
           setLoading(false),
         ];
         expect(store.getActions()).toEqual(expectedActions);

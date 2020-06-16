@@ -10,10 +10,10 @@ const ProfileRaw: React.FC<EmotionProps> = props => {
   const { user } = useAuth0();
   return (
     <div className={props.className} title="Logout">
-      <img src={user.picture} alt="Avatar" />
+      <img src={user?.picture} alt="Avatar" />
       <div className="details">
-        <span>{user.name}</span>
-        <span>{user.email}</span>
+        <span>{user?.name}</span>
+        <span>{user?.email}</span>
       </div>
     </div>
   );
@@ -32,7 +32,7 @@ function NavBarRaw(props: EmotionProps) {
     defaultState: '',
     options: profileDropdownList,
     onSelect: {
-      Logout: logout,
+      Logout: logout!,
     },
   });
 

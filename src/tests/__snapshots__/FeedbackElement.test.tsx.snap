@@ -1,0 +1,396 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FeedbackElement disable 1`] = `
+.emotion-0 {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-0:not(.feedback-hidden) > *:first-child {
+  padding-right: 25px;
+  border: 2px solid #9b9797;
+  border-radius: 0.3em;
+  height: calc(100% - 6px);
+}
+
+.emotion-0 .feedback-icon {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9b9797;
+  border-radius: 2em;
+  border: 2px solid #9b9797;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.emotion-0 .feedback-icon:after {
+  content: 'A disabled message';
+  display: none;
+  position: absolute;
+  white-space: nowrap;
+  border: 1px solid #9b9797;
+  border-radius: 0.3em;
+  padding: 2px;
+  bottom: 150%;
+  background: white;
+  opacity: 0.9;
+  font-size: 8px;
+}
+
+.emotion-0 .feedback-icon:hover:after {
+  display: block;
+}
+
+<div
+  className=" emotion-0"
+>
+  <div>
+    Disabled
+  </div>
+  <div
+    className="feedback-icon"
+  >
+    i
+  </div>
+</div>
+`;
+
+exports[`FeedbackElement error 1`] = `
+.emotion-0 {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-0:not(.feedback-hidden) > *:first-child {
+  padding-right: 25px;
+  border: 2px solid #cc0000;
+  border-radius: 0.3em;
+  height: calc(100% - 6px);
+}
+
+.emotion-0 .feedback-icon {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #cc0000;
+  border-radius: 2em;
+  border: 2px solid #cc0000;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.emotion-0 .feedback-icon:after {
+  content: 'An Error Message';
+  display: none;
+  position: absolute;
+  white-space: nowrap;
+  border: 1px solid #cc0000;
+  border-radius: 0.3em;
+  padding: 2px;
+  bottom: 150%;
+  background: white;
+  opacity: 0.9;
+  font-size: 8px;
+}
+
+.emotion-0 .feedback-icon:hover:after {
+  display: block;
+}
+
+<div
+  className=" emotion-0"
+>
+  <div>
+    Error
+  </div>
+  <div
+    className="feedback-icon"
+  >
+    i
+  </div>
+</div>
+`;
+
+exports[`FeedbackElement hidden 1`] = `
+.emotion-0 {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-0:not(.feedback-hidden) > *:first-child {
+  padding-right: 25px;
+  border: 2px solid #9b9797;
+  border-radius: 0.3em;
+  height: calc(100% - 6px);
+}
+
+.emotion-0 .feedback-icon {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9b9797;
+  border-radius: 2em;
+  border: 2px solid #9b9797;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.emotion-0 .feedback-icon:after {
+  content: '';
+  display: none;
+  position: absolute;
+  white-space: nowrap;
+  border: 1px solid #9b9797;
+  border-radius: 0.3em;
+  padding: 2px;
+  bottom: 150%;
+  background: white;
+  opacity: 0.9;
+  font-size: 8px;
+}
+
+.emotion-0 .feedback-icon:hover:after {
+  display: block;
+}
+
+<div
+  className="feedback-hidden emotion-0"
+>
+  <div>
+    Hidden
+  </div>
+</div>
+`;
+
+exports[`FeedbackElement info 1`] = `
+.emotion-0 {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-0:not(.feedback-hidden) > *:first-child {
+  padding-right: 25px;
+  border: 2px solid #00703c;
+  border-radius: 0.3em;
+  height: calc(100% - 6px);
+}
+
+.emotion-0 .feedback-icon {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #00703c;
+  border-radius: 2em;
+  border: 2px solid #00703c;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.emotion-0 .feedback-icon:after {
+  content: 'An Information message';
+  display: none;
+  position: absolute;
+  white-space: nowrap;
+  border: 1px solid #00703c;
+  border-radius: 0.3em;
+  padding: 2px;
+  bottom: 150%;
+  background: white;
+  opacity: 0.9;
+  font-size: 8px;
+}
+
+.emotion-0 .feedback-icon:hover:after {
+  display: block;
+}
+
+<div
+  className=" emotion-0"
+>
+  <div>
+    Info
+  </div>
+  <div
+    className="feedback-icon"
+  >
+    i
+  </div>
+</div>
+`;
+
+exports[`FeedbackElement warn 1`] = `
+.emotion-0 {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-0:not(.feedback-hidden) > *:first-child {
+  padding-right: 25px;
+  border: 2px solid #ffbf00;
+  border-radius: 0.3em;
+  height: calc(100% - 6px);
+}
+
+.emotion-0 .feedback-icon {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffbf00;
+  border-radius: 2em;
+  border: 2px solid #ffbf00;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.emotion-0 .feedback-icon:after {
+  content: 'A Warning message';
+  display: none;
+  position: absolute;
+  white-space: nowrap;
+  border: 1px solid #ffbf00;
+  border-radius: 0.3em;
+  padding: 2px;
+  bottom: 150%;
+  background: white;
+  opacity: 0.9;
+  font-size: 8px;
+}
+
+.emotion-0 .feedback-icon:hover:after {
+  display: block;
+}
+
+<div
+  className=" emotion-0"
+>
+  <div>
+    Warn
+  </div>
+  <div
+    className="feedback-icon"
+  >
+    i
+  </div>
+</div>
+`;

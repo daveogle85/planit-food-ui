@@ -7,8 +7,8 @@ import { DropdownProps } from './DropdownTypes';
 import { styleDropdown } from './StyledDropdown';
 import { useOutOfBounds } from '../../helpers/outOfBounds';
 
-const useDropdown = (props: DropdownProps) => {
-  const { label, defaultState = '', onSelect, options } = props;
+const useDropdown = (dropdownProps: DropdownProps) => {
+  const { label, defaultState = '', onSelect, options } = dropdownProps;
   const Header =
     typeof label === 'string'
       ? () => <div className="dd-header-title">{label}</div>
@@ -23,8 +23,8 @@ const useDropdown = (props: DropdownProps) => {
     }
     setIsOpen(false);
   };
-  const Dropdownmaker = (props: EmotionProps) => {
-    const dropdownRef = useRef(null);
+  const DropdownMaker = (props: EmotionProps) => {
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const [listRef, isOutOfBounds] = useOutOfBounds();
     useOutsideAlerter(dropdownRef, () => setIsOpen(false));
     return (
@@ -32,7 +32,7 @@ const useDropdown = (props: DropdownProps) => {
         className={classNames(['dd-wrapper', props.className])}
         ref={dropdownRef}
       >
-        <div className="dd-header" onClick={() => setIsOpen(!isOpen)}>
+        <div className="dd-header" onClick={e => setIsOpen(!isOpen)}>
           <Header />
         </div>
         <div>
@@ -56,7 +56,7 @@ const useDropdown = (props: DropdownProps) => {
   return {
     selected,
     isOpen,
-    component: styleDropdown(Dropdownmaker as React.ComponentType),
+    component: styleDropdown(DropdownMaker as React.ComponentType),
     setSelected,
     setIsOpen,
   };

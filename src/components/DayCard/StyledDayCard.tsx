@@ -19,7 +19,8 @@ export const styleDayCard = (DayCard: React.ComponentType) =>
     height: 100%;
     background-color: ${props => props.theme.colours.background.mealCardBlue};
     margin: 0 ${props => props.theme.spacing.small};
-    border: ${props => props.theme.border.thin};
+    border: ${props =>
+      props.theme.border.thin(props.theme.colours.background.backgroundGrey)};
     border-radius: ${props => props.theme.border.radius.medium};
     ${header}
     ${main}

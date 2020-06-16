@@ -1,6 +1,24 @@
+async function fetchWithTimeout(
+  url: string,
+  options = {},
+  timeout = 5000
+): Promise<Response> {
+  const controller = new AbortController();
+  const { signal } = controller;
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`Timeout for request to ${url}`));
+      controller.abort();
+    }, timeout);
+    fetch(url, { signal, ...options })
+      .finally(() => clearTimeout(timer))
+      .then(resolve, reject);
+  });
+}
+
 export async function get<T>(path: string, accessToken: string): Promise<T> {
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${process.env.REACT_APP_SERVER_BASE_URL}${path}`,
       {
         method: 'GET',
@@ -10,10 +28,47 @@ export async function get<T>(path: string, accessToken: string): Promise<T> {
         }),
       }
     );
-    return response.json();
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(
+        'Request failed with status ' + response.status + response.statusText
+      );
+    }
   } catch (ex) {
-    console.error(ex);
-    return new Promise(() => ex);
+    console.error(ex.message);
+    throw ex;
+  }
+}
+
+export async function put<T, Body>(
+  path: string,
+  accessToken: string,
+  body: Body
+): Promise<T> {
+  try {
+    const response = await fetchWithTimeout(
+      `${process.env.REACT_APP_SERVER_BASE_URL}${path}`,
+      {
+        method: 'PUT',
+        redirect: 'follow',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${accessToken}`,
+        }),
+        body: JSON.stringify(body),
+      }
+    );
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(
+        'Request failed with status ' + response.status + response.statusText
+      );
+    }
+  } catch (ex) {
+    console.error(ex.message);
+    throw ex;
   }
 }
 
