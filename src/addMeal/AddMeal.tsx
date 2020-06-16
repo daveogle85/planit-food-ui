@@ -1,28 +1,27 @@
 import classNames from 'classnames';
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { searchForDish } from '../api/dish';
 import { searchForMeal } from '../api/meal';
-import { Dish, DishType, ApiDish } from '../api/types/DishTypes';
-import { Meal, ApiMeal } from '../api/types/MealTypes';
+import { ApiDish, Dish, DishType } from '../api/types/DishTypes';
+import { ApiMeal, Meal } from '../api/types/MealTypes';
 import AutoCompleteInput from '../components/AutoCompleteInput/AutoCompleteInput';
+import FeedbackElement from '../components/FeedbackInput/FeedbackElement';
 import NavBar from '../components/NavBar/NavBar';
 import { authSelectors } from '../ducks/auth/AuthReducer';
+import { ToastState, FeedbackStatus } from '../ducks/toast/ToastTypes';
+import {
+  addMealToSelectedList,
+  fetchLists,
+  listsSelectors,
+} from '../ducks/lists/ListsReducer';
+import { nullOrEmptyString } from '../helpers/string';
 import { EmotionProps } from '../styles/types';
 import { DishComponentProps } from './AddMealTypes';
 import { styledAddMeal } from './StyledAddMeal';
-import { nullOrEmptyString } from '../helpers/string';
-import {
-  fetchLists,
-  listsSelectors,
-  addMealToSelectedList,
-} from '../ducks/lists/ListsReducer';
-import FeedbackElement from '../components/FeedbackInput/FeedbackElement';
-import { BorderInfoState } from '../styles/border';
-import { FeedbackElementState } from '../components/FeedbackInput/FeedbackElementTypes';
+import Loading from '../components/Loading/Loading';
 
-// TODO test me
 function generateMealName(dishes: Array<Dish>): string {
   if (!dishes.length) {
     return '';
@@ -233,107 +232,117 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const getSelectedListText = () =>
     selectedList == null ? 'No List Available' : selectedList.name;
 
-  const validateMeal = (): FeedbackElementState => {
-    // no dish names and no meal name;
+  const validateMeal = (): ToastState => {
+    let message = undefined;
+    let status = FeedbackStatus.HIDDEN;
+
+    if (selectedList == null) {
+      status = FeedbackStatus.ERROR;
+      message = 'No Default list was found';
+    }
+
+    // no dish names and no meal name
     const atLeastOneDishName = dishes.reduce(
       (a, c) => (a = a || !nullOrEmptyString(c.name)),
       false
     );
     const mealHasName = !nullOrEmptyString(meal.name);
 
-    if ((!atLeastOneDishName && !mealHasName) || dishErrors.size > 0) {
-      return {
-        borderState: BorderInfoState.ERROR,
-        message:
-          dishErrors.size > 0
-            ? 'Error in dishes'
-            : 'Meals with no dishes must have a name',
-      };
+    if (!atLeastOneDishName && !mealHasName) {
+      status = FeedbackStatus.ERROR;
+      message = 'Meals with no dishes must have a name';
+    }
+
+    if (dishErrors.size > 0) {
+      status = FeedbackStatus.ERROR;
+      message = 'Error in dishes';
     }
 
     return {
-      borderState: BorderInfoState.HIDDEN,
+      status,
+      message,
     };
   };
 
   const dishesDisabledState = () => {
     if (!nullOrEmptyString(meal.id)) {
       return {
-        borderState: BorderInfoState.DISABLED,
+        status: FeedbackStatus.DISABLED,
         message: 'Dishes associated with a meal cannot be edited',
       };
     }
     return {
-      borderState: BorderInfoState.HIDDEN,
+      status: FeedbackStatus.HIDDEN,
     };
   };
 
   return (
     <>
       <NavBar />
-      <div className={classNames('AddMeal', props.className)}>
-        <h2 className="title">Add A New Meal</h2>
-        <div>
-          Selected List:
-          {loadingLists ? 'loading' : getSelectedListText()}
-        </div>
-        <div>
-          <div className="meal">
-            <label htmlFor="mealname">Meal name</label>
-            <div>
-              <AutoCompleteInput
-                className="meal-name"
-                placeholder="Optional"
-                getOptions={getMealOptions}
-                updateCurrentValue={handleMealUpdate}
-                currentValue={meal}
-                onDirty={setIsMealDirty}
-                convertFromApiType={convertFromMealApi}
-              />
-              <button onClick={handleMealClear}>Clear Meal</button>
-            </div>
-          </div>
-          <FeedbackElement
-            className="dishes-wrapper"
-            state={dishesDisabledState()}
-          >
-            <div className="dishes">
-              <h3>Dishes</h3>
-              <div className="dishes-grid">
-                <div>Dish Name</div>
-                <div>Main</div>
-                <div>Delete</div>
-                {dishes.map(dish => (
-                  <DishComponent key={dish.localId} dish={dish} />
-                ))}
-              </div>
-              <button
-                disabled={!nullOrEmptyString(meal.id)}
-                onClick={handleAddDish}
-              >
-                Add Dish
-              </button>
-            </div>
-          </FeedbackElement>
-          <div className="options">
-            <h3>Notes</h3>
-            <textarea />
-          </div>
+      <Loading isLoading={loadingLists}>
+        <div className={classNames('AddMeal', props.className)}>
+          <h2 className="title">Add A New Meal</h2>
+          <div>Selected List: {getSelectedListText()}</div>
           <div>
-            <FeedbackElement state={validateMeal()}>
-              <button
-                disabled={validateMeal().borderState === BorderInfoState.ERROR}
-                onClick={handleAddMealToList}
-              >
-                Add Meal To List
-              </button>
+            <div className="meal">
+              <label htmlFor="mealname">Meal name</label>
+              <div>
+                <AutoCompleteInput
+                  className="meal-name"
+                  placeholder="Optional"
+                  getOptions={getMealOptions}
+                  updateCurrentValue={handleMealUpdate}
+                  currentValue={meal}
+                  onDirty={setIsMealDirty}
+                  convertFromApiType={convertFromMealApi}
+                />
+                <button onClick={handleMealClear}>Clear Meal</button>
+              </div>
+            </div>
+            <FeedbackElement
+              className="dishes-wrapper"
+              state={dishesDisabledState()}
+            >
+              <div className="dishes">
+                <h3>Dishes</h3>
+                <div className="dishes-grid">
+                  <div>Dish Name</div>
+                  <div>Main</div>
+                  <div>Delete</div>
+                  {dishes.map(dish => (
+                    <DishComponent key={dish.localId} dish={dish} />
+                  ))}
+                </div>
+                <button
+                  disabled={!nullOrEmptyString(meal.id)}
+                  onClick={handleAddDish}
+                >
+                  Add Dish
+                </button>
+              </div>
             </FeedbackElement>
-            <button disabled={true}>Add Meal To Calendar</button>
+            <div className="options">
+              <h3>Notes</h3>
+              <textarea />
+            </div>
+            <div>
+              <FeedbackElement state={validateMeal()}>
+                <button
+                  disabled={validateMeal().status === FeedbackStatus.ERROR}
+                  onClick={handleAddMealToList}
+                >
+                  Add Meal To List
+                </button>
+              </FeedbackElement>
+              <button disabled={true}>Add Meal To Calendar</button>
+            </div>
           </div>
         </div>
-      </div>
+      </Loading>
     </>
   );
 };
+
+export { generateMealName as _test_generateMealName };
 
 export default styledAddMeal(AddMeal);

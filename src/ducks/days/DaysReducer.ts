@@ -64,7 +64,13 @@ export const fetchDayDataForCarousel = (): AppThunk => async dispatch => {
   const range = getDayCardRange();
   const fetchDays = getDaysByRange(range);
   const apiCall = dispatchApiAction(setLoading);
-  return await dispatch(apiCall(fetchDays, setData, []));
+  return await dispatch(
+    apiCall({
+      request: fetchDays,
+      onSuccessAction: setData,
+      onFailFallback: [],
+    })
+  );
 };
 
 export default daysSlice.reducer;

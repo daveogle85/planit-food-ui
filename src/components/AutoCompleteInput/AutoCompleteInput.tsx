@@ -5,18 +5,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { jsx } from '@emotion/core';
 
 import LoadingSpinner from '../../components/Spinner/Spinner';
+import { ToastState, FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import useOutsideAlerter from '../../helpers/clickedOutside';
 import useDebounce from '../../helpers/debounce';
 import { nullOrEmptyString } from '../../helpers/string';
-import { BorderInfoState } from '../../styles/border';
+import FeedbackElement from '../FeedbackInput/FeedbackElement';
 import {
+  AutoCompleteInputApiType,
   AutoCompleteInputBaseType,
   AutoCompleteInputProps,
-  AutoCompleteInputApiType,
 } from './AutoCompleteInputTypes';
 import { styledAutoCompleteInput } from './StyledAutoCompleteInput';
-import FeedbackElement from '../FeedbackInput/FeedbackElement';
-import { FeedbackElementState } from '../FeedbackInput/FeedbackElementTypes';
 
 export function AutoCompleteInput<
   T extends AutoCompleteInputBaseType,
@@ -111,27 +110,27 @@ export function AutoCompleteInput<
 
   const handleDirtyChange = (dirty: boolean) => onDirty && onDirty(dirty);
 
-  const getBorderInfoState = (): FeedbackElementState => {
+  const getInfoState = (): ToastState => {
     if (nullOrEmptyString(debouncedSearchTerm)) {
       return {
-        borderState: BorderInfoState.HIDDEN,
+        status: FeedbackStatus.HIDDEN,
       };
     }
 
     if (!nullOrEmptyString(inputError)) {
       return {
-        borderState: BorderInfoState.ERROR,
+        status: FeedbackStatus.ERROR,
         message: inputError,
       };
     }
 
     return optionLocked
       ? {
-          borderState: BorderInfoState.INFO,
+          status: FeedbackStatus.INFO,
           message: 'Option Selected',
         }
       : {
-          borderState: BorderInfoState.WARN,
+          status: FeedbackStatus.WARN,
           message: 'Option will be added to Database',
         };
   };
@@ -141,7 +140,7 @@ export function AutoCompleteInput<
       className={classNames('auto-complete-input', props.className)}
       ref={ref}
     >
-      <FeedbackElement state={getBorderInfoState()}>
+      <FeedbackElement state={getInfoState()}>
         <input
           type="text"
           placeholder={props.placeholder}

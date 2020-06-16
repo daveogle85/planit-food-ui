@@ -1,6 +1,17 @@
-import { AppThunk, RootState } from '.';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+
+import { AppThunk, RootState } from './';
 import { authSelectors } from './auth/AuthReducer';
+import { setToastState } from './toast/ToastReducer';
+import { FeedbackStatus } from './toast/ToastTypes';
+import { nullOrEmptyString } from '../helpers/string';
+
+type DispatchApiActionOptions<ApiReturnType> = {
+  request: (token: string) => Promise<ApiReturnType>;
+  onSuccessAction: ActionCreatorWithPayload<ApiReturnType, string>;
+  onFailFallback: ApiReturnType;
+  onSuccessMessage?: string;
+};
 
 /**
  * Generic function to handle setting loading and calling
@@ -14,17 +25,36 @@ import { authSelectors } from './auth/AuthReducer';
 export const dispatchApiAction = (
   setLoading: ActionCreatorWithPayload<boolean, string>
 ) => <ApiReturnType>(
-  apiCall: (token: string) => Promise<ApiReturnType>,
-  onSuccessDispatch: ActionCreatorWithPayload<ApiReturnType, string>,
-  onFailFallback: ApiReturnType
+  options: DispatchApiActionOptions<ApiReturnType>
 ): AppThunk => async (dispatch, getState: () => RootState) => {
+  const {
+    request,
+    onFailFallback,
+    onSuccessAction,
+    onSuccessMessage,
+  } = options;
   dispatch(setLoading(true));
   try {
     const token = authSelectors.selectedToken(getState());
-    const result = token ? await apiCall(token) : onFailFallback;
-    dispatch(onSuccessDispatch(result));
+    const result = token ? await request(token) : onFailFallback;
+    dispatch(onSuccessAction(result));
+
+    if (!nullOrEmptyString(onSuccessMessage)) {
+      dispatch(
+        setToastState({
+          status: FeedbackStatus.INFO,
+          message: onSuccessMessage,
+        })
+      );
+    }
   } catch (exception) {
-    dispatch(onSuccessDispatch(onFailFallback));
+    dispatch(onSuccessAction(onFailFallback));
+    dispatch(
+      setToastState({
+        status: FeedbackStatus.ERROR,
+        message: exception.message,
+      })
+    );
   } finally {
     dispatch(setLoading(false));
   }

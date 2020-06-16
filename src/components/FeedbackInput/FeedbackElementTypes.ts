@@ -1,11 +1,6 @@
-import { BorderInfoState } from '../../styles/border';
-
-export type FeedbackElementState = {
-  borderState: BorderInfoState;
-  message?: string;
-};
+import { ToastState } from '../../ducks/toast/ToastTypes';
 
 export type FeedbackElementProps = {
-  state: FeedbackElementState;
+  state: ToastState;
   className?: string;
 };

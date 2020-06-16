@@ -21,6 +21,7 @@ import Login from '../Login/Login';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
 import { CheckAuth } from './CheckAuth';
+import Toast from '../Toast/Toast';
 
 const CallBack: React.FC = props => {
   let history = useHistory();
@@ -46,6 +47,7 @@ const Root = ({ store }: { store: ReturnType<typeof createStore> }) => (
           <Router>
             <Routes />
           </Router>
+          <Toast />
         </CheckAuth>
       </ThemeProvider>
     </Provider>

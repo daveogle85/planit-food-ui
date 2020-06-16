@@ -11,7 +11,7 @@ import { EmotionProps } from '../styles/types';
 import DayCardCarousel from '../components/Carousel/DayCardCarousel';
 import NavBar from '../components/NavBar/NavBar';
 import { styledWeekView } from './StyledWeekView';
-import LoadingSpinner from '../components/Spinner/Spinner';
+import Loading from '../components/Loading/Loading';
 
 const WeekView: React.FC<EmotionProps> = props => {
   const dispatch = useDispatch();
@@ -30,7 +30,9 @@ const WeekView: React.FC<EmotionProps> = props => {
     <>
       <NavBar />
       <div className={classNames('WeekView', props.className)}>
-        {loadingDays ? <LoadingSpinner /> : <DayCardCarousel days={days} />}
+        <Loading isLoading={loadingDays}>
+          <DayCardCarousel days={days} />
+        </Loading>
       </div>
     </>
   );

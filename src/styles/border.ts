@@ -4,14 +4,7 @@ const borderTheme = {
     full: '2em',
   },
   thin: (colour: string) => `1px solid ${colour}`,
+  medium: (colour: string) => `2px solid ${colour}`,
 };
-
-export enum BorderInfoState {
-  ERROR,
-  WARN,
-  INFO,
-  DISABLED,
-  HIDDEN,
-}
 
 export default borderTheme;

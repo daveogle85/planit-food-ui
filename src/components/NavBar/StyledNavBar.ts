@@ -31,7 +31,8 @@ export const Add = styled.div`
   span {
     position: relative;
     display: inline-block;
-    border: 2px solid ${props => props.theme.colours.background.darkGrey};
+    border: ${props =>
+      props.theme.border.medium(props.theme.colours.background.darkGrey)};
     ${navBarImageStyle}
     &:before {
       content: '';

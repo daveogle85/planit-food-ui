@@ -43,6 +43,14 @@ export const styledAddMeal = (AddMeal: React.ComponentType) => styled(AddMeal)`
     padding-bottom: ${props => props.theme.spacing.xSmall};
   }
 
+  .options {
+    padding-bottom: ${props => props.theme.spacing.medium};
+  }
+
+  textarea {
+    width: 100%;
+  }
+
   .dishes,
   .dishes-wrapper {
     width: 100%;

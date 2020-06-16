@@ -87,7 +87,7 @@ export const styledLoginButton = (LoginButton: React.ComponentType) => styled(
     ${centerFlex}
     width: 100%;
     height: 100%;
-    color: ${props => props.theme.colours.background.whitesmoke};
+    color: ${props => props.theme.colours.background.whiteSmoke};
     font-size: ${props => props.theme.font.size.small};
     font-weight: ${props => props.theme.font.weight.bold};
     opacity: 1;
@@ -100,7 +100,7 @@ export const styledLoginButton = (LoginButton: React.ComponentType) => styled(
     ${centerFlex}
     width: 100%;
     height: 100%;
-    color: ${props => props.theme.colours.background.whitesmoke};
+    color: ${props => props.theme.colours.background.whiteSmoke};
     text-decoration: none;
     transition: 0.25s;
     svg {
@@ -110,7 +110,7 @@ export const styledLoginButton = (LoginButton: React.ComponentType) => styled(
     }
     &:hover {
       background-color: rgba(
-        ${props => props.theme.colours.background.whitesmoke},
+        ${props => props.theme.colours.background.whiteSmoke},
         0.1
       );
       animation: ${bounce} 0.4s linear;

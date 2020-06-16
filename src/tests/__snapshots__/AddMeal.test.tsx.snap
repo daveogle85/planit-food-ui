@@ -1,0 +1,869 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Add Meal View renders correctly 1`] = `
+Array [
+  .emotion-4 {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  height: 70px;
+  box-shadow: 4px 0 12px -6px #000, -4px 0 12px -6px #000;
+  list-style-type: none;
+  z-index: 1;
+}
+
+.emotion-4 ul {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding-left: 40px;
+}
+
+.emotion-4 ul li {
+  cursor: pointer;
+  list-style-type: none;
+  height: 100%;
+  min-width: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.emotion-4 ul li:hover:not(.app-title) {
+  background-color: #f1f1f1;
+}
+
+.emotion-4 ul .app-title {
+  white-space: nowrap;
+}
+
+.emotion-4 ul .dd-menu-items {
+  position: relative;
+  height: calc(100% - 0px);
+  width: calc(100% - 0px);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+.emotion-4 ul .dd-menu-items li:not(.dd-list-item) {
+  margin-right: 8px;
+}
+
+.emotion-1 {
+  height: 100%;
+  position: relative;
+}
+
+.emotion-1 .dd-header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+}
+
+.emotion-1 .dd-header-title {
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.emotion-1 li:hover {
+  background-color: #46627f;
+}
+
+.emotion-1 .dd-list {
+  z-index: 1;
+  background-color: #fff;
+  position: absolute;
+  padding: 0;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  display: none;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 100%;
+  border: 1px solid #2b2d2f;
+  border-radius: 0.3em;
+}
+
+.emotion-1 .dd-list.dd-open {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.emotion-1 .dd-list.dd-oob {
+  right: 0;
+}
+
+.emotion-1 .dd-list li {
+  cursor: pointer;
+  border-radius: 0.3em;
+  padding: 0 8px;
+  width: -webkit-fill-available;
+  width: -moz-available;
+  width: fill-available;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 30px;
+  line-height: 30px;
+}
+
+.emotion-0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 0 8px;
+}
+
+.emotion-0 .add-text {
+  display: none;
+}
+
+.emotion-0 span {
+  position: relative;
+  display: inline-block;
+  border: 2px solid #9b9797;
+  width: 40px;
+  height: 40px;
+  border-radius: 2em;
+}
+
+@media (min-width:768px) {
+  .emotion-0 span {
+    margin-right: 8px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.emotion-0 span:before {
+  content: '';
+  left: 5px;
+  right: 5px;
+  position: absolute;
+  background-color: #9b9797;
+  top: 50%;
+  height: 2px;
+}
+
+.emotion-0 span:after {
+  content: '';
+  top: 5px;
+  bottom: 5px;
+  position: absolute;
+  background-color: #9b9797;
+  left: 50%;
+  width: 2px;
+}
+
+@media (min-width:768px) {
+  .emotion-0 .add-text {
+    display: block;
+  }
+}
+
+.emotion-2 {
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 8px;
+}
+
+.emotion-2 div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-2 .details {
+  display: none;
+  font-weight: 300;
+  font-size: 15px;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+@media (min-width:768px) {
+  .emotion-2 .details {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+
+.emotion-2 img {
+  width: 40px;
+  height: 40px;
+  border-radius: 2em;
+}
+
+@media (min-width:768px) {
+  .emotion-2 img {
+    margin-right: 8px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+<nav
+    className="emotion-4"
+  >
+    <ul
+      className="menu"
+    >
+      <li
+        className="app-title"
+        onClick={[Function]}
+      >
+        Planit Food App
+      </li>
+      <div
+        className="dd-menu-items"
+      >
+        <li
+          className="dd-add"
+        >
+          <div
+            className="dd-wrapper emotion-1"
+          >
+            <div
+              className="dd-header"
+              onClick={[Function]}
+            >
+              <div
+                className="emotion-0"
+                title="Add Options"
+              >
+                <span />
+                <div
+                  className="add-text"
+                >
+                  Add
+                </div>
+              </div>
+            </div>
+            <div>
+              <ul
+                className="dd-list"
+              >
+                <li
+                  className="dd-list-item"
+                  onClick={[Function]}
+                >
+                  Add A Meal
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li
+          className="dd-profile"
+        >
+          <div
+            className="dd-wrapper emotion-1"
+          >
+            <div
+              className="dd-header"
+              onClick={[Function]}
+            >
+              <div
+                className="emotion-2"
+                title="Logout"
+              >
+                <img
+                  alt="Avatar"
+                  src=""
+                />
+                <div
+                  className="details"
+                >
+                  <span />
+                  <span />
+                </div>
+              </div>
+            </div>
+            <div>
+              <ul
+                className="dd-list"
+              >
+                <li
+                  className="dd-list-item"
+                  onClick={[Function]}
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </div>
+    </ul>
+  </nav>,
+  .emotion-6 {
+  margin: 30px;
+  margin: 30px;
+}
+
+.emotion-6 .title {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.emotion-6 label {
+  padding-right: 8px;
+}
+
+.emotion-6 .meal {
+  padding-bottom: 8px;
+}
+
+.emotion-6 .dishes {
+  padding: 8px;
+}
+
+.emotion-6 .dishes-wrapper .feedback-icon {
+  top: 8px;
+}
+
+.emotion-6 .dishes-wrapper .feedback-icon:after {
+  right: -25px;
+}
+
+.emotion-6 button {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.emotion-6 .options {
+  padding-bottom: 20px;
+}
+
+.emotion-6 textarea {
+  width: 100%;
+}
+
+.emotion-6 .dishes,
+.emotion-6 .dishes-wrapper {
+  width: 100%;
+}
+
+.emotion-6 .dishes-grid {
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr;
+  grid-auto-rows: 30px;
+  grid-gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+}
+
+.emotion-6 .dishes-grid .delete-dish > button {
+  height: 100%;
+  width: 30px;
+}
+
+.emotion-6 .title {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.emotion-6 label {
+  padding-right: 8px;
+}
+
+.emotion-6 .meal {
+  padding-bottom: 8px;
+}
+
+.emotion-6 .dishes {
+  padding: 8px;
+}
+
+.emotion-6 .dishes-wrapper .feedback-icon {
+  top: 8px;
+}
+
+.emotion-6 .dishes-wrapper .feedback-icon:after {
+  right: -25px;
+}
+
+.emotion-6 button {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.emotion-6 .options {
+  padding-bottom: 20px;
+}
+
+.emotion-6 textarea {
+  width: 100%;
+}
+
+.emotion-6 .dishes,
+.emotion-6 .dishes-wrapper {
+  width: 100%;
+}
+
+.emotion-6 .dishes-grid {
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr;
+  grid-auto-rows: 30px;
+  grid-gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+}
+
+.emotion-6 .dishes-grid .delete-dish > button {
+  height: 100%;
+  width: 30px;
+}
+
+.emotion-1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  max-width: 500px;
+  height: 30px;
+}
+
+.emotion-1 .dd-list {
+  z-index: 1;
+  background-color: #fff;
+  position: absolute;
+  padding: 0;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+  display: none;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 100%;
+  border: 1px solid #2b2d2f;
+  border-radius: 0.3em;
+}
+
+.emotion-1 .dd-list.dd-open {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.emotion-1 .dd-list.dd-oob {
+  right: 0;
+}
+
+.emotion-1 .dd-list li {
+  cursor: pointer;
+  border-radius: 0.3em;
+  padding: 0 8px;
+  width: -webkit-fill-available;
+  width: -moz-available;
+  width: fill-available;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 30px;
+  line-height: 30px;
+}
+
+.emotion-1 input {
+  width: 100%;
+  height: 100%;
+}
+
+.emotion-1 .feedback-hidden > input {
+  border: 1px solid #f1f1f1;
+  border-radius: 0.3em;
+  height: calc(100% - 6px);
+}
+
+.emotion-1 > div {
+  width: 100%;
+}
+
+.emotion-1 .dd-list {
+  margin: 0;
+  top: 30px;
+}
+
+.emotion-1 .dd-list li:hover {
+  background-color: #46627f;
+}
+
+.emotion-0 {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-0:not(.feedback-hidden) > *:first-child {
+  padding-right: 25px;
+  border: 2px solid #9b9797;
+  border-radius: 0.3em;
+  height: calc(100% - 6px);
+}
+
+.emotion-0 .feedback-icon {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9b9797;
+  border-radius: 2em;
+  border: 2px solid #9b9797;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.emotion-0 .feedback-icon:after {
+  content: '';
+  display: none;
+  position: absolute;
+  white-space: nowrap;
+  border: 1px solid #9b9797;
+  border-radius: 0.3em;
+  padding: 2px;
+  bottom: 150%;
+  background: white;
+  opacity: 0.9;
+  font-size: 8px;
+}
+
+.emotion-0 .feedback-icon:hover:after {
+  display: block;
+}
+
+.emotion-5 {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-5:not(.feedback-hidden) > *:first-child {
+  padding-right: 25px;
+  border: 2px solid #cc0000;
+  border-radius: 0.3em;
+  height: calc(100% - 6px);
+}
+
+.emotion-5 .feedback-icon {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  right: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #cc0000;
+  border-radius: 2em;
+  border: 2px solid #cc0000;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.emotion-5 .feedback-icon:after {
+  content: 'Meals with no dishes must have a name';
+  display: none;
+  position: absolute;
+  white-space: nowrap;
+  border: 1px solid #cc0000;
+  border-radius: 0.3em;
+  padding: 2px;
+  bottom: 150%;
+  background: white;
+  opacity: 0.9;
+  font-size: 8px;
+}
+
+.emotion-5 .feedback-icon:hover:after {
+  display: block;
+}
+
+<div
+    className="AddMeal emotion-6"
+  >
+    <h2
+      className="title"
+    >
+      Add A New Meal
+    </h2>
+    <div>
+      Selected List: 
+      No List Available
+    </div>
+    <div>
+      <div
+        className="meal"
+      >
+        <label
+          htmlFor="mealname"
+        >
+          Meal name
+        </label>
+        <div>
+          <div
+            className="auto-complete-input meal-name emotion-1"
+          >
+            <div
+              className="feedback-hidden emotion-0"
+            >
+              <input
+                onBlur={[Function]}
+                onChange={[Function]}
+                placeholder="Optional"
+                type="text"
+                value=""
+              />
+            </div>
+            <ul
+              className="dd-list"
+            >
+              <li>
+                No Option Found
+              </li>
+            </ul>
+          </div>
+          <button
+            onClick={[Function]}
+          >
+            Clear Meal
+          </button>
+        </div>
+      </div>
+      <div
+        className="dishes-wrapper feedback-hidden emotion-0"
+      >
+        <div
+          className="dishes"
+        >
+          <h3>
+            Dishes
+          </h3>
+          <div
+            className="dishes-grid"
+          >
+            <div>
+              Dish Name
+            </div>
+            <div>
+              Main
+            </div>
+            <div>
+              Delete
+            </div>
+            <div
+              className="auto-complete-input dish-name emotion-1"
+            >
+              <div
+                className="feedback-hidden emotion-0"
+              >
+                <input
+                  disabled={false}
+                  onBlur={[Function]}
+                  onChange={[Function]}
+                  placeholder="Dish Name"
+                  type="text"
+                  value=""
+                />
+              </div>
+              <ul
+                className="dd-list"
+              >
+                <li>
+                  No Option Found
+                </li>
+              </ul>
+            </div>
+            <div>
+              <input
+                checked={true}
+                disabled={false}
+                name="isMain"
+                onChange={[Function]}
+                type="checkbox"
+              />
+            </div>
+            <div
+              className="delete-dish"
+            >
+              <button
+                disabled={false}
+                onClick={[Function]}
+              >
+                -
+              </button>
+            </div>
+          </div>
+          <button
+            disabled={false}
+            onClick={[Function]}
+          >
+            Add Dish
+          </button>
+        </div>
+      </div>
+      <div
+        className="options"
+      >
+        <h3>
+          Notes
+        </h3>
+        <textarea />
+      </div>
+      <div>
+        <div
+          className=" emotion-5"
+        >
+          <button
+            disabled={true}
+            onClick={[Function]}
+          >
+            Add Meal To List
+          </button>
+          <div
+            className="feedback-icon"
+          >
+            i
+          </div>
+        </div>
+        <button
+          disabled={true}
+        >
+          Add Meal To Calendar
+        </button>
+      </div>
+    </div>
+  </div>,
+]
+`;

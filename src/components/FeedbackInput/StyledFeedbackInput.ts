@@ -1,26 +1,15 @@
 import css from '@emotion/css/macro';
-import { BorderInfoState } from '../../styles/border';
-import { theme } from '../../styles/theme';
-import { centerFlex, pointer } from '../../styles/common';
 
-const getColourFromInfoState = (state: BorderInfoState) => {
-  switch (state) {
-    case BorderInfoState.ERROR:
-      return theme.colours.errorRed;
-    case BorderInfoState.WARN:
-      return theme.colours.warningAmber;
-    case BorderInfoState.DISABLED:
-      return theme.colours.background.darkGrey;
-    default:
-      return theme.colours.infoGreen;
-  }
-};
+import { centerFlex, pointer } from '../../styles/common';
+import { theme } from '../../styles/theme';
+import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
+import { getColourFromStatus } from '../../styles/colours';
 
 export const styledFeedbackInput = (
-  state: BorderInfoState = BorderInfoState.INFO,
+  state: FeedbackStatus = FeedbackStatus.INFO,
   message?: string
 ) => {
-  const borderColour = getColourFromInfoState(state);
+  const borderColour = getColourFromStatus(state);
   const iconStyle = css`
     .feedback-icon {
       width: 13px;
@@ -31,7 +20,7 @@ export const styledFeedbackInput = (
       font-weight: ${theme.font.weight.bold};
       color: ${borderColour};
       border-radius: ${theme.border.radius.full};
-      border: 2px solid ${borderColour};
+      border: ${theme.border.medium(borderColour)};
       ${centerFlex};
       ${pointer};
     }
@@ -63,7 +52,7 @@ export const styledFeedbackInput = (
     align-items: center;
     :not(.feedback-hidden) > *:first-child {
       padding-right: 25px;
-      border: 2px solid ${borderColour};
+      border: ${theme.border.medium(borderColour)};
       border-radius: ${theme.border.radius.medium};
       height: calc(100% - 6px); // account for border
     }
