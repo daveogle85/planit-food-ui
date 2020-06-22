@@ -10,8 +10,9 @@ import reducer, {
   setLoading,
   setWeek,
 } from '../../ducks/days/DaysReducer';
-import { setToastState } from '../../ducks/toast/ToastReducer';
+import { setPopped } from '../../ducks/toast/ToastReducer';
 import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
+import { dispatchWithTimeout, mockSetToastState } from '../helpers';
 
 describe('DaysReducer', () => {
   describe('getDayCardRange', () => {
@@ -87,6 +88,7 @@ describe('DaysReducer', () => {
   });
 
   describe('Thunks', () => {
+    jest.useFakeTimers();
     beforeEach(() => jest.resetModules());
 
     describe('fetchDayDataForCarousel', () => {
@@ -141,15 +143,17 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(fetchDayDataForCarousel() as any);
+        await dispatchWithTimeout(store.dispatch, fetchDayDataForCarousel());
         const expectedActions = [
           setLoading(true),
           setData([]),
-          setToastState({
+          setPopped(true),
+          mockSetToastState({
             status: FeedbackStatus.ERROR,
             message: 'test exception',
           }),
           setLoading(false),
+          setPopped(false),
         ];
         expect(store.getActions()).toEqual(expectedActions);
       });

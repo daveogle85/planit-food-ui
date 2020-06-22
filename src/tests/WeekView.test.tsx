@@ -1,8 +1,8 @@
 import serializer from 'jest-emotion';
 import React from 'react';
 
-import { styledWeekView } from '../weekView/StyledWeekView';
-import WeekView from '../weekView/WeekView';
+import { styledWeekView } from '../views/weekView/StyledWeekView';
+import WeekView from '../views/weekView/WeekView';
 import { renderWithTheme } from './helpers';
 import { RootState } from '../ducks';
 

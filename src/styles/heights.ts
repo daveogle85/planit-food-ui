@@ -12,3 +12,8 @@ export const loginModalDim = {
 };
 export const spinnerBubbleHeight = '13px';
 export const spinnerBoxHeight = '80px';
+
+export const tabDim = {
+  height: 100,
+  width: 40,
+};

@@ -1,9 +1,9 @@
 import { Ingredient } from './IngredientsTypes';
 
 export enum DishType {
-  MAIN,
-  SIDE,
-  DESSERT,
+  MAIN = 'MAIN',
+  SIDE = 'SIDE',
+  DESSERT = 'DESSERT',
 }
 
 export type ApiDish = {

@@ -4,7 +4,7 @@ import Root from './components/Routes/Root';
 import ReactDOM from 'react-dom';
 import store from './store';
 
-import './index.css';
+// import './index.css';
 
 const render = () => {
   ReactDOM.render(<Root store={store} />, document.getElementById('root'));

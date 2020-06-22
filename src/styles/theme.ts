@@ -60,6 +60,7 @@ export const globals = css`
   #root,
   body {
     height: 100%;
+    margin: 0;
     ${fullScreen}
   }
 

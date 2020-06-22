@@ -1,26 +1,34 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuid } from 'uuid';
 
-import { searchForDish } from '../api/dish';
-import { searchForMeal } from '../api/meal';
-import { ApiDish, Dish, DishType } from '../api/types/DishTypes';
-import { ApiMeal, Meal } from '../api/types/MealTypes';
-import AutoCompleteInput from '../components/AutoCompleteInput/AutoCompleteInput';
-import FeedbackElement from '../components/FeedbackInput/FeedbackElement';
-import NavBar from '../components/NavBar/NavBar';
-import { authSelectors } from '../ducks/auth/AuthReducer';
-import { ToastState, FeedbackStatus } from '../ducks/toast/ToastTypes';
+import { searchForDish } from '../../api/dish';
+import {
+  convertFromDishApi,
+  convertFromMealApi,
+} from '../../api/helpers/convert';
+import { searchForMeal } from '../../api/meal';
+import { Dish, DishType } from '../../api/types/DishTypes';
+import { Meal } from '../../api/types/MealTypes';
+import AutoCompleteInput from '../../components/AutoCompleteInput/AutoCompleteInput';
+import FeedbackElement from '../../components/FeedbackInput/FeedbackElement';
+import List from '../../components/List/List';
+import Loading from '../../components/Loading/Loading';
+import NavBar from '../../components/NavBar/NavBar';
+import { authSelectors } from '../../ducks/auth/AuthReducer';
 import {
   addMealToSelectedList,
+  fetchDefaultList,
   fetchLists,
   listsSelectors,
-} from '../ducks/lists/ListsReducer';
-import { nullOrEmptyString } from '../helpers/string';
-import { EmotionProps } from '../styles/types';
+} from '../../ducks/lists/ListsReducer';
+import { FeedbackStatus, ErrorState } from '../../ducks/toast/ToastTypes';
+import { nullOrEmptyString } from '../../helpers/string';
+import { EmotionProps } from '../../styles/types';
 import { DishComponentProps } from './AddMealTypes';
 import { styledAddMeal } from './StyledAddMeal';
-import Loading from '../components/Loading/Loading';
+import usePrevious from '../../helpers/usePrevious';
 
 function generateMealName(dishes: Array<Dish>): string {
   if (!dishes.length) {
@@ -39,25 +47,27 @@ function generateMealName(dishes: Array<Dish>): string {
 
 const AddMeal: React.FC<EmotionProps> = props => {
   const defaultDish: Dish = {
-    localId: 'local-0',
+    localId: uuid(),
     name: '',
     dishType: DishType.MAIN,
   };
   const defaultDishes = [defaultDish];
   const defaultMeal: Meal = {
-    localId: 'local-meal-0',
+    localId: uuid(),
     name: '',
   };
 
   const token = useSelector(authSelectors.selectedToken);
   const dispatch = useDispatch();
-  const [dishCount, setDishCount] = useState(0);
   const [dishes, setDishes] = useState([defaultDish]);
   const [meal, setMeal] = useState<Meal>(defaultMeal);
   const [isMealDirty, setIsMealDirty] = useState(false);
   const loadingLists = useSelector(listsSelectors.selectLoading);
   const selectedList = useSelector(listsSelectors.selectSelectedList);
+  const lists = useSelector(listsSelectors.selectLists);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
+  const prevSelectedList = usePrevious(selectedList);
+  const clearMealCached = useCallback(clearMeal, []);
 
   useEffect(() => {
     async function getLists() {
@@ -66,13 +76,25 @@ const AddMeal: React.FC<EmotionProps> = props => {
     getLists();
   }, [dispatch, token]);
 
-  const getMealOptions = (text: string) => searchForMeal(text)(token);
+  useEffect(() => {
+    async function setDefaultList() {
+      dispatch(fetchDefaultList());
+    }
 
-  const getDishId = () => {
-    const id = `local-${dishCount + 1}`;
-    setDishCount(dishCount + 1);
-    return id;
-  };
+    if (lists.length && selectedList == null) {
+      setDefaultList();
+    }
+
+    if (
+      selectedList &&
+      prevSelectedList &&
+      selectedList.meals.length > prevSelectedList?.meals.length
+    ) {
+      clearMealCached();
+    }
+  }, [lists, selectedList, dispatch, prevSelectedList, clearMealCached]);
+
+  const getMealOptions = (text: string) => searchForMeal(text)(token);
 
   const setDishesAndMealName = (dishes: Array<Dish>) => {
     const namedDishes = dishes.filter(d => !nullOrEmptyString(d.name));
@@ -93,7 +115,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const handleAddDish = () => {
     const newDishes = [...dishes];
     newDishes.push({
-      localId: getDishId(),
+      localId: uuid(),
       name: '',
       dishType: dishes.length === 0 ? DishType.MAIN : DishType.SIDE,
     });
@@ -150,32 +172,18 @@ const AddMeal: React.FC<EmotionProps> = props => {
     setDishesAndMealName([...newDishes]);
   };
 
-  const handleMealClear = () => {
+  function clearMeal() {
     setMeal(defaultMeal);
     setDishesAndMealName(defaultDishes);
     setIsMealDirty(false);
-  };
+  }
+
+  const handleMealClear = () => clearMeal();
 
   const handleAddMealToList = () => {
     const dishesToAdd = dishes.filter(d => !nullOrEmptyString(d.name));
     const mealToAdd = { ...meal, dishes: dishesToAdd };
     dispatch(addMealToSelectedList(mealToAdd));
-  };
-
-  const convertFromDishApi = (dish: ApiDish, id?: string) => ({
-    ...dish,
-    localId: id ?? getDishId(),
-  });
-
-  const convertFromMealApi = (meal: ApiMeal) => {
-    let id = dishCount;
-    const dishes = meal.dishes?.map(d => {
-      const dish = convertFromDishApi(d, `local-${id + 1}`);
-      id++;
-      return dish;
-    });
-    setDishCount(dishCount + (meal.dishes?.length ?? 0));
-    return { ...meal, localId: 'local-meal-1', dishes };
   };
 
   function updateDishErrors() {
@@ -210,7 +218,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
           <input
             name="isMain"
             type="checkbox"
-            checked={props.dish.dishType === DishType.MAIN}
+            checked={dish.dishType === DishType.MAIN}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               handleMainChecked(dish.localId, e.currentTarget.checked)
             }
@@ -229,10 +237,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
     );
   };
 
-  const getSelectedListText = () =>
-    selectedList == null ? 'No List Available' : selectedList.name;
-
-  const validateMeal = (): ToastState => {
+  const validateMeal = (): ErrorState => {
     let message = undefined;
     let status = FeedbackStatus.HIDDEN;
 
@@ -279,10 +284,10 @@ const AddMeal: React.FC<EmotionProps> = props => {
   return (
     <>
       <NavBar />
+      <List />
       <Loading isLoading={loadingLists}>
         <div className={classNames('AddMeal', props.className)}>
           <h2 className="title">Add A New Meal</h2>
-          <div>Selected List: {getSelectedListText()}</div>
           <div>
             <div className="meal">
               <label htmlFor="mealname">Meal name</label>

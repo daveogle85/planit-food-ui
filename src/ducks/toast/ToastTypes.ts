@@ -6,7 +6,11 @@ export enum FeedbackStatus {
   HIDDEN = 'Hidden',
 }
 
-export type ToastState = {
+export type ErrorState = {
   status: FeedbackStatus;
   message?: string;
+};
+
+export type ToastState = ErrorState & {
+  popped: boolean;
 };

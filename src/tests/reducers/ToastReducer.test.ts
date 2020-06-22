@@ -1,14 +1,23 @@
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import reducer, {
-  setToastState,
   toastSelectors,
+  setPopped,
+  popToast,
 } from '../../ducks/toast/ToastReducer';
 import { RootState } from '../../ducks';
+import {
+  mockPopToastPayload,
+  dispatchWithTimeout,
+  mockPopToastActions,
+} from '../helpers';
 
 describe('ToastReducer', () => {
   describe('reducer, actions and selectors', () => {
     const initialState = {
       status: FeedbackStatus.HIDDEN,
+      popped: false,
     };
 
     it('should return the initial state on first run', () => {
@@ -16,35 +25,52 @@ describe('ToastReducer', () => {
       expect(result).toEqual(initialState);
     });
 
-    it('should set the state correctly', () => {
-      const newState = {
-        status: FeedbackStatus.WARN,
-        message: 'test',
-      };
+    it('should set the popped state correctly', () => {
+      const popped = true;
 
-      const result = reducer(initialState, setToastState(newState));
+      const result = reducer(initialState, setPopped(popped));
       const rootState = { toast: result };
-      expect(
-        toastSelectors.selectToastState(rootState as RootState)
-      ).toStrictEqual(newState);
+      expect(toastSelectors.selectPopped(rootState as RootState)).toBe(popped);
     });
+  });
 
-    it('should overwrite the old state correctly', () => {
-      const newState = {
-        status: FeedbackStatus.DISABLED,
-      };
+  describe('Thunks', () => {
+    jest.useFakeTimers();
+    beforeEach(() => jest.resetModules());
 
-      const result = reducer(
-        {
-          status: FeedbackStatus.ERROR,
+    describe('popToast', () => {
+      const mockStore = configureMockStore([thunk]);
+      it('should pop toast correctly', async () => {
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [],
+            week: [],
+          },
+          lists: {
+            loading: false,
+            selectedList: null,
+            lists: [],
+          },
+          toast: {
+            status: FeedbackStatus.HIDDEN,
+            popped: false,
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          popToast(mockPopToastPayload)
+        );
+        const expectedActions = mockPopToastActions({
           message: 'test',
-        },
-        setToastState(newState)
-      );
-      const rootState = { toast: result };
-      expect(
-        toastSelectors.selectToastState(rootState as RootState)
-      ).toStrictEqual({ ...newState, message: undefined });
+          status: FeedbackStatus.WARN,
+        });
+        expect(store.getActions()).toEqual(expectedActions);
+      });
     });
   });
 });

@@ -8,10 +8,17 @@ import reducer, {
   setLists,
   setLoading,
   setSelectedList,
+  setSideBarOpen,
+  setSelectedMeal,
 } from '../../ducks/lists/ListsReducer';
-import { setToastState } from '../../ducks/toast/ToastReducer';
+import { setPopped } from '../../ducks/toast/ToastReducer';
 import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import { Meal } from '../../api/types/MealTypes';
+import {
+  dispatchWithTimeout,
+  mockSetToastState,
+  mockPopToastActions,
+} from '../helpers';
 
 describe('DaysReducer', () => {
   describe('reducer, actions and selectors', () => {
@@ -19,6 +26,8 @@ describe('DaysReducer', () => {
       loading: false,
       selectedList: null,
       lists: [],
+      sideBarOpen: false,
+      selectedMeal: null,
     };
 
     it('should return the initial state on first run', () => {
@@ -63,9 +72,35 @@ describe('DaysReducer', () => {
         selectedList
       );
     });
+
+    it('should set the sideBar open flag correctly', () => {
+      const sideBarOpen = true;
+
+      const result = reducer(initialState, setSideBarOpen(sideBarOpen));
+      const rootState = { lists: result };
+      expect(listsSelectors.selectSideBarOpen(rootState as RootState)).toBe(
+        sideBarOpen
+      );
+    });
+
+    it('should set the selected meal correctly', () => {
+      const selectedMeal: Meal = {
+        id: '1',
+        localId: '1',
+        name: 'default',
+        dishes: [],
+      };
+
+      const result = reducer(initialState, setSelectedMeal(selectedMeal));
+      const rootState = { lists: result };
+      expect(listsSelectors.selectedSelectedMeal(rootState as RootState)).toBe(
+        selectedMeal
+      );
+    });
   });
 
   describe('Thunks', () => {
+    jest.useFakeTimers();
     const mockDefaultList = {
       id: '1',
       name: 'default',
@@ -91,11 +126,9 @@ describe('DaysReducer', () => {
       const mockStore = configureMockStore([thunk]);
       it('should fetch the available lists with no error', async () => {
         const mockListsPromise = new Promise(res => res(mockListsResponse));
-        // const mockListPromise = new Promise(res => res(mockDefaultList));
         jest.mock('../../api/list', () => ({
           __esModule: true,
           default: jest.fn().mockReturnValueOnce(() => mockListsPromise),
-          //   getListByName: jest.fn().mockReturnValueOnce(() => mockListPromise),
         }));
         const { fetchLists } = require('../../ducks/lists/ListsReducer');
         const initialState = {
@@ -147,15 +180,17 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(fetchLists() as any);
+        await dispatchWithTimeout(store.dispatch, fetchLists());
         const expectedActions = [
           setLoading(true),
           setLists([]),
-          setToastState({
+          setPopped(true),
+          mockSetToastState({
             status: FeedbackStatus.ERROR,
             message: 'test exception',
           }),
           setLoading(false),
+          setPopped(false),
         ];
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -261,15 +296,17 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(fetchDefaultList() as any);
+        await dispatchWithTimeout(store.dispatch, fetchDefaultList());
         const expectedActions = [
           setLoading(true),
           setSelectedList(null),
-          setToastState({
+          setPopped(true),
+          mockSetToastState({
             status: FeedbackStatus.ERROR,
             message: 'test exception',
           }),
           setLoading(false),
+          setPopped(false),
         ];
         expect(store.getActions()).toEqual(expectedActions);
         expect(mockGetListByName).toBeCalledWith('default');
@@ -301,13 +338,11 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(fetchDefaultList() as any);
-        const expectedActions = [
-          setToastState({
-            status: FeedbackStatus.ERROR,
-            message: 'Cannot set default List, no lists are available',
-          }),
-        ];
+        await dispatchWithTimeout(store.dispatch, fetchDefaultList());
+        const expectedActions = mockPopToastActions({
+          status: FeedbackStatus.ERROR,
+          message: 'Cannot set default List, no lists are available',
+        });
         expect(store.getActions()).toEqual(expectedActions);
         expect(mockGetListByName).not.toHaveBeenCalled();
       });
@@ -353,18 +388,23 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(addMealToSelectedList(mealToAdd) as any);
+        await dispatchWithTimeout(
+          store.dispatch,
+          addMealToSelectedList(mealToAdd)
+        );
         const expectedActions = [
           setLoading(true),
           setSelectedList({
             ...mockDefaultList,
             meals: [...mockDefaultList.meals, mealToAdd],
           }),
-          setToastState({
+          setPopped(true),
+          mockSetToastState({
             status: FeedbackStatus.INFO,
             message: '"new" Added to List: default',
           }),
           setLoading(false),
+          setPopped(false),
         ];
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -396,17 +436,22 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(addMealToSelectedList(mealToAdd) as any);
+        await dispatchWithTimeout(
+          store.dispatch,
+          addMealToSelectedList(mealToAdd)
+        );
         const expectedActions = [
           setLoading(true),
           setSelectedList({
             ...mockDefaultList,
           }),
-          setToastState({
+          setPopped(true),
+          mockSetToastState({
             status: FeedbackStatus.ERROR,
             message: 'test exception',
           }),
           setLoading(false),
+          setPopped(false),
         ];
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -444,13 +489,167 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(addMealToSelectedList(mealToAdd) as any);
+        await dispatchWithTimeout(
+          store.dispatch,
+          addMealToSelectedList(mealToAdd)
+        );
+        const expectedActions = mockPopToastActions({
+          status: FeedbackStatus.ERROR,
+          message: 'No list selected',
+        });
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+
+    describe('deleteMealFromSelectedList', () => {
+      const mockStore = configureMockStore([thunk]);
+      const mealToDelete: Meal = {
+        id: 'new',
+        localId: 'new',
+        name: 'new',
+      };
+      it('should delete meal from list with no error', async () => {
+        const mockListPromise = new Promise(res =>
+          res({
+            ...mockDefaultList,
+            meals: [],
+          })
+        );
+        const mockGetListByName = jest.fn();
+        jest.mock('../../api/list', () => ({
+          __esModule: true,
+          updateList: mockGetListByName.mockReturnValueOnce(
+            () => mockListPromise
+          ),
+        }));
+        const {
+          deleteMealFromSelectedList,
+        } = require('../../ducks/lists/ListsReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [],
+            week: [],
+          },
+          lists: {
+            loading: false,
+            selectedList: mockDefaultList,
+            lists: mockListsResponse,
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          deleteMealFromSelectedList(mealToDelete)
+        );
         const expectedActions = [
-          setToastState({
-            status: FeedbackStatus.ERROR,
-            message: 'No list selected',
+          setLoading(true),
+          setSelectedList({
+            ...mockDefaultList,
+            meals: [],
           }),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.INFO,
+            message: 'Meal "new" deleted',
+          }),
+          setLoading(false),
+          setPopped(false),
         ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
+      it('should delete a meal from the list with error', async () => {
+        const mockGetListByName = jest.fn();
+        jest.mock('../../api/list', () => ({
+          __esModule: true,
+          updateList: mockGetListByName.mockReturnValueOnce(() => {
+            throw new Error('test exception');
+          }),
+        }));
+        const {
+          deleteMealFromSelectedList,
+        } = require('../../ducks/lists/ListsReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [],
+            week: [],
+          },
+          lists: {
+            loading: false,
+            selectedList: mockDefaultList,
+            lists: mockListsResponse,
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          deleteMealFromSelectedList(mealToDelete)
+        );
+        const expectedActions = [
+          setLoading(true),
+          setSelectedList({
+            ...mockDefaultList,
+          }),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.ERROR,
+            message: 'test exception',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
+      it('should not delete a meal from list if no selected list', async () => {
+        const mockListPromise = new Promise(res =>
+          res({
+            ...mockDefaultList,
+            meals: [],
+          })
+        );
+        const mockGetListByName = jest.fn();
+        jest.mock('../../api/list', () => ({
+          __esModule: true,
+          updateList: mockGetListByName.mockReturnValueOnce(
+            () => mockListPromise
+          ),
+        }));
+        const {
+          deleteMealFromSelectedList,
+        } = require('../../ducks/lists/ListsReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [],
+            week: [],
+          },
+          lists: {
+            loading: false,
+            selectedList: null,
+            lists: mockListsResponse,
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          deleteMealFromSelectedList(mealToDelete)
+        );
+        const expectedActions = mockPopToastActions({
+          status: FeedbackStatus.ERROR,
+          message: 'Selected list was not found',
+        });
         expect(store.getActions()).toEqual(expectedActions);
       });
     });

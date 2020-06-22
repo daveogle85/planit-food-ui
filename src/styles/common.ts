@@ -1,4 +1,5 @@
 import css from '@emotion/css/macro';
+import borderTheme from './border';
 export const fullScreen = css`
   position: absolute;
   top: 0;
@@ -23,6 +24,17 @@ export const centerFlex = css`
 `;
 
 export const pointer = css`
+  cursor: pointer;
+`;
+
+export const circularButton = css`
+  padding: 2px;
+  height: 20px;
+  width: 20px;
+  border-radius: ${borderTheme.radius.full};
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 `;
 

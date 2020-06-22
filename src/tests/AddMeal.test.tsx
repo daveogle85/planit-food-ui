@@ -1,10 +1,10 @@
 import serializer from 'jest-emotion';
 import React from 'react';
 
-import AddMeal, { _test_generateMealName } from '../addMeal//AddMeal';
+import AddMeal, { _test_generateMealName } from '../views/addMeal/AddMeal';
 import { renderWithTheme } from './helpers';
 import { RootState } from '../ducks';
-import { styledAddMeal } from '../addMeal/StyledAddMeal';
+import { styledAddMeal } from '../views/addMeal/StyledAddMeal';
 import { DishType } from '../api/types/DishTypes';
 
 jest.mock('../contexts/auth0-context', () => ({

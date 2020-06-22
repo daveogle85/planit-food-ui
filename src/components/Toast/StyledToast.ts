@@ -35,20 +35,29 @@ export const styledToast = (state: FeedbackStatus) => {
 
   const show = css`
     &.show {
+      opacity: 0;
       display: block;
+    }
+
+    &.show.pop {
+      opacity: 1;
       animation: ${fadeIn} 0.5s;
     }
   `;
 
   const hide = css`
-    &.hidden {
+    &.close.hidden {
+      display: none;
+    }
+
+    &.close.pop {
       opacity: 0;
       animation: ${fadeOut} 0.5s;
     }
   `;
 
   return css`
-    display: none;
+    z-index: ${theme.zIndex.two};
     position: fixed;
     left: ${theme.spacing.medium};
     right: ${theme.spacing.medium};
