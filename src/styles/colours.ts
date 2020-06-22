@@ -9,6 +9,7 @@ export const colours = {
   lightWarningAmber: '#fff3d1',
   infoGreen: '#00703c',
   lightInfoGreen: '#b9decd',
+  addGreen: '#53dd49',
   background: {
     weekViewPurple: '#7f53ac',
     weekViewBlue: '#647dee',

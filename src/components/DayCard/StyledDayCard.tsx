@@ -1,5 +1,6 @@
-import styled from '../../styles/theme';
 import css from '@emotion/css/macro';
+
+import styled from '../../styles/theme';
 import { CssProps } from '../../styles/types';
 
 const header = css`

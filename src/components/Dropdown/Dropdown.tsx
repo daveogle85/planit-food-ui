@@ -2,10 +2,10 @@ import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
 
 import useOutsideAlerter from '../../helpers/clickedOutside';
+import { useOutOfBounds } from '../../helpers/outOfBounds';
 import { EmotionProps } from '../../styles/types';
 import { DropdownProps } from './DropdownTypes';
 import { styleDropdown } from './StyledDropdown';
-import { useOutOfBounds } from '../../helpers/outOfBounds';
 
 const useDropdown = (dropdownProps: DropdownProps) => {
   const { label, defaultState = '', onSelect, options } = dropdownProps;

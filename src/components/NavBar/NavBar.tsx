@@ -5,6 +5,8 @@ import { EmotionProps } from '../../styles/types';
 import useDropdown from '../Dropdown/Dropdown';
 import { useHistory } from 'react-router-dom';
 import { styledNavBar, styledProfile, Add } from './StyledNavBar';
+import Plus from '../../images/plus';
+import { colours } from '../../styles/colours';
 
 const ProfileRaw: React.FC<EmotionProps> = props => {
   const { user } = useAuth0();
@@ -38,7 +40,7 @@ function NavBarRaw(props: EmotionProps) {
 
   const StyledAdd: React.FC = props => (
     <Add title="Add Options">
-      <span />
+      <Plus crossColour={colours.background.darkGrey} />
       <div className="add-text">Add</div>
     </Add>
   );

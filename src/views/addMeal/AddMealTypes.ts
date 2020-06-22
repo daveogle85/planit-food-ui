@@ -1,4 +1,4 @@
-import { Dish } from '../api/types/DishTypes';
+import { Dish } from '../../api/types/DishTypes';
 
 export type DishComponentProps = {
   dish: Dish;

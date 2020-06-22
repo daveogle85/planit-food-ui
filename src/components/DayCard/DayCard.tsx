@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 
-import DayCardProps from './DayCardTypes';
 import { getDayOfWeek, parseDateAsFormattedString } from '../../helpers/date';
+import DayCardProps from './DayCardTypes';
 import { styleDayCard } from './StyledDayCard';
 
 const DayCard: React.FC<DayCardProps> = (props: DayCardProps) => {

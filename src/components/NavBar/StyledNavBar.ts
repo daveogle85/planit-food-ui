@@ -19,8 +19,6 @@ const navBarImageStyle = (props: CssProps) => css`
   }
 `;
 
-const PLUS_EDGE = '5px';
-
 export const Add = styled.div`
   display: flex;
   align-items: center;
@@ -28,30 +26,12 @@ export const Add = styled.div`
   .add-text {
     display: none;
   }
-  span {
+  svg {
     position: relative;
     display: inline-block;
     border: ${props =>
       props.theme.border.medium(props.theme.colours.background.darkGrey)};
     ${navBarImageStyle}
-    &:before {
-      content: '';
-      left: ${PLUS_EDGE};
-      right: ${PLUS_EDGE};
-      position: absolute;
-      background-color: ${props => props.theme.colours.background.darkGrey};
-      top: 50%;
-      height: 2px;
-    }
-    &:after {
-      content: '';
-      top: ${PLUS_EDGE};
-      bottom: ${PLUS_EDGE};
-      position: absolute;
-      background-color: ${props => props.theme.colours.background.darkGrey};
-      left: 50%;
-      width: 2px;
-    }
   }
   ${props => props.theme.mediaQueries.largeMobile} {
     .add-text {
@@ -71,7 +51,7 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
   box-shadow: 4px 0 12px -6px ${props => props.theme.colours.black},
     -4px 0 12px -6px ${props => props.theme.colours.black};
   list-style-type: none;
-  z-index: ${props => props.theme.zIndex.one};
+  z-index: ${props => props.theme.zIndex.two};
   ul {
     display: flex;
     align-items: center;

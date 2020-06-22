@@ -1,51 +1,46 @@
 import classNames from 'classnames';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 
-import { toastSelectors, setToastState } from '../../ducks/toast/ToastReducer';
+import { toastSelectors, setPopped } from '../../ducks/toast/ToastReducer';
 import { EmotionProps } from '../../styles/types';
 import { styledToast } from './StyledToast';
-import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
 
 function ToastRaw(props: EmotionProps) {
-  const [hidden, setHidden] = useState(false);
-  const { status, message } = useSelector(toastSelectors.selectToastState);
+  const { status, message, popped } = useSelector(
+    toastSelectors.selectToastState
+  );
+  const [poppedClassName, setPoppedClassName] = useState('hidden');
   const dispatch = useDispatch();
-
-  const hideToast = () => {
-    setHidden(true);
-    setTimeout(() => {
-      dispatch(
-        setToastState({
-          status: FeedbackStatus.HIDDEN,
-        })
-      );
-      setHidden(false);
-    }, 500);
-  };
-
-  const hideToastCached = useCallback(hideToast, []);
+  const handleCloseToast = () => dispatch(setPopped(false));
 
   useEffect(() => {
-    setTimeout(() => {
-      hideToastCached();
-    }, 5000);
-  }, [status, hideToastCached]);
+    if (popped) {
+      setPoppedClassName('pop');
+    } else {
+      setTimeout(() => setPoppedClassName('hidden'), 500);
+    }
+  }, [popped]);
 
   return (
     <div
-      className={classNames(props.className, 'toast', {
-        show: status !== FeedbackStatus.HIDDEN,
-        hidden,
-      })}
+      className={classNames(
+        props.className,
+        'toast',
+        {
+          show: popped,
+          close: !popped,
+        },
+        poppedClassName
+      )}
       css={styledToast(status)}
     >
       <div className="header">
         <div>{status.toString()}</div>
-        <div className="close" onClick={hideToastCached}>
+        <div className="close" onClick={handleCloseToast}>
           ✖
         </div>
       </div>

@@ -1,13 +1,14 @@
-import { Dish } from './DishTypes';
+import { ApiDish, Dish } from './DishTypes';
 
 export type ApiMeal = {
   id?: string;
   name?: string;
   searchName?: string;
   notes?: string;
-  dishes?: Array<Dish>;
+  dishes?: Array<ApiDish>;
 };
 
-export type Meal = ApiMeal & {
+export type Meal = Omit<ApiMeal, 'dishes'> & {
   localId: string;
+  dishes?: Array<Dish>;
 };

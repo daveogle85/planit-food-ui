@@ -1,6 +1,6 @@
-import styled from '../styles/theme';
-import { listItem } from '../styles/heights';
-import { CssProps } from '../styles/types';
+import styled from '../../styles/theme';
+import { listItem } from '../../styles/heights';
+import { CssProps } from '../../styles/types';
 import css from '@emotion/css/macro';
 
 const styledDish = (props: CssProps) => css`

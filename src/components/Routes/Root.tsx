@@ -13,15 +13,15 @@ import { createStore } from 'redux';
 import { Global } from '@emotion/core';
 import css from '@emotion/css/macro';
 
-import AddMeal from '../../addMeal/AddMeal';
 import Auth0Provider from '../../contexts/auth0-context';
 import { globals, theme } from '../../styles/theme';
-import WeekView from '../../weekView/WeekView';
+import AddMeal from '../../views/addMeal/AddMeal';
+import WeekView from '../../views/weekView/WeekView';
 import Login from '../Login/Login';
+import Toast from '../Toast/Toast';
+import { CheckAuth } from './CheckAuth';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
-import { CheckAuth } from './CheckAuth';
-import Toast from '../Toast/Toast';
 
 const CallBack: React.FC = props => {
   let history = useHistory();

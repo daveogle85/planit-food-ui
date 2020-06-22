@@ -1,6 +1,6 @@
-import { ToastState } from '../../ducks/toast/ToastTypes';
+import { ErrorState } from '../../ducks/toast/ToastTypes';
 
 export type FeedbackElementProps = {
-  state: ToastState;
+  state: ErrorState;
   className?: string;
 };

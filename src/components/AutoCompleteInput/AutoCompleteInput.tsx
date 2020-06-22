@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { jsx } from '@emotion/core';
 
 import LoadingSpinner from '../../components/Spinner/Spinner';
-import { ToastState, FeedbackStatus } from '../../ducks/toast/ToastTypes';
+import { FeedbackStatus, ErrorState } from '../../ducks/toast/ToastTypes';
 import useOutsideAlerter from '../../helpers/clickedOutside';
 import useDebounce from '../../helpers/debounce';
 import { nullOrEmptyString } from '../../helpers/string';
@@ -110,7 +110,7 @@ export function AutoCompleteInput<
 
   const handleDirtyChange = (dirty: boolean) => onDirty && onDirty(dirty);
 
-  const getInfoState = (): ToastState => {
+  const getInfoState = (): ErrorState => {
     if (nullOrEmptyString(debouncedSearchTerm)) {
       return {
         status: FeedbackStatus.HIDDEN,

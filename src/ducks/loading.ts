@@ -2,7 +2,7 @@ import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from './';
 import { authSelectors } from './auth/AuthReducer';
-import { setToastState } from './toast/ToastReducer';
+import { popToast } from './toast/ToastReducer';
 import { FeedbackStatus } from './toast/ToastTypes';
 import { nullOrEmptyString } from '../helpers/string';
 
@@ -41,7 +41,7 @@ export const dispatchApiAction = (
 
     if (!nullOrEmptyString(onSuccessMessage)) {
       dispatch(
-        setToastState({
+        popToast({
           status: FeedbackStatus.INFO,
           message: onSuccessMessage,
         })
@@ -50,7 +50,7 @@ export const dispatchApiAction = (
   } catch (exception) {
     dispatch(onSuccessAction(onFailFallback));
     dispatch(
-      setToastState({
+      popToast({
         status: FeedbackStatus.ERROR,
         message: exception.message,
       })
