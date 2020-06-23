@@ -4,9 +4,10 @@ import { useAuth0 } from '../../contexts/auth0-context';
 import { EmotionProps } from '../../styles/types';
 import useDropdown from '../Dropdown/Dropdown';
 import { useHistory } from 'react-router-dom';
-import { styledNavBar, styledProfile, Add } from './StyledNavBar';
+import { styledNavBar, styledProfile, MenuButton } from './StyledNavBar';
 import Plus from '../../images/plus';
 import { colours } from '../../styles/colours';
+import CalendarIcon from '../../images/calendarIcon';
 
 const ProfileRaw: React.FC<EmotionProps> = props => {
   const { user } = useAuth0();
@@ -39,10 +40,17 @@ function NavBarRaw(props: EmotionProps) {
   });
 
   const StyledAdd: React.FC = props => (
-    <Add title="Add Options">
+    <MenuButton title="Add Options">
       <Plus crossColour={colours.background.darkGrey} />
-      <div className="add-text">Add</div>
-    </Add>
+      <div className="button-text">Add Options</div>
+    </MenuButton>
+  );
+
+  const StyledCalendarButton: React.FC = props => (
+    <MenuButton title="Calendar" onClick={() => history.push('/calendar')}>
+      <CalendarIcon fill={colours.background.darkGrey} />
+      <div className="button-text">Go To Calendar</div>
+    </MenuButton>
   );
 
   const { component: AddDropdown } = useDropdown({
@@ -61,6 +69,9 @@ function NavBarRaw(props: EmotionProps) {
           Planit Food App
         </li>
         <div className="dd-menu-items">
+          <li className="dd-calendar">
+            <StyledCalendarButton />
+          </li>
           <li className="dd-add">
             <AddDropdown />
           </li>
