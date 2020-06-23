@@ -22,6 +22,7 @@ import Toast from '../Toast/Toast';
 import { CheckAuth } from './CheckAuth';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
+import Calendar from '../../views/calendar/Calendar';
 
 const CallBack: React.FC = props => {
   let history = useHistory();
@@ -69,6 +70,12 @@ const Routes: React.FC = () => {
           exact={true}
           path="/addMeal"
           component={AddMeal}
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          exact={true}
+          path="/calendar"
+          component={Calendar}
         />
         <Route path="/callback" component={CallBack} />
         <Route exact path="/login" component={Login} />

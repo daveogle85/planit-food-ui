@@ -4,26 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Meal } from '../../api/types/MealTypes';
 import {
+  deleteMealFromSelectedList,
   listsSelectors,
   setSelectedMeal,
   setSideBarOpen,
-  deleteMealFromSelectedList,
 } from '../../ducks/lists/ListsReducer';
 import { nullOrEmptyString } from '../../helpers/string';
+import Chevron from '../../images/chevron';
 import Minus from '../../images/minus';
 import Plus from '../../images/plus';
 import { colours } from '../../styles/colours';
 import { EmotionProps } from '../../styles/types';
 import Loading from '../Loading/Loading';
+import { MealProps } from './ListTypes';
 import { styleListComponent, styleMealItem } from './StyledList';
-import Chevron from '../../images/chevron';
-
-type ListProps = EmotionProps & {};
-type MealProps = EmotionProps & {
-  meal: Meal;
-  setSelectedMeal: () => void;
-  selected: boolean;
-};
 
 const MealItemRaw: React.FC<MealProps> = (props: MealProps) => {
   const [expanded, setExpanded] = useState(false);
@@ -87,7 +81,7 @@ const MealItemRaw: React.FC<MealProps> = (props: MealProps) => {
 
 const MealItem = styleMealItem(MealItemRaw);
 
-const ListComponent: React.FC<ListProps> = (props: ListProps) => {
+const ListComponent: React.FC<EmotionProps> = (props: EmotionProps) => {
   const dispatch = useDispatch();
   const loading = useSelector(listsSelectors.selectLoading);
   const sideBarOpen = useSelector(listsSelectors.selectSideBarOpen);
