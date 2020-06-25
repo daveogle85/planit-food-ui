@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
@@ -19,16 +19,13 @@ import NavBar from '../../components/NavBar/NavBar';
 import { authSelectors } from '../../ducks/auth/AuthReducer';
 import {
   addMealToSelectedList,
-  fetchDefaultList,
-  fetchLists,
   listsSelectors,
 } from '../../ducks/lists/ListsReducer';
-import { FeedbackStatus, ErrorState } from '../../ducks/toast/ToastTypes';
+import { ErrorState, FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import { nullOrEmptyString } from '../../helpers/string';
 import { EmotionProps } from '../../styles/types';
 import { DishComponentProps } from './AddMealTypes';
 import { styledAddMeal } from './StyledAddMeal';
-import usePrevious from '../../helpers/usePrevious';
 
 function generateMealName(dishes: Array<Dish>): string {
   if (!dishes.length) {
@@ -64,35 +61,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const [isMealDirty, setIsMealDirty] = useState(false);
   const loadingLists = useSelector(listsSelectors.selectLoading);
   const selectedList = useSelector(listsSelectors.selectSelectedList);
-  const lists = useSelector(listsSelectors.selectLists);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
-  const prevSelectedList = usePrevious(selectedList);
-  const clearMealCached = useCallback(clearMeal, []);
-
-  useEffect(() => {
-    async function getLists() {
-      dispatch(fetchLists());
-    }
-    getLists();
-  }, [dispatch, token]);
-
-  useEffect(() => {
-    async function setDefaultList() {
-      dispatch(fetchDefaultList());
-    }
-
-    if (lists.length && selectedList == null) {
-      setDefaultList();
-    }
-
-    if (
-      selectedList &&
-      prevSelectedList &&
-      selectedList.meals.length > prevSelectedList?.meals.length
-    ) {
-      clearMealCached();
-    }
-  }, [lists, selectedList, dispatch, prevSelectedList, clearMealCached]);
 
   const getMealOptions = (text: string) => searchForMeal(text)(token);
 
@@ -172,13 +141,11 @@ const AddMeal: React.FC<EmotionProps> = props => {
     setDishesAndMealName([...newDishes]);
   };
 
-  function clearMeal() {
+  const handleMealClear = () => {
     setMeal(defaultMeal);
     setDishesAndMealName(defaultDishes);
     setIsMealDirty(false);
-  }
-
-  const handleMealClear = () => clearMeal();
+  };
 
   const handleAddMealToList = () => {
     const dishesToAdd = dishes.filter(d => !nullOrEmptyString(d.name));
@@ -284,7 +251,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
   return (
     <>
       <NavBar />
-      <List />
+      <List onMealDelete={handleMealClear} />
       <Loading isLoading={loadingLists}>
         <div className={classNames('AddMeal', props.className)}>
           <h2 className="title">Add A New Meal</h2>

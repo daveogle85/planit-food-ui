@@ -1,4 +1,4 @@
-import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { ActionCreatorWithPayload, Action } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from './';
 import { authSelectors } from './auth/AuthReducer';
@@ -11,6 +11,7 @@ type DispatchApiActionOptions<ApiReturnType> = {
   onSuccessAction: ActionCreatorWithPayload<ApiReturnType, string>;
   onFailFallback: ApiReturnType;
   onSuccessMessage?: string;
+  additionalSuccessActions?: Array<Action>;
 };
 
 /**
@@ -32,6 +33,7 @@ export const dispatchApiAction = (
     onFailFallback,
     onSuccessAction,
     onSuccessMessage,
+    additionalSuccessActions,
   } = options;
   dispatch(setLoading(true));
   try {
@@ -39,6 +41,11 @@ export const dispatchApiAction = (
     const result = token ? await request(token) : onFailFallback;
     dispatch(onSuccessAction(result));
 
+    if (additionalSuccessActions?.length) {
+      additionalSuccessActions.forEach(action => {
+        dispatch(action);
+      });
+    }
     if (!nullOrEmptyString(onSuccessMessage)) {
       dispatch(
         popToast({

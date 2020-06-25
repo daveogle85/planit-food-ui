@@ -14,10 +14,19 @@ export type DateInfo = {
   view: ViewApi;
 };
 
+export type EventInfo = {
+  start: Date;
+  end: Date;
+  startStr: string;
+  endStr: string;
+  timeZone: string;
+};
+
 type PlanitFoodCalendarType = typeof FullCalendar &
   React.Component<
     CalendarOptions & {
       dateClick: (info: DateInfo) => void;
+      viewRender: (e: any) => void;
     }
   >;
 

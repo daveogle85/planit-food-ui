@@ -6,3 +6,7 @@ export type MealProps = EmotionProps & {
   setSelectedMeal: () => void;
   selected: boolean;
 };
+
+export type ListProps = EmotionProps & {
+  onMealDelete?: () => void;
+};

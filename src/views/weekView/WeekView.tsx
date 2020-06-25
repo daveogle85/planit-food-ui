@@ -16,7 +16,7 @@ import Loading from '../../components/Loading/Loading';
 const WeekView: React.FC<EmotionProps> = props => {
   const dispatch = useDispatch();
   const loadingDays = useSelector(daysSelectors.selectLoading);
-  const days = useSelector(daysSelectors.selectData);
+  const days = useSelector(daysSelectors.selectDataForCarousel);
   const token = useSelector((state: RootState) => state.auth.token);
 
   useEffect(() => {

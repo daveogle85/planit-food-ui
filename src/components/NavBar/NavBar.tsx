@@ -47,9 +47,12 @@ function NavBarRaw(props: EmotionProps) {
   );
 
   const StyledCalendarButton: React.FC = props => (
-    <MenuButton title="Calendar" onClick={() => history.push('/calendar')}>
+    <MenuButton
+      title="Go To Calendar"
+      onClick={() => history.push('/calendar')}
+    >
       <CalendarIcon fill={colours.background.darkGrey} />
-      <div className="button-text">Go To Calendar</div>
+      <div className="button-text">Calendar</div>
     </MenuButton>
   );
 

@@ -1,8 +1,6 @@
 import styled from '../../styles/theme';
 import { fullScreen } from '../../styles/common';
 import { navBar } from '../../styles/heights';
-// import { CssProps } from '../../styles/types';
-// import css from '@emotion/css/macro';
 
 export const styledCalendar = (Calendar: React.ComponentType) =>
   styled(Calendar)`
@@ -12,5 +10,14 @@ export const styledCalendar = (Calendar: React.ComponentType) =>
     padding-top: ${props => props.theme.spacing.medium};
     .fc-toolbar {
       flex-direction: column;
+    }
+
+    thead {
+      position: relative;
+      z-index: ${props => props.theme.zIndex.one};
+    }
+
+    .fc-event {
+      white-space: normal;
     }
   `;
