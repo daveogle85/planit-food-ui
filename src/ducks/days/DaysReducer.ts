@@ -1,20 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '..';
 import getDaysByRange from '../../api/day';
 import { Day, DayRange } from '../../api/types/DayTypes';
-import { dateToISOString } from '../../helpers/date';
+import {
+  dateToISOString,
+  getOverlappingRange,
+  isDayWithinRange,
+} from '../../helpers/date';
 import dispatchApiAction from '../loading';
+import { updateObject } from '../../helpers/object';
 
 type DaysSlice = {
   loading: boolean;
   data: Array<Day>;
-  week: Array<Day>;
+  requestedRange?: DayRange;
 };
 
 const initialState: DaysSlice = {
   loading: false,
   data: [],
-  week: [],
 };
 
 const daysSlice = createSlice({
@@ -24,21 +28,56 @@ const daysSlice = createSlice({
     setLoading(state, action) {
       state.loading = action.payload;
     },
-    setData(state, action) {
-      state.data = action.payload;
+    setData(state, action: PayloadAction<Array<Day>>) {
+      const updatedDays = [...state.data];
+      action.payload.forEach(day => {
+        const foundIndex = updatedDays.findIndex(d => d.id === day.id);
+        if (foundIndex === -1) {
+          updatedDays.push(day);
+        } else {
+          updatedDays[foundIndex] = updateObject(updatedDays[foundIndex], day);
+        }
+      });
+      state.data = updatedDays;
     },
-    setWeek(state, action) {
-      state.week = action.payload;
+    updateRequestedRange(state, action: PayloadAction<DayRange>) {
+      if (state.requestedRange == null) {
+        state.requestedRange = action.payload;
+      } else {
+        state.requestedRange = {
+          startDate:
+            Date.parse(action.payload.startDate) <
+            Date.parse(state.requestedRange.startDate)
+              ? action.payload.startDate
+              : state.requestedRange.startDate,
+          endDate:
+            Date.parse(action.payload.endDate) <
+            Date.parse(state.requestedRange.endDate)
+              ? state.requestedRange.endDate
+              : action.payload.endDate,
+        };
+      }
     },
   },
 });
 
-export const { setLoading, setData, setWeek } = daysSlice.actions;
+const selectData = (state: RootState) => state.days.data;
+const selectDataForCarousel = createSelector(selectData, data => {
+  const dayRange = getDayCardRange();
+  return data.filter(day => isDayWithinRange(dayRange, day.date));
+});
+
+const selectMealsAsEvents = createSelector(selectData, data =>
+  data.map(day => ({ title: day.meal.name, date: day.date }))
+);
+
+export const { setLoading, setData, updateRequestedRange } = daysSlice.actions;
 export const daysSelectors = {
   selectLoading: (state: RootState) => state.days.loading,
-  // TODO should just have data and not store duplicate values in week
-  selectData: (state: RootState) => state.days.data,
-  selectWeek: (state: RootState) => state.days.week,
+  selectData,
+  selectRequestedRange: (state: RootState) => state.days.requestedRange,
+  selectDataForCarousel,
+  selectMealsAsEvents,
 };
 
 export const getDayCardRange = (): DayRange => {
@@ -60,17 +99,48 @@ export const getDayCardRange = (): DayRange => {
 };
 
 // Thunks
-export const fetchDayDataForCarousel = (): AppThunk => async dispatch => {
-  const range = getDayCardRange();
-  const fetchDays = getDaysByRange(range);
-  const apiCall = dispatchApiAction(setLoading);
-  return await dispatch(
-    apiCall({
-      request: fetchDays,
-      onSuccessAction: setData,
-      onFailFallback: [],
-    })
-  );
+export const fetchDayDataForCarousel = (): AppThunk => async (
+  dispatch,
+  getState
+) => {
+  const dayCardRange = getDayCardRange();
+  const requestedRange = daysSelectors.selectRequestedRange(getState());
+  const range = requestedRange
+    ? getOverlappingRange(requestedRange, dayCardRange)
+    : dayCardRange;
+  if (range) {
+    const fetchDays = getDaysByRange(range, true);
+    const apiCall = dispatchApiAction(setLoading);
+    return await dispatch(
+      apiCall({
+        request: fetchDays,
+        onSuccessAction: setData,
+        onFailFallback: [],
+      })
+    );
+  }
+};
+
+export const fetchMealsForRange = (dayRange: DayRange): AppThunk => async (
+  dispatch,
+  getState
+) => {
+  const requestedRange = daysSelectors.selectRequestedRange(getState());
+  const range = requestedRange
+    ? getOverlappingRange(requestedRange, dayRange)
+    : dayRange;
+  if (range) {
+    const request = getDaysByRange(range);
+    const apiCall = dispatchApiAction(setLoading);
+    return await dispatch(
+      apiCall({
+        request,
+        onSuccessAction: setData,
+        additionalSuccessActions: [updateRequestedRange(range)],
+        onFailFallback: [],
+      })
+    );
+  }
 };
 
 export default daysSlice.reducer;

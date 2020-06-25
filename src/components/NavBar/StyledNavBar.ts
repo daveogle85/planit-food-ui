@@ -19,11 +19,11 @@ const navBarImageStyle = (props: CssProps) => css`
   }
 `;
 
-export const Add = styled.div`
+export const MenuButton = styled.div`
   display: flex;
   align-items: center;
   margin: 0 ${props => props.theme.spacing.small};
-  .add-text {
+  .button-text {
     display: none;
   }
   svg {
@@ -34,8 +34,11 @@ export const Add = styled.div`
     ${navBarImageStyle}
   }
   ${props => props.theme.mediaQueries.largeMobile} {
-    .add-text {
+    .button-text {
       display: block;
+    }
+    svg {
+      display: none;
     }
   }
 `;

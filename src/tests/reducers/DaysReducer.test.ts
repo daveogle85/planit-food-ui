@@ -8,11 +8,12 @@ import reducer, {
   getDayCardRange,
   setData,
   setLoading,
-  setWeek,
+  updateRequestedRange,
 } from '../../ducks/days/DaysReducer';
 import { setPopped } from '../../ducks/toast/ToastReducer';
 import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import { dispatchWithTimeout, mockSetToastState } from '../helpers';
+import { Day } from '../../api/types/DayTypes';
 
 describe('DaysReducer', () => {
   describe('getDayCardRange', () => {
@@ -43,10 +44,13 @@ describe('DaysReducer', () => {
   });
 
   describe('reducer, actions and selectors', () => {
+    afterEach(() => {
+      MockDate.reset();
+    });
+
     const initialState = {
       loading: false,
       data: [],
-      week: [],
     };
 
     it('should return the initial state on first run', () => {
@@ -66,24 +70,193 @@ describe('DaysReducer', () => {
       const data = [
         {
           id: '1',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+          },
         },
       ];
 
       const result = reducer(initialState, setData(data));
       const rootState = { days: result };
-      expect(daysSelectors.selectData(rootState as RootState)).toBe(data);
+      expect(daysSelectors.selectData(rootState as RootState)).toStrictEqual(
+        data
+      );
     });
 
-    it('should correctly get the data for the week when requested', () => {
-      const week = [
+    it('should update the data correctly', () => {
+      const testDay: Day = {
+        id: '1',
+        meal: {
+          id: 'meal-1',
+          localId: 'meal-1',
+          name: 'meal1',
+          searchName: 'test',
+        },
+      };
+
+      const testUpdate = [
         {
           id: '1',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+            name: 'meal-1',
+            notes: 'notes',
+          },
+        },
+        {
+          id: '2',
+          meal: {
+            id: 'meal-2',
+            localId: 'meal-2',
+          },
         },
       ];
 
-      const result = reducer(initialState, setWeek(week));
+      const data = [testDay];
+      const result = reducer(
+        {
+          ...initialState,
+          data,
+        },
+        setData(testUpdate)
+      );
       const rootState = { days: result };
-      expect(daysSelectors.selectWeek(rootState as RootState)).toBe(week);
+      expect(daysSelectors.selectData(rootState as RootState)).toStrictEqual([
+        {
+          id: '1',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+            name: 'meal-1',
+            notes: 'notes',
+            searchName: 'test',
+          },
+        },
+        {
+          id: '2',
+          meal: {
+            id: 'meal-2',
+            localId: 'meal-2',
+          },
+        },
+      ]);
+    });
+
+    it('should select the data for carousel correctly', () => {
+      MockDate.set(new Date('2020-06-10'));
+      const testDays = [
+        {
+          id: '1',
+          date: '2020-06-07',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+          },
+        },
+        {
+          id: '2',
+          date: '2020-06-08',
+          meal: {
+            id: 'meal-2',
+            localId: 'meal-2',
+          },
+        },
+        {
+          id: '3',
+          date: '2020-06-15',
+          meal: {
+            id: 'meal-3',
+            localId: 'meal-3',
+          },
+        },
+      ];
+      const result = reducer({ ...initialState, data: testDays }, {} as any);
+      const rootState = { days: result };
+      expect(
+        daysSelectors.selectDataForCarousel(rootState as RootState)
+      ).toStrictEqual([
+        {
+          date: '2020-06-08',
+          id: '2',
+          meal: { id: 'meal-2', localId: 'meal-2' },
+        },
+      ]);
+    });
+
+    it('should select the data for the calendar correctly', () => {
+      const testDays = [
+        {
+          id: '1',
+          date: '2020-06-07',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+            name: 'Meal 1',
+          },
+        },
+        {
+          id: '2',
+          date: '2020-06-08',
+          meal: {
+            id: 'meal-2',
+            localId: 'meal-2',
+            name: 'Meal 2',
+          },
+        },
+      ];
+      const result = reducer({ ...initialState, data: testDays }, {} as any);
+      const rootState = { days: result };
+      expect(
+        daysSelectors.selectMealsAsEvents(rootState as RootState)
+      ).toStrictEqual([
+        {
+          date: '2020-06-07',
+          title: 'Meal 1',
+        },
+        {
+          date: '2020-06-08',
+          title: 'Meal 2',
+        },
+      ]);
+    });
+
+    it('should set the requested range correctly', () => {
+      const range = {
+        startDate: '02/20/98',
+        endDate: '02/30/98',
+      };
+
+      const result = reducer(initialState, updateRequestedRange(range));
+      const rootState = { days: result };
+      expect(daysSelectors.selectRequestedRange(rootState as RootState)).toBe(
+        range
+      );
+    });
+
+    it('should update the request range correctly', () => {
+      const range = {
+        startDate: '02/20/98',
+        endDate: '02/30/98',
+      };
+
+      const newRange = {
+        startDate: '02/10/98',
+        endDate: '02/20/98',
+      };
+
+      const result = reducer(
+        { ...initialState, requestedRange: range },
+        updateRequestedRange(newRange)
+      );
+      const rootState = { days: result };
+      expect(
+        daysSelectors.selectRequestedRange(rootState as RootState)
+      ).toStrictEqual({
+        startDate: '02/10/98',
+        endDate: '02/30/98',
+      });
     });
   });
 
@@ -94,7 +267,14 @@ describe('DaysReducer', () => {
     describe('fetchDayDataForCarousel', () => {
       const mockStore = configureMockStore([thunk]);
       it('should fetch the data for day card carousel display with no error', async () => {
-        const mockPromise = new Promise(res => res([{ id: 'testId' }]));
+        const testDay = {
+          id: 'testId',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+          },
+        };
+        const mockPromise = new Promise(res => res([testDay]));
         jest.mock('../../api/day', () => ({
           __esModule: true,
           default: jest.fn().mockReturnValueOnce(() => mockPromise),
@@ -109,14 +289,13 @@ describe('DaysReducer', () => {
           days: {
             loading: false,
             data: [],
-            week: [],
           },
         };
         const store = mockStore(initialState);
         await store.dispatch(fetchDayDataForCarousel() as any);
         const expectedActions = [
           setLoading(true),
-          setData([{ id: 'testId' }]),
+          setData([testDay]),
           setLoading(false),
         ];
         expect(store.getActions()).toEqual(expectedActions);
@@ -139,11 +318,129 @@ describe('DaysReducer', () => {
           days: {
             loading: false,
             data: [],
-            week: [],
           },
         };
         const store = mockStore(initialState);
         await dispatchWithTimeout(store.dispatch, fetchDayDataForCarousel());
+        const expectedActions = [
+          setLoading(true),
+          setData([]),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.ERROR,
+            message: 'test exception',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+
+    describe('fetchMealsForRange', () => {
+      const mockStore = configureMockStore([thunk]);
+      it('should fetch the data for range with no error', async () => {
+        const testDay = {
+          id: 'testId',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+          },
+        };
+        const mockPromise = new Promise(res => res([testDay]));
+        jest.mock('../../api/day', () => ({
+          __esModule: true,
+          default: jest.fn().mockReturnValueOnce(() => mockPromise),
+        }));
+        const { fetchMealsForRange } = require('../../ducks/days/DaysReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [],
+          },
+        };
+        const requestedRange = {
+          startDate: '01/01/01',
+          endDate: '01/02/01',
+        };
+        const store = mockStore(initialState);
+        await store.dispatch(fetchMealsForRange(requestedRange) as any);
+        const expectedActions = [
+          setLoading(true),
+          setData([testDay]),
+          updateRequestedRange(requestedRange),
+          setLoading(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
+      it('should not fetch the data for range if already in store', async () => {
+        const testDay = {
+          id: 'testId',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+          },
+        };
+        const mockPromise = new Promise(res => res([testDay]));
+        jest.mock('../../api/day', () => ({
+          __esModule: true,
+          default: jest.fn().mockReturnValueOnce(() => mockPromise),
+        }));
+        const { fetchMealsForRange } = require('../../ducks/days/DaysReducer');
+        const requestedRange = {
+          startDate: '01/01/01',
+          endDate: '02/01/01',
+        };
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [],
+            requestedRange,
+          },
+        };
+        const store = mockStore(initialState);
+        await store.dispatch(
+          fetchMealsForRange({
+            startDate: '01/02/01',
+            endDate: '01/12/01',
+          }) as any
+        );
+        expect(store.getActions()).toEqual([]);
+      });
+
+      it('should fetch the data for range with error', async () => {
+        jest.mock('../../api/day', () => ({
+          __esModule: true,
+          default: jest.fn().mockReturnValueOnce(() => {
+            throw new Error('test exception');
+          }),
+        }));
+        const { fetchMealsForRange } = require('../../ducks/days/DaysReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [],
+          },
+        };
+        const requestedRange = {
+          startDate: '01/01/01',
+          endDate: '01/02/01',
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          fetchMealsForRange(requestedRange)
+        );
         const expectedActions = [
           setLoading(true),
           setData([]),

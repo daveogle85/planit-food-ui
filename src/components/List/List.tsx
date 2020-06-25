@@ -1,29 +1,26 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Meal } from '../../api/types/MealTypes';
+import { authSelectors } from '../../ducks/auth/AuthReducer';
 import {
+  deleteMealFromSelectedList,
+  fetchDefaultList,
+  fetchLists,
   listsSelectors,
   setSelectedMeal,
   setSideBarOpen,
-  deleteMealFromSelectedList,
 } from '../../ducks/lists/ListsReducer';
 import { nullOrEmptyString } from '../../helpers/string';
+import usePrevious from '../../helpers/usePrevious';
+import Chevron from '../../images/chevron';
 import Minus from '../../images/minus';
 import Plus from '../../images/plus';
 import { colours } from '../../styles/colours';
-import { EmotionProps } from '../../styles/types';
 import Loading from '../Loading/Loading';
+import { ListProps, MealProps } from './ListTypes';
 import { styleListComponent, styleMealItem } from './StyledList';
-import Chevron from '../../images/chevron';
-
-type ListProps = EmotionProps & {};
-type MealProps = EmotionProps & {
-  meal: Meal;
-  setSelectedMeal: () => void;
-  selected: boolean;
-};
 
 const MealItemRaw: React.FC<MealProps> = (props: MealProps) => {
   const [expanded, setExpanded] = useState(false);
@@ -88,15 +85,45 @@ const MealItemRaw: React.FC<MealProps> = (props: MealProps) => {
 const MealItem = styleMealItem(MealItemRaw);
 
 const ListComponent: React.FC<ListProps> = (props: ListProps) => {
+  const handleMealDelete = props.onMealDelete ? props.onMealDelete : () => null;
   const dispatch = useDispatch();
+  const token = useSelector(authSelectors.selectedToken);
   const loading = useSelector(listsSelectors.selectLoading);
   const sideBarOpen = useSelector(listsSelectors.selectSideBarOpen);
   const selectedList = useSelector(listsSelectors.selectSelectedList);
   const selectedMeal = useSelector(listsSelectors.selectedSelectedMeal);
+  const lists = useSelector(listsSelectors.selectLists);
+  const prevSelectedList = usePrevious(selectedList);
+  const handleMealDeleteCached = useCallback(handleMealDelete, []);
   const listName = nullOrEmptyString(selectedList?.name)
     ? ''
     : selectedList!.name!.charAt(0).toUpperCase() +
       selectedList!.name!.slice(1);
+
+  useEffect(() => {
+    async function getLists() {
+      dispatch(fetchLists());
+    }
+    getLists();
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    async function setDefaultList() {
+      dispatch(fetchDefaultList());
+    }
+
+    if (lists.length && selectedList == null) {
+      setDefaultList();
+    }
+
+    if (
+      selectedList &&
+      prevSelectedList &&
+      selectedList.meals.length > prevSelectedList?.meals.length
+    ) {
+      handleMealDeleteCached();
+    }
+  }, [lists, selectedList, dispatch, prevSelectedList, handleMealDeleteCached]);
 
   const toggleDraw = () =>
     !loading && selectedList != null && dispatch(setSideBarOpen(!sideBarOpen));
