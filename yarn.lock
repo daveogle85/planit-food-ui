@@ -1165,10 +1165,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@fullcalendar/daygrid@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.0.0.tgz#9677d46add515df182720d0b1d40f5f3d93debe1"
-  integrity sha512-22WZsZ+BqGZp8IL4wyY/12kBRR7/y5Kqv6DcCRtELFQF1QA4lWx7SQYbylZgQqLr1mJzTOjgq7WrRXmb/0UQxw==
+"@fullcalendar/daygrid@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.0.1.tgz#dfa39737f9d9f7b9c247020a17e099e4a9c17a26"
+  integrity sha512-9KhEkwgTZqRDQb1S5S/MELKqovm0c7QU2r9655W47mizoutf+ssWaS3lvsqlKjypYZuWsGDuFKv5GcmUbhVg7g==
   dependencies:
     "@fullcalendar/common" "~5.0.0"
     tslib "^2.0.0"
