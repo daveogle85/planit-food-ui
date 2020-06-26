@@ -1,6 +1,7 @@
-import { get } from './helpers/http';
+import { httpRequest } from './helpers/http';
 import { nullOrEmptyString } from '../helpers/string';
 import { ApiMeal } from './types/MealTypes';
+import { RestVerb } from './helpers/types';
 
 const path = '/meals';
 
@@ -12,7 +13,11 @@ export const searchForMeal = (mealSearchText: string) => async (
     return [];
   }
   try {
-    return await get<Array<ApiMeal>>(requestPath, token!);
+    return await httpRequest<Array<ApiMeal>, undefined>(
+      requestPath,
+      token!,
+      RestVerb.GET
+    );
   } catch (e) {
     return [];
   }

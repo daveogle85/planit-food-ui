@@ -9,14 +9,18 @@ import { FeedbackElementProps } from './FeedbackElementTypes';
 import { styledFeedbackInput } from './StyledFeedbackInput';
 
 function FeedbackElement(props: React.PropsWithChildren<FeedbackElementProps>) {
-  const { children, className, state } = props;
+  const { children, className, state, styles } = props;
   const hidden = state.status === FeedbackStatus.HIDDEN;
+  const elementStyles = [
+    styledFeedbackInput(state.status, state.message),
+    styles,
+  ];
   return (
     <div
       className={classNames(className, {
         'feedback-hidden': hidden,
       })}
-      css={styledFeedbackInput(state.status, state.message)}
+      css={elementStyles}
     >
       {children}
       {!hidden && <div className="feedback-icon">i</div>}

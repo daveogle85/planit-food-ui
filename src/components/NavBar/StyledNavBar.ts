@@ -1,11 +1,12 @@
-import styled from '../../styles/theme';
+import css from '@emotion/css/macro';
+
+import { centerFlex, fullScreenRelative, pointer } from '../../styles/common';
 import {
   navBar,
   NavBarImageSize,
   NavBarImageSizeMobile,
 } from '../../styles/heights';
-import { centerFlex, fullScreenRelative, pointer } from '../../styles/common';
-import css from '@emotion/css/macro';
+import styled from '../../styles/theme';
 import { CssProps } from '../../styles/types';
 
 const navBarImageStyle = (props: CssProps) => css`
@@ -54,7 +55,7 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
   box-shadow: 4px 0 12px -6px ${props => props.theme.colours.black},
     -4px 0 12px -6px ${props => props.theme.colours.black};
   list-style-type: none;
-  z-index: ${props => props.theme.zIndex.two};
+  z-index: ${props => props.theme.zIndex.three};
   ul {
     display: flex;
     align-items: center;

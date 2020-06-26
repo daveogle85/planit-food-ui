@@ -1,6 +1,7 @@
 import { ApiDish } from './types/DishTypes';
-import { get } from './helpers/http';
+import { httpRequest } from './helpers/http';
 import { nullOrEmptyString } from '../helpers/string';
+import { RestVerb } from './helpers/types';
 
 const path = '/dishes';
 
@@ -12,7 +13,11 @@ export const searchForDish = (dishSearchText: string) => async (
     return [];
   }
   try {
-    return await get<Array<ApiDish>>(requestPath, token!);
+    return await httpRequest<Array<ApiDish>, undefined>(
+      requestPath,
+      token!,
+      RestVerb.GET
+    );
   } catch (e) {
     return [];
   }

@@ -1,10 +1,15 @@
-import { Meal } from './MealTypes';
+import { Meal, ApiMeal } from './MealTypes';
 
-export type Day = {
-  id: string;
+export type ApiDay = {
+  id?: string;
+  date: string;
+  meal: ApiMeal;
+  notes?: string;
+};
+
+export type Day = Pick<ApiDay, 'id' | 'notes'> & {
   date?: string;
   meal: Meal;
-  notes?: string;
 };
 
 export type DayRange = {

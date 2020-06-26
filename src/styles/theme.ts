@@ -1,8 +1,9 @@
 import css from '@emotion/css/macro';
 import styled, { CreateStyled } from '@emotion/styled/macro';
-import { fullScreen } from './common';
-import { colours } from './colours';
+
 import border from './border';
+import { colours } from './colours';
+import { fullScreen } from './common';
 
 export const breakpoints = {
   smallMobile: 576,
@@ -41,6 +42,7 @@ export const theme = {
   },
   border,
   spacing: {
+    xxSmall: '2px',
     xSmall: '4px',
     small: '8px',
     medium: '20px',
@@ -51,6 +53,7 @@ export const theme = {
   zIndex: {
     one: 1,
     two: 2,
+    three: 3,
   },
   mediaQueries: getMediaQueries(),
 };

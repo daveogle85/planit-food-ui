@@ -3,12 +3,14 @@ import authReducer from './auth/AuthReducer';
 import daysReducer from './days/DaysReducer';
 import listsReducer from './lists/ListsReducer';
 import toastReducer from './toast/ToastReducer';
+import calendarReducer from './calendar/CalendarReducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  calendar: calendarReducer,
   days: daysReducer,
-  toast: toastReducer,
   lists: listsReducer,
+  toast: toastReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

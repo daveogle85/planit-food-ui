@@ -23,6 +23,7 @@ const DayCard: React.FC<DayCardProps> = (props: DayCardProps) => {
             <li key={dish.id}>{dish.name}</li>
           ))}
         </ul>
+        <div className="dc-notes">{props.meal.notes}</div>
       </div>
     </div>
   );
