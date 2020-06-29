@@ -165,7 +165,7 @@ export const deleteDayFromCalendar = (date: Date): AppThunk => async (
   dispatch,
   getState
 ) => {
-  const day = getState().days.data.find((day: Day) =>
+  const day = selectData(getState()).find((day: Day) =>
     datesAreOnSameDay(new Date(day.date ?? ''), date)
   );
   if (day != null) {

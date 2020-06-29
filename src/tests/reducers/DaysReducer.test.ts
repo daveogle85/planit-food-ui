@@ -9,11 +9,13 @@ import reducer, {
   setData,
   setLoading,
   updateRequestedRange,
+  removeDay,
 } from '../../ducks/days/DaysReducer';
 import { setPopped } from '../../ducks/toast/ToastReducer';
 import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import { dispatchWithTimeout, mockSetToastState } from '../helpers';
 import { Day } from '../../api/types/DayTypes';
+import { setSelectedMeal } from '../../ducks/lists/ListsReducer';
 
 describe('DaysReducer', () => {
   describe('getDayCardRange', () => {
@@ -292,7 +294,7 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(fetchDayDataForCarousel() as any);
+        await dispatchWithTimeout(store.dispatch, fetchDayDataForCarousel());
         const expectedActions = [
           setLoading(true),
           setData([testDay]),
@@ -367,7 +369,10 @@ describe('DaysReducer', () => {
           endDate: '01/02/01',
         };
         const store = mockStore(initialState);
-        await store.dispatch(fetchMealsForRange(requestedRange) as any);
+        await dispatchWithTimeout(
+          store.dispatch,
+          fetchMealsForRange(requestedRange)
+        );
         const expectedActions = [
           setLoading(true),
           setData([testDay]),
@@ -406,11 +411,12 @@ describe('DaysReducer', () => {
           },
         };
         const store = mockStore(initialState);
-        await store.dispatch(
+        await dispatchWithTimeout(
+          store.dispatch,
           fetchMealsForRange({
             startDate: '01/02/01',
             endDate: '01/12/01',
-          }) as any
+          })
         );
         expect(store.getActions()).toEqual([]);
       });
@@ -444,6 +450,286 @@ describe('DaysReducer', () => {
         const expectedActions = [
           setLoading(true),
           setData([]),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.ERROR,
+            message: 'test exception',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+
+    describe('addDayToCalendar', () => {
+      const mockStore = configureMockStore([thunk]);
+      it('should add a new Day to the calendar with no error', async () => {
+        const testDay = {
+          id: 'testId',
+          date: '2020-01-01',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+            name: 'meal-1',
+          },
+        };
+        const mockPromise = new Promise(res => res([testDay]));
+        jest.mock('../../api/day', () => ({
+          __esModule: true,
+          addDay: jest.fn().mockReturnValueOnce(() => mockPromise),
+        }));
+        const { addDayToCalendar } = require('../../ducks/days/DaysReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [
+              {
+                id: 'old',
+                date: '2020-02-02',
+                meal: {
+                  id: 'meal-old',
+                  localId: 'meal-old',
+                },
+              },
+            ],
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(store.dispatch, addDayToCalendar(testDay));
+        const expectedActions = [
+          setLoading(true),
+          setData([testDay]),
+          setSelectedMeal(null),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.INFO,
+            message: 'meal-1 added to 2020-01-01',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
+      it('should try and add a day to calendar with an error', async () => {
+        const testDay = {
+          id: 'testId',
+          date: '2020-01-01',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+          },
+        };
+        jest.mock('../../api/day', () => ({
+          __esModule: true,
+          addDay: jest.fn().mockReturnValueOnce(() => {
+            throw new Error('test exception');
+          }),
+        }));
+        const { addDayToCalendar } = require('../../ducks/days/DaysReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [
+              {
+                id: 'old',
+                date: '2020-02-02',
+                meal: {
+                  id: 'meal-old',
+                  localId: 'meal-old',
+                },
+              },
+            ],
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(store.dispatch, addDayToCalendar(testDay));
+        const expectedActions = [
+          setLoading(true),
+          setData([]),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.ERROR,
+            message: 'test exception',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+
+    describe('deleteDayFromCalendar', () => {
+      const mockStore = configureMockStore([thunk]);
+      it('should delete a day from the calendar with no error', async () => {
+        const testDay = {
+          id: 'testId',
+          date: '2020-01-01',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+            name: 'meal-1',
+          },
+        };
+        const mockPromise = new Promise(res => res(testDay));
+        jest.mock('../../api/day', () => ({
+          __esModule: true,
+          deleteDay: jest.fn().mockReturnValueOnce(() => mockPromise),
+        }));
+        const {
+          deleteDayFromCalendar,
+        } = require('../../ducks/days/DaysReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [
+              {
+                id: 'old',
+                date: '2020-02-02',
+                meal: {
+                  id: 'meal-old',
+                  localId: 'meal-old',
+                },
+              },
+              {
+                id: 'testId',
+                date: '2020-01-01',
+                meal: {
+                  id: 'meal-1',
+                  localId: 'meal-1',
+                  name: 'meal-1',
+                },
+              },
+            ],
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          deleteDayFromCalendar(new Date(testDay.date))
+        );
+        const expectedActions = [
+          setLoading(true),
+          removeDay(testDay),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.INFO,
+            message: 'meal-1 removed',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
+      it('should not delete a day from the calendar if day not found', async () => {
+        const testDay = {
+          id: 'testId',
+          date: '2020-01-01',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+            name: 'meal-1',
+          },
+        };
+        const mockPromise = new Promise(res => res(testDay));
+        jest.mock('../../api/day', () => ({
+          __esModule: true,
+          deleteDay: jest.fn().mockReturnValueOnce(() => mockPromise),
+        }));
+        const {
+          deleteDayFromCalendar,
+        } = require('../../ducks/days/DaysReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [
+              {
+                id: 'old',
+                date: '2020-02-02',
+                meal: {
+                  id: 'meal-old',
+                  localId: 'meal-old',
+                },
+              },
+              {
+                id: 'testId',
+                date: '2020-01-01',
+                meal: {
+                  id: 'meal-1',
+                  localId: 'meal-1',
+                  name: 'meal-1',
+                },
+              },
+            ],
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          deleteDayFromCalendar(new Date('20202-02-02'))
+        );
+        const expectedActions: any = [];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
+      it('should not delete a day from the calendar with an error', async () => {
+        const testDay = {
+          id: 'testId',
+          date: '2020-01-01',
+          meal: {
+            id: 'meal-1',
+            localId: 'meal-1',
+          },
+        };
+        jest.mock('../../api/day', () => ({
+          __esModule: true,
+          deleteDay: jest.fn().mockReturnValueOnce(() => {
+            throw new Error('test exception');
+          }),
+        }));
+        const {
+          deleteDayFromCalendar,
+        } = require('../../ducks/days/DaysReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [
+              {
+                id: 'old',
+                date: '2020-01-01',
+                meal: {
+                  id: 'meal-old',
+                  localId: 'meal-old',
+                },
+              },
+            ],
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          deleteDayFromCalendar(new Date(testDay.date))
+        );
+        const expectedActions = [
+          setLoading(true),
+          removeDay(null),
           setPopped(true),
           mockSetToastState({
             status: FeedbackStatus.ERROR,
