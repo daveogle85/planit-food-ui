@@ -13,6 +13,10 @@ const main = (props: CssProps) => css`
   .dc-main {
     margin-left: ${props.theme.spacing.large};
   }
+
+  .dc-notes {
+    margin-top: ${props.theme.spacing.medium};
+  }
 `;
 
 export const styleDayCard = (DayCard: React.ComponentType) =>

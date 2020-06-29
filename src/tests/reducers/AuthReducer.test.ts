@@ -9,7 +9,6 @@ describe('AuthReducer', () => {
   describe('reducer, actions and selectors', () => {
     const initialState = {
       isAuthenticated: false,
-      token: null,
     };
 
     it('should return the initial state on first run', () => {

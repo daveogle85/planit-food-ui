@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { ApiDish, Dish } from '../types/DishTypes';
 import { ApiMeal, Meal } from '../types/MealTypes';
 import { List, ApiList } from '../types/ListTypes';
+import { ApiDay, Day } from '../types/DayTypes';
 
 export const convertFromDishApi = (dish: ApiDish): Dish => ({
   ...dish,
@@ -15,6 +16,11 @@ export const convertFromMealApi = (meal: ApiMeal): Meal => {
     return dish;
   });
   return { ...meal, localId: uuid(), dishes };
+};
+
+export const convertFromDayApi = (day: ApiDay): Day => {
+  const meal = convertFromMealApi(day.meal);
+  return { ...day, meal };
 };
 
 export const convertToApiDish = (dish: Dish): ApiDish => {
@@ -57,4 +63,14 @@ export const convertToListApiRequest = (list: List): ApiList => {
     ...list,
     meals: updatedMeals,
   };
+};
+
+export const convertToLightApiDay = (day: Day): ApiDay => {
+  const meal = convertToLightApiMeal(day.meal);
+  return { ...day, date: day.date!, meal };
+};
+
+export const convertToApiDay = (day: Day): ApiDay => {
+  const meal = convertToApiMeal(day.meal);
+  return { ...day, date: day.date!, meal };
 };

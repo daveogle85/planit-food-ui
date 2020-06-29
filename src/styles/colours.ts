@@ -10,6 +10,7 @@ export const colours = {
   infoGreen: '#00703c',
   lightInfoGreen: '#b9decd',
   addGreen: '#53dd49',
+  daySelectedBlue: '#ebf8fb',
   background: {
     weekViewPurple: '#7f53ac',
     weekViewBlue: '#647dee',

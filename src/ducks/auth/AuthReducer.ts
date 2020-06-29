@@ -3,10 +3,9 @@ import { RootState } from '..';
 
 const initialState: {
   isAuthenticated: boolean;
-  token: string | null;
+  token?: string | null;
 } = {
   isAuthenticated: false,
-  token: null,
 };
 
 const authSlice = createSlice({

@@ -1,14 +1,17 @@
-import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
-import { AppThunk, RootState } from '..';
-import getDaysByRange from '../../api/day';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { AppThunk, RootState } from '../';
+import getDaysByRange, { addDay, deleteDay } from '../../api/day';
 import { Day, DayRange } from '../../api/types/DayTypes';
 import {
+  datesAreOnSameDay,
   dateToISOString,
   getOverlappingRange,
   isDayWithinRange,
 } from '../../helpers/date';
-import dispatchApiAction from '../loading';
 import { updateObject } from '../../helpers/object';
+import { setSelectedMeal } from '../lists/ListsReducer';
+import dispatchApiAction from '../loading';
 
 type DaysSlice = {
   loading: boolean;
@@ -31,7 +34,9 @@ const daysSlice = createSlice({
     setData(state, action: PayloadAction<Array<Day>>) {
       const updatedDays = [...state.data];
       action.payload.forEach(day => {
-        const foundIndex = updatedDays.findIndex(d => d.id === day.id);
+        const foundIndex = updatedDays.findIndex(
+          d => d.date === day.date && d.id === day.id
+        );
         if (foundIndex === -1) {
           updatedDays.push(day);
         } else {
@@ -58,6 +63,9 @@ const daysSlice = createSlice({
         };
       }
     },
+    removeDay(state, action: PayloadAction<Day | null>) {
+      state.data = state.data.filter(day => day.date !== action.payload?.date);
+    },
   },
 });
 
@@ -71,7 +79,12 @@ const selectMealsAsEvents = createSelector(selectData, data =>
   data.map(day => ({ title: day.meal.name, date: day.date }))
 );
 
-export const { setLoading, setData, updateRequestedRange } = daysSlice.actions;
+export const {
+  setLoading,
+  setData,
+  updateRequestedRange,
+  removeDay,
+} = daysSlice.actions;
 export const daysSelectors = {
   selectLoading: (state: RootState) => state.days.loading,
   selectData,
@@ -99,26 +112,17 @@ export const getDayCardRange = (): DayRange => {
 };
 
 // Thunks
-export const fetchDayDataForCarousel = (): AppThunk => async (
-  dispatch,
-  getState
-) => {
+export const fetchDayDataForCarousel = (): AppThunk => async dispatch => {
   const dayCardRange = getDayCardRange();
-  const requestedRange = daysSelectors.selectRequestedRange(getState());
-  const range = requestedRange
-    ? getOverlappingRange(requestedRange, dayCardRange)
-    : dayCardRange;
-  if (range) {
-    const fetchDays = getDaysByRange(range, true);
-    const apiCall = dispatchApiAction(setLoading);
-    return await dispatch(
-      apiCall({
-        request: fetchDays,
-        onSuccessAction: setData,
-        onFailFallback: [],
-      })
-    );
-  }
+  const fetchDays = getDaysByRange(dayCardRange, true);
+  const apiCall = dispatchApiAction(setLoading);
+  return await dispatch(
+    apiCall({
+      request: fetchDays,
+      onSuccessAction: setData,
+      onFailFallback: [],
+    })
+  );
 };
 
 export const fetchMealsForRange = (dayRange: DayRange): AppThunk => async (
@@ -138,6 +142,41 @@ export const fetchMealsForRange = (dayRange: DayRange): AppThunk => async (
         onSuccessAction: setData,
         additionalSuccessActions: [updateRequestedRange(range)],
         onFailFallback: [],
+      })
+    );
+  }
+};
+
+export const addDayToCalendar = (day: Day): AppThunk => async dispatch => {
+  const request = addDay(day);
+  const apiCall = dispatchApiAction(setLoading);
+  return await dispatch(
+    apiCall({
+      request,
+      onSuccessAction: setData,
+      onSuccessMessage: `${day.meal.name} added to ${day.date}`,
+      additionalSuccessActions: [setSelectedMeal(null)],
+      onFailFallback: [],
+    })
+  );
+};
+
+export const deleteDayFromCalendar = (date: Date): AppThunk => async (
+  dispatch,
+  getState
+) => {
+  const day = selectData(getState()).find((day: Day) =>
+    datesAreOnSameDay(new Date(day.date ?? ''), date)
+  );
+  if (day != null) {
+    const request = deleteDay(day);
+    const apiCall = dispatchApiAction(setLoading);
+    return await dispatch(
+      apiCall({
+        request,
+        onSuccessAction: removeDay,
+        onSuccessMessage: `${day.meal.name} removed`,
+        onFailFallback: null,
       })
     );
   }

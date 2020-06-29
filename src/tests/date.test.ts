@@ -4,6 +4,7 @@ import {
   dateToISOString,
   getOverlappingRange,
   isDayWithinRange,
+  datesAreOnSameDay,
 } from '../helpers/date';
 
 describe('date', () => {
@@ -176,5 +177,42 @@ describe('isDayWithinRange', () => {
     const day = '01/15/98';
     const result = isDayWithinRange(givenRange, day);
     expect(result).toBe(true);
+  });
+});
+
+describe('datesAreOnSameDay', () => {
+  it('should return true if both dates are on the same day', () => {
+    const day1 = new Date('01/01/98 00:00');
+    const day2 = new Date('01/01/98 23:59');
+    expect(datesAreOnSameDay(day1, day2)).toBe(true);
+  });
+
+  it('should return false if both dates are on different days', () => {
+    const day1 = new Date('01/01/98');
+    const day2 = new Date('02/01/98');
+    expect(datesAreOnSameDay(day1, day2)).toBe(false);
+  });
+
+  it('should return false if not a date', () => {
+    const day1 = new Date('test');
+    const day2 = new Date('02/01/98');
+    let result = datesAreOnSameDay(day1, day2);
+    result = result || datesAreOnSameDay(day2, null as any);
+
+    expect(result).toBe(false);
+  });
+});
+
+describe('rangeNoGreaterThan24hours', () => {
+  it('should return true if range less than 24 hours', () => {
+    const start = new Date('01/01/98 00:00:00');
+    const end = new Date('01/01/98 23:59:59');
+    expect(datesAreOnSameDay(start, end)).toBe(true);
+  });
+
+  it('should return false if dates are greater than 24 hours apart', () => {
+    const start = new Date('01/01/98 00:00:00');
+    const end = new Date('01/01/98 24:00:01');
+    expect(datesAreOnSameDay(start, end)).toBe(false);
   });
 });

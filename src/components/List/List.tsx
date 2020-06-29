@@ -1,9 +1,11 @@
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { Meal } from '../../api/types/MealTypes';
 import { authSelectors } from '../../ducks/auth/AuthReducer';
+import { setIsEditMode } from '../../ducks/calendar/CalendarReducer';
 import {
   deleteMealFromSelectedList,
   fetchDefaultList,
@@ -25,7 +27,8 @@ import { styleListComponent, styleMealItem } from './StyledList';
 const MealItemRaw: React.FC<MealProps> = (props: MealProps) => {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
-  const { className, meal, setSelectedMeal, selected } = props;
+  const { className, meal, handleSelectedMeal, selected } = props;
+  const history = useHistory();
 
   const handleExpandClicked = (
     e: React.MouseEvent<HTMLSpanElement, MouseEvent>
@@ -38,8 +41,12 @@ const MealItemRaw: React.FC<MealProps> = (props: MealProps) => {
     dispatch(deleteMealFromSelectedList(props.meal));
   };
 
-  const handleAddMeal = () => {
-    return null;
+  const handleAddMeal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    history.push('/calendar');
+    dispatch(setSelectedMeal(meal));
+    dispatch(setSideBarOpen(false));
+    dispatch(setIsEditMode(true));
   };
 
   return (
@@ -49,7 +56,7 @@ const MealItemRaw: React.FC<MealProps> = (props: MealProps) => {
           'meal-expanded': expanded,
           selected,
         })}
-        onClick={setSelectedMeal}
+        onClick={handleSelectedMeal}
       >
         <div className="meal-item">
           <div>
@@ -85,7 +92,8 @@ const MealItemRaw: React.FC<MealProps> = (props: MealProps) => {
 const MealItem = styleMealItem(MealItemRaw);
 
 const ListComponent: React.FC<ListProps> = (props: ListProps) => {
-  const handleMealDelete = props.onMealDelete ? props.onMealDelete : () => null;
+  const { onMealDelete, onMealSelect } = props;
+  const handleMealDelete = onMealDelete ? onMealDelete : () => null;
   const dispatch = useDispatch();
   const token = useSelector(authSelectors.selectedToken);
   const loading = useSelector(listsSelectors.selectLoading);
@@ -132,7 +140,7 @@ const ListComponent: React.FC<ListProps> = (props: ListProps) => {
     if (selectedMeal?.localId === meal.localId) {
       dispatch(setSelectedMeal(null));
     } else {
-      dispatch(setSelectedMeal(meal));
+      onMealSelect ? onMealSelect(meal) : dispatch(setSelectedMeal(meal));
     }
   };
 
@@ -156,7 +164,7 @@ const ListComponent: React.FC<ListProps> = (props: ListProps) => {
                 <MealItem
                   meal={meal}
                   key={meal.localId}
-                  setSelectedMeal={toggleSelectedMeal(meal)}
+                  handleSelectedMeal={toggleSelectedMeal(meal)}
                   selected={selectedMeal?.localId === meal.localId}
                 />
               ))}

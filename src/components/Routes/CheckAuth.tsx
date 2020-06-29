@@ -15,18 +15,20 @@ export const CheckAuth: React.FC = props => {
 
   useEffect(() => {
     const isAuth = isAuthenticated || loading;
-    dispatch(setIsAuthenticated(Boolean(isAuth)));
-
-    if (isAuthenticated) {
-      dispatch(setToken(token));
-    } else {
-      dispatch(setToken(null));
-    }
+    const updateAuth = async () => {
+      dispatch(setIsAuthenticated(Boolean(isAuth)));
+      if (isAuthenticated) {
+        await dispatch(setToken(token));
+      } else if (!loading) {
+        await dispatch(setToken(null));
+      }
+    };
+    updateAuth();
   }, [isAuthenticated, loading, dispatch, token]);
 
   // We don't load any components until the token has had time to
   // be set in the redux store
-  if (loading || tokenFromStore == null) {
+  if (loading || tokenFromStore === undefined) {
     return <LoadingSpinner />;
   }
 

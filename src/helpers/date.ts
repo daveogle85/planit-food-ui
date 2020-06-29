@@ -110,3 +110,15 @@ export const getOverlappingRange = (
   // if outside range on both sides or
   return rangeToTest;
 };
+
+export const datesAreOnSameDay = (first: Date, second: Date) =>
+  first != null &&
+  second != null &&
+  !isNaN(first.getTime()) &&
+  !isNaN(second.getTime()) &&
+  first.getFullYear() === second.getFullYear() &&
+  first.getMonth() === second.getMonth() &&
+  first.getDate() === second.getDate();
+
+export const rangeNoGreaterThan24hours = (start: Date, end: Date) =>
+  end.getTime() / 1000 - start.getTime() / 1000 <= 86400;
