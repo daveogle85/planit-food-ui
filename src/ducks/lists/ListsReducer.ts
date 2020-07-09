@@ -136,7 +136,8 @@ export const deleteMealFromSelectedList = (meal: Meal): AppThunk => async (
   dispatch,
   getState
 ) => {
-  const selectedList = listsSelectors.selectSelectedList(getState());
+  const state = getState();
+  const selectedList = listsSelectors.selectSelectedList(state);
 
   if (!selectedList) {
     dispatch(
@@ -152,12 +153,15 @@ export const deleteMealFromSelectedList = (meal: Meal): AppThunk => async (
     };
     const apiCall = dispatchApiAction(setLoading);
     const updateListRequest = updateList(updatedList);
+    const additionalSuccessActions =
+      state.lists.selectedMeal?.id === meal.id ? [setSelectedMeal(null)] : [];
     await dispatch(
       apiCall({
         request: updateListRequest,
         onFailFallback: selectedList,
         onSuccessAction: setSelectedList,
         onSuccessMessage: `Meal "${meal.name}" deleted`,
+        additionalSuccessActions,
       })
     );
   }
