@@ -562,6 +562,62 @@ describe('DaysReducer', () => {
         expect(store.getActions()).toEqual(expectedActions);
       });
 
+      it('should delete a meal from the list and remove selected meal if a match', async () => {
+        const mockListPromise = new Promise(res =>
+          res({
+            ...mockDefaultList,
+            meals: [],
+          })
+        );
+        const mockGetListByName = jest.fn();
+        jest.mock('../../api/list', () => ({
+          __esModule: true,
+          updateList: mockGetListByName.mockReturnValueOnce(
+            () => mockListPromise
+          ),
+        }));
+        const {
+          deleteMealFromSelectedList,
+        } = require('../../ducks/lists/ListsReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          days: {
+            loading: false,
+            data: [],
+            week: [],
+          },
+          lists: {
+            loading: false,
+            selectedList: mockDefaultList,
+            lists: mockListsResponse,
+            selectedMeal: mealToDelete,
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(
+          store.dispatch,
+          deleteMealFromSelectedList(mealToDelete)
+        );
+        const expectedActions = [
+          setLoading(true),
+          setSelectedList({
+            ...mockDefaultList,
+            meals: [],
+          }),
+          setSelectedMeal(null),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.INFO,
+            message: 'Meal "new" deleted',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
       it('should delete a meal from the list with error', async () => {
         const mockGetListByName = jest.fn();
         jest.mock('../../api/list', () => ({
