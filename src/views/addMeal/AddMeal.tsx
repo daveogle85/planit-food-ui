@@ -26,6 +26,11 @@ import { nullOrEmptyString } from '../../helpers/string';
 import { EmotionProps } from '../../styles/types';
 import { DishComponentProps } from './AddMealTypes';
 import { styledAddMeal } from './StyledAddMeal';
+import EyeIcon from '../../images/eye';
+import { colours } from '../../styles/colours';
+import PlanitFoodModal from '../../components/Modal/ListModal';
+import { mealsSelectors, fetchMeals } from '../../ducks/meals/MealsReducer';
+import { isNullOrUndefined } from 'util';
 
 function generateMealName(dishes: Array<Dish>): string {
   if (!dishes.length) {
@@ -61,7 +66,10 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const [isMealDirty, setIsMealDirty] = useState(false);
   const loadingLists = useSelector(listsSelectors.selectLoading);
   const selectedList = useSelector(listsSelectors.selectSelectedList);
+  const meals = useSelector(mealsSelectors.selectData);
+  const mealsLoading = useSelector(mealsSelectors.selectLoading);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getMealOptions = (text: string) => searchForMeal(text)(token);
 
@@ -248,8 +256,27 @@ const AddMeal: React.FC<EmotionProps> = props => {
     };
   };
 
+  const setModalOpen = () => setIsModalOpen(true);
+  const setModalClose = () => setIsModalOpen(false);
+
+  const handleRequestMeals = () => {
+    if (isNullOrUndefined(meals)) {
+      dispatch(fetchMeals());
+    }
+  };
+
+  const modalListItem = (item: Meal) => <div>{item.name}</div>;
+
   return (
     <>
+      <PlanitFoodModal
+        isOpen={isModalOpen}
+        closeModal={setModalClose}
+        listItems={meals}
+        isLoading={mealsLoading}
+        onBeforeOpen={handleRequestMeals}
+        listItem={modalListItem}
+      />
       <NavBar />
       <List onMealDelete={handleMealClear} />
       <Loading isLoading={loadingLists}>
@@ -257,7 +284,12 @@ const AddMeal: React.FC<EmotionProps> = props => {
           <h2 className="title">Add A New Meal</h2>
           <div>
             <div className="meal">
-              <label htmlFor="mealname">Meal name</label>
+              <div className="meal-label">
+                <label htmlFor="mealname">Meal name</label>
+                <div title="View All Meals" onClick={setModalOpen}>
+                  <EyeIcon fill={colours.eyeIconBlue} />
+                </div>
+              </div>
               <div>
                 <AutoCompleteInput
                   className="meal-name"
