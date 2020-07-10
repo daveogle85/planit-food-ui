@@ -2,7 +2,6 @@ import styled from '../../styles/theme';
 import { listItem } from '../../styles/heights';
 import { CssProps } from '../../styles/types';
 import css from '@emotion/css/macro';
-import { pointer } from '../../styles/common';
 
 const styledDish = (props: CssProps) => css`
   .delete-dish > button {
@@ -25,17 +24,6 @@ export const styledAddMeal = (AddMeal: React.ComponentType) => styled(AddMeal)`
 
   .meal {
     padding-bottom: ${props => props.theme.spacing.small};
-  }
-
-  .meal-label {
-    display: flex;
-    align-items: center;
-    > div,
-    svg {
-      ${pointer}
-      height: 17px;
-      width: 17px;
-    }
   }
 
   .dishes {

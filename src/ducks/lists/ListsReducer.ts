@@ -11,6 +11,7 @@ import { Meal } from '../../api/types/MealTypes';
 import dispatchApiAction from '../loading';
 import { popToast } from '../toast/ToastReducer';
 import { FeedbackStatus } from '../toast/ToastTypes';
+import { setData } from '../meals/MealsReducer';
 
 type ListsSlice = {
   loading: boolean;
@@ -120,6 +121,7 @@ export const addMealToSelectedList = (meal: Meal): AppThunk => async (
         onSuccessAction: setSelectedList,
         onFailFallback: selectedList,
         onSuccessMessage: `"${meal.name}" Added to List: ${selectedList.name}`,
+        additionalSuccessActions: [setData(null)],
       })
     );
   } else {

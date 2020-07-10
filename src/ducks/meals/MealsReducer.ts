@@ -29,7 +29,7 @@ const mealsSlice = createSlice({
 
 export const { setLoading, setData } = mealsSlice.actions;
 export const mealsSelectors = {
-  selectLoading: (state: RootState) => state.days.loading,
+  selectLoading: (state: RootState) => state.meals.loading,
   selectData: (state: RootState) => state.meals.data,
 };
 

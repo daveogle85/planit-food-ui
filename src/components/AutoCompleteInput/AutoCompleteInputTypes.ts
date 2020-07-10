@@ -4,13 +4,15 @@ import { Meal } from '../../api/types/MealTypes';
 
 export type AutoCompleteInputProps<T, ApiT> = EmotionProps & {
   getOptions: (text: string) => Promise<Array<ApiT>>;
-  updateCurrentValue: (value: T) => void;
+  updateCurrentValue: (value: ApiT | T | null) => void;
   currentValue: T;
-  convertFromApiType: (option: ApiT) => T;
   placeholder?: string;
   inputError?: string;
   disabled?: boolean;
   onDirty?: (dirty: boolean) => void;
+  allItems: Array<T> | null;
+  allItemsLoading: boolean;
+  fetchAll: () => void;
 };
 
 export type AutoCompleteInputBaseType = Pick<

@@ -26,6 +26,10 @@ test('Add Meal View renders correctly', () => {
       selectedList: null,
       lists: [],
     },
+    meals: {
+      loading: false,
+      data: null,
+    },
     auth: { isAuthenticated: true, token: '' },
   };
   const TestAddMealView = styledAddMeal(AddMeal as any);

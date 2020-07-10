@@ -3,14 +3,10 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
-import { searchForDish } from '../../api/dish';
-import {
-  convertFromDishApi,
-  convertFromMealApi,
-} from '../../api/helpers/convert';
-import { searchForMeal } from '../../api/meal';
-import { Dish, DishType } from '../../api/types/DishTypes';
-import { Meal } from '../../api/types/MealTypes';
+import { searchForDish, getDishById } from '../../api/dish';
+import { searchForMeal, getMealById } from '../../api/meal';
+import { Dish, DishType, ApiDish } from '../../api/types/DishTypes';
+import { Meal, ApiMeal } from '../../api/types/MealTypes';
 import AutoCompleteInput from '../../components/AutoCompleteInput/AutoCompleteInput';
 import FeedbackElement from '../../components/FeedbackInput/FeedbackElement';
 import List from '../../components/List/List';
@@ -26,11 +22,9 @@ import { nullOrEmptyString } from '../../helpers/string';
 import { EmotionProps } from '../../styles/types';
 import { DishComponentProps } from './AddMealTypes';
 import { styledAddMeal } from './StyledAddMeal';
-import EyeIcon from '../../images/eye';
-import { colours } from '../../styles/colours';
-import PlanitFoodModal from '../../components/Modal/ListModal';
 import { mealsSelectors, fetchMeals } from '../../ducks/meals/MealsReducer';
 import { isNullOrUndefined } from 'util';
+import { convertToLightApiMeal } from '../../api/helpers/convert';
 
 function generateMealName(dishes: Array<Dish>): string {
   if (!dishes.length) {
@@ -69,15 +63,26 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const meals = useSelector(mealsSelectors.selectData);
   const mealsLoading = useSelector(mealsSelectors.selectLoading);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const getMealOptions = (text: string) => searchForMeal(text)(token);
+  const getMealOptions = (text: string): Promise<ApiMeal[]> => {
+    if (!isNullOrUndefined(meals)) {
+      const foundMeals = meals.filter(meal =>
+        meal.name?.toLowerCase().includes(text.toLowerCase())
+      );
+      return new Promise(res =>
+        res(foundMeals.map(convertToLightApiMeal))
+      ) as Promise<ApiMeal[]>;
+    }
 
-  const setDishesAndMealName = (dishes: Array<Dish>) => {
+    return searchForMeal(text)(token);
+  };
+
+  const setDishesAndMealName = (dishes: Array<Dish>, newMeal?: Meal) => {
     const namedDishes = dishes.filter(d => !nullOrEmptyString(d.name));
     if (!isMealDirty) {
+      const mealToSet = isNullOrUndefined(newMeal) ? meal : newMeal;
       setMeal({
-        ...meal,
+        ...mealToSet,
         name: generateMealName(namedDishes),
       });
     }
@@ -99,44 +104,63 @@ const AddMeal: React.FC<EmotionProps> = props => {
     setDishesAndMealName(newDishes);
   };
 
-  const handleDishUpdate = (oldId: string) => (dishToUpdate: Dish) => {
-    let nameCount = 0;
-    updateDishErrors();
-    const newDishes = dishes.map(dish => {
-      if (nameCount > 0) {
-        const errors = new Map(dishErrors);
-        errors.set(dishToUpdate.localId, 'Dishes must have unique names');
-        setDishErrors(errors);
-      }
+  const handleDishUpdate = (oldId: string) => async (
+    dishToUpdate: Dish | ApiDish | null
+  ) => {
+    const dishInDatabase = !nullOrEmptyString(dishToUpdate?.id);
+    const fullDish = isNullOrUndefined(dishToUpdate)
+      ? defaultDish
+      : dishInDatabase
+      ? await getDishById(dishToUpdate.id!)(token)
+      : (dishToUpdate as Dish);
 
-      if (dish.name === dishToUpdate.name) {
-        nameCount++;
-      }
+    if (fullDish) {
+      let nameCount = 0;
+      updateDishErrors();
+      const newDishes = dishes.map(dish => {
+        if (nameCount > 0) {
+          const errors = new Map(dishErrors);
+          errors.set(fullDish.localId, 'Dishes must have unique names');
+          setDishErrors(errors);
+        }
 
-      if (dish.localId === oldId) {
-        return dishToUpdate;
-      }
-      return dish;
-    });
-    setDishesAndMealName(newDishes);
+        if (dish.name === fullDish.name) {
+          nameCount++;
+        }
+
+        if (dish.localId === oldId) {
+          return fullDish;
+        }
+        return dish;
+      });
+      setDishesAndMealName(newDishes);
+    }
   };
 
-  const handleMealUpdate = (mealToUpdate: Meal) => {
+  const handleMealUpdate = async (mealToUpdate: Meal | ApiMeal | null) => {
+    if (isNullOrUndefined(mealToUpdate)) {
+      return handleMealClear();
+    }
     let dishesToUpdate: Array<Dish> = [];
     const inDatabase = !nullOrEmptyString(mealToUpdate.id);
 
     if (inDatabase) {
-      dishesToUpdate = mealToUpdate.dishes ?? [];
+      // go and fetch the full meal.
+      const fullMeal = await getMealById(mealToUpdate.id!)(token);
+      if (fullMeal) {
+        dishesToUpdate = fullMeal.dishes ?? [];
+        setMeal(fullMeal);
+      }
     } else {
       // If meal not in database clear out the dishes if we have just
       // switched from a db meal to a custom
       dishesToUpdate =
-        !nullOrEmptyString(meal.id) && !inDatabase
+        !nullOrEmptyString(mealToUpdate.id) && !inDatabase
           ? defaultDishes
           : dishes ?? defaultDishes;
+      setMeal(mealToUpdate as Meal);
     }
 
-    setMeal(mealToUpdate);
     setDishes(dishesToUpdate);
   };
 
@@ -149,9 +173,9 @@ const AddMeal: React.FC<EmotionProps> = props => {
     setDishesAndMealName([...newDishes]);
   };
 
-  const handleMealClear = () => {
+  const handleMealClear = async () => {
     setMeal(defaultMeal);
-    setDishesAndMealName(defaultDishes);
+    setDishesAndMealName(defaultDishes, defaultMeal);
     setIsMealDirty(false);
   };
 
@@ -187,7 +211,9 @@ const AddMeal: React.FC<EmotionProps> = props => {
           updateCurrentValue={handleDishUpdate(dish.localId)}
           inputError={dishErrors.get(dish.localId)}
           disabled={!nullOrEmptyString(meal.id)}
-          convertFromApiType={convertFromDishApi}
+          allItems={[]}
+          allItemsLoading={false}
+          fetchAll={() => null}
         />
         <div>
           <input
@@ -256,27 +282,10 @@ const AddMeal: React.FC<EmotionProps> = props => {
     };
   };
 
-  const setModalOpen = () => setIsModalOpen(true);
-  const setModalClose = () => setIsModalOpen(false);
-
-  const handleRequestMeals = () => {
-    if (isNullOrUndefined(meals)) {
-      dispatch(fetchMeals());
-    }
-  };
-
-  const modalListItem = (item: Meal) => <div>{item.name}</div>;
+  const fetchAllMeals = () => dispatch(fetchMeals());
 
   return (
     <>
-      <PlanitFoodModal
-        isOpen={isModalOpen}
-        closeModal={setModalClose}
-        listItems={meals}
-        isLoading={mealsLoading}
-        onBeforeOpen={handleRequestMeals}
-        listItem={modalListItem}
-      />
       <NavBar />
       <List onMealDelete={handleMealClear} />
       <Loading isLoading={loadingLists}>
@@ -284,21 +293,19 @@ const AddMeal: React.FC<EmotionProps> = props => {
           <h2 className="title">Add A New Meal</h2>
           <div>
             <div className="meal">
-              <div className="meal-label">
-                <label htmlFor="mealname">Meal name</label>
-                <div title="View All Meals" onClick={setModalOpen}>
-                  <EyeIcon fill={colours.eyeIconBlue} />
-                </div>
-              </div>
+              <label htmlFor="mealname">Meal name</label>
               <div>
                 <AutoCompleteInput
                   className="meal-name"
                   placeholder="Optional"
+                  disabled={!nullOrEmptyString(meal.id)}
                   getOptions={getMealOptions}
                   updateCurrentValue={handleMealUpdate}
                   currentValue={meal}
                   onDirty={setIsMealDirty}
-                  convertFromApiType={convertFromMealApi}
+                  allItems={meals}
+                  allItemsLoading={mealsLoading}
+                  fetchAll={fetchAllMeals}
                 />
                 <button onClick={handleMealClear}>Clear Meal</button>
               </div>

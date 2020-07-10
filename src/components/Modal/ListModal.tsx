@@ -1,11 +1,13 @@
+import classNames from 'classnames';
 import React from 'react';
 import Modal from 'styled-react-modal';
-import { ModalProps } from './ModalTypes';
-import { styleModal } from './StyledModal';
+
 import { EmotionProps } from '../../styles/types';
 import Loading from '../Loading/Loading';
+import { ModalProps } from './ModalTypes';
+import { styleModal } from './StyledModal';
 
-const PlanitFoodModal = <T extends {}>(props: ModalProps<T> & EmotionProps) => {
+const ListModal = <T extends {}>(props: ModalProps<T> & EmotionProps) => {
   const {
     isOpen,
     closeModal,
@@ -19,21 +21,24 @@ const PlanitFoodModal = <T extends {}>(props: ModalProps<T> & EmotionProps) => {
       isOpen={isOpen}
       beforeOpen={onBeforeOpen}
       onEscapeKeydown={closeModal}
+      allowScroll={true}
     >
       <Loading isLoading={isLoading}>
-        <div>
+        <div className={classNames(props.className, 'sm-body')}>
           <div className="list">
             {listItems && listItems.map(item => listItem(item))}
           </div>
-          <button onClick={closeModal}>Close me</button>
+          <div className="close-button">
+            <button onClick={closeModal}>Close</button>
+          </div>
         </div>
       </Loading>
     </Modal>
   );
 };
 
-const StyledModal = styleModal(
-  PlanitFoodModal as React.ComponentType
-) as typeof PlanitFoodModal;
+const StyledListModal = styleModal(
+  ListModal as React.ComponentType
+) as typeof ListModal;
 
-export default StyledModal;
+export default StyledListModal;

@@ -1,7 +1,8 @@
-import { ApiDish } from './types/DishTypes';
+import { ApiDish, Dish } from './types/DishTypes';
 import { httpRequest } from './helpers/http';
 import { nullOrEmptyString } from '../helpers/string';
 import { RestVerb } from './helpers/types';
+import { convertFromDishApi } from './helpers/convert';
 
 const path = '/dishes';
 
@@ -20,5 +21,24 @@ export const searchForDish = (dishSearchText: string) => async (
     );
   } catch (e) {
     return [];
+  }
+};
+
+export const getDishById = (dishId: string) => async (
+  token?: string | null
+): Promise<Dish | null> => {
+  const requestPath = `${path}/${dishId}`;
+  if (nullOrEmptyString(token)) {
+    return null;
+  }
+  try {
+    const dish = await httpRequest<ApiDish, undefined>(
+      requestPath,
+      token!,
+      RestVerb.GET
+    );
+    return convertFromDishApi(dish);
+  } catch (e) {
+    return null;
   }
 };

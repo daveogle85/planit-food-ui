@@ -24,6 +24,25 @@ export const searchForMeal = (mealSearchText: string) => async (
   }
 };
 
+export const getMealById = (mealId: string) => async (
+  token?: string | null
+): Promise<Meal | null> => {
+  const requestPath = `${path}/${mealId}`;
+  if (nullOrEmptyString(token)) {
+    return null;
+  }
+  try {
+    const meal = await httpRequest<ApiMeal, undefined>(
+      requestPath,
+      token!,
+      RestVerb.GET
+    );
+    return convertFromMealApi(meal);
+  } catch (e) {
+    return null;
+  }
+};
+
 export const getAllMeals = () => async (
   token?: string | null
 ): Promise<Array<Meal>> => {
