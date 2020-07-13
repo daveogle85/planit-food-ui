@@ -23,6 +23,7 @@ import { CheckAuth } from './CheckAuth';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
 import Calendar from '../../views/calendar/Calendar';
+import { ModalProvider } from 'styled-react-modal';
 
 const CallBack: React.FC = props => {
   let history = useHistory();
@@ -44,12 +45,14 @@ const Root = ({ store }: { store: ReturnType<typeof createStore> }) => (
         `}
       />
       <ThemeProvider theme={theme}>
-        <CheckAuth>
-          <Router>
-            <Routes />
-          </Router>
-          <Toast />
-        </CheckAuth>
+        <ModalProvider>
+          <CheckAuth>
+            <Router>
+              <Routes />
+            </Router>
+            <Toast />
+          </CheckAuth>
+        </ModalProvider>
       </ThemeProvider>
     </Provider>
   </Auth0Provider>

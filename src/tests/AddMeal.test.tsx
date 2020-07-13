@@ -25,6 +25,16 @@ test('Add Meal View renders correctly', () => {
       loading: false,
       selectedList: null,
       lists: [],
+      sideBarOpen: false,
+      selectedMeal: null,
+    },
+    meals: {
+      loading: false,
+      data: null,
+    },
+    dishes: {
+      loading: false,
+      data: null,
     },
     auth: { isAuthenticated: true, token: '' },
   };

@@ -21,6 +21,7 @@
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-test-renderer": "^16.9.2",
+    "@types/styled-react-modal": "^1.2.0",
     "@types/uuid": "^8.0.0",
     "@types/webpack-env": "^1.15.2",
     "classnames": "^2.2.6",
@@ -33,6 +34,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-test-renderer": "^16.13.1",
+    "styled-components": "^5.1.1",
+    "styled-react-modal": "^2.0.1",
     "typescript": "^3.9.6",
     "typescript-styled-plugin": "^0.15.0",
     "uuid": "^8.2.0"
@@ -40,7 +43,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test -u",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

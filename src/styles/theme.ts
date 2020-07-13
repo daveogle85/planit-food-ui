@@ -71,6 +71,11 @@ export const globals = css`
     border-radius: ${theme.border.radius.medium};
     padding-left: ${theme.spacing.xSmall};
   }
+
+  button {
+    border: ${theme.border.thin(theme.colours.background.backgroundGrey)};
+    border-radius: ${theme.border.radius.medium};
+  }
 `;
 
 export type Theme = typeof theme;

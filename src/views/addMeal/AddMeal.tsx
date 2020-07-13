@@ -1,26 +1,29 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { isNullOrUndefined } from 'util';
 import { v4 as uuid } from 'uuid';
 
-import { searchForDish } from '../../api/dish';
+import { getDishById, searchForDish } from '../../api/dish';
 import {
-  convertFromDishApi,
-  convertFromMealApi,
+  convertToLightApiMeal,
+  convertToLightApiDish,
 } from '../../api/helpers/convert';
-import { searchForMeal } from '../../api/meal';
-import { Dish, DishType } from '../../api/types/DishTypes';
-import { Meal } from '../../api/types/MealTypes';
+import { getMealById, searchForMeal } from '../../api/meal';
+import { ApiDish, Dish, DishType } from '../../api/types/DishTypes';
+import { ApiMeal, Meal } from '../../api/types/MealTypes';
 import AutoCompleteInput from '../../components/AutoCompleteInput/AutoCompleteInput';
 import FeedbackElement from '../../components/FeedbackInput/FeedbackElement';
 import List from '../../components/List/List';
 import Loading from '../../components/Loading/Loading';
 import NavBar from '../../components/NavBar/NavBar';
 import { authSelectors } from '../../ducks/auth/AuthReducer';
+import { dishesSelectors, fetchDishes } from '../../ducks/dishes/DishesReducer';
 import {
   addMealToSelectedList,
   listsSelectors,
 } from '../../ducks/lists/ListsReducer';
+import { fetchMeals, mealsSelectors } from '../../ducks/meals/MealsReducer';
 import { ErrorState, FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import { nullOrEmptyString } from '../../helpers/string';
 import { EmotionProps } from '../../styles/types';
@@ -61,15 +64,29 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const [isMealDirty, setIsMealDirty] = useState(false);
   const loadingLists = useSelector(listsSelectors.selectLoading);
   const selectedList = useSelector(listsSelectors.selectSelectedList);
+  const meals = useSelector(mealsSelectors.selectData);
+  const mealsLoading = useSelector(mealsSelectors.selectLoading);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
 
-  const getMealOptions = (text: string) => searchForMeal(text)(token);
+  const getMealOptions = (text: string): Promise<ApiMeal[]> => {
+    if (!isNullOrUndefined(meals)) {
+      const foundMeals = meals.filter(meal =>
+        meal.name?.toLowerCase().includes(text.toLowerCase())
+      );
+      return new Promise(res =>
+        res(foundMeals.map(convertToLightApiMeal))
+      ) as Promise<ApiMeal[]>;
+    }
 
-  const setDishesAndMealName = (dishes: Array<Dish>) => {
+    return searchForMeal(text)(token);
+  };
+
+  const setDishesAndMealName = (dishes: Array<Dish>, newMeal?: Meal) => {
     const namedDishes = dishes.filter(d => !nullOrEmptyString(d.name));
     if (!isMealDirty) {
+      const mealToSet = isNullOrUndefined(newMeal) ? meal : newMeal;
       setMeal({
-        ...meal,
+        ...mealToSet,
         name: generateMealName(namedDishes),
       });
     }
@@ -91,44 +108,63 @@ const AddMeal: React.FC<EmotionProps> = props => {
     setDishesAndMealName(newDishes);
   };
 
-  const handleDishUpdate = (oldId: string) => (dishToUpdate: Dish) => {
-    let nameCount = 0;
-    updateDishErrors();
-    const newDishes = dishes.map(dish => {
-      if (nameCount > 0) {
-        const errors = new Map(dishErrors);
-        errors.set(dishToUpdate.localId, 'Dishes must have unique names');
-        setDishErrors(errors);
-      }
+  const handleDishUpdate = (oldId: string) => async (
+    dishToUpdate: Dish | ApiDish | null
+  ) => {
+    const dishInDatabase = !nullOrEmptyString(dishToUpdate?.id);
+    const fullDish = isNullOrUndefined(dishToUpdate)
+      ? defaultDish
+      : dishInDatabase
+      ? await getDishById(dishToUpdate.id!)(token)
+      : (dishToUpdate as Dish);
 
-      if (dish.name === dishToUpdate.name) {
-        nameCount++;
-      }
+    if (fullDish) {
+      let nameCount = 0;
+      updateDishErrors();
+      const newDishes = dishes.map(dish => {
+        if (nameCount > 0) {
+          const errors = new Map(dishErrors);
+          errors.set(fullDish.localId, 'Dishes must have unique names');
+          setDishErrors(errors);
+        }
 
-      if (dish.localId === oldId) {
-        return dishToUpdate;
-      }
-      return dish;
-    });
-    setDishesAndMealName(newDishes);
+        if (dish.name === fullDish.name) {
+          nameCount++;
+        }
+
+        if (dish.localId === oldId) {
+          return fullDish;
+        }
+        return dish;
+      });
+      setDishesAndMealName(newDishes);
+    }
   };
 
-  const handleMealUpdate = (mealToUpdate: Meal) => {
+  const handleMealUpdate = async (mealToUpdate: Meal | ApiMeal | null) => {
+    if (isNullOrUndefined(mealToUpdate)) {
+      return handleMealClear();
+    }
     let dishesToUpdate: Array<Dish> = [];
     const inDatabase = !nullOrEmptyString(mealToUpdate.id);
 
     if (inDatabase) {
-      dishesToUpdate = mealToUpdate.dishes ?? [];
+      // go and fetch the full meal.
+      const fullMeal = await getMealById(mealToUpdate.id!)(token);
+      if (fullMeal) {
+        dishesToUpdate = fullMeal.dishes ?? [];
+        setMeal(fullMeal);
+      }
     } else {
       // If meal not in database clear out the dishes if we have just
       // switched from a db meal to a custom
       dishesToUpdate =
-        !nullOrEmptyString(meal.id) && !inDatabase
+        !nullOrEmptyString(mealToUpdate.id) && !inDatabase
           ? defaultDishes
           : dishes ?? defaultDishes;
+      setMeal(mealToUpdate as Meal);
     }
 
-    setMeal(mealToUpdate);
     setDishes(dishesToUpdate);
   };
 
@@ -141,9 +177,9 @@ const AddMeal: React.FC<EmotionProps> = props => {
     setDishesAndMealName([...newDishes]);
   };
 
-  const handleMealClear = () => {
+  const handleMealClear = async () => {
     setMeal(defaultMeal);
-    setDishesAndMealName(defaultDishes);
+    setDishesAndMealName(defaultDishes, defaultMeal);
     setIsMealDirty(false);
   };
 
@@ -167,8 +203,25 @@ const AddMeal: React.FC<EmotionProps> = props => {
   }
 
   const DishComponent = (props: DishComponentProps) => {
-    const getDishOptions = (text: string) => searchForDish(text)(token);
+    const getDishOptions = (text: string): Promise<ApiDish[]> => {
+      if (!isNullOrUndefined(dishes)) {
+        const foundDishes = dishes.filter(dish =>
+          dish.name?.toLowerCase().includes(text.toLowerCase())
+        );
+        return new Promise(res =>
+          res(foundDishes.map(convertToLightApiDish))
+        ) as Promise<ApiDish[]>;
+      }
+
+      return searchForDish(text)(token);
+    };
+
     const { dish } = props;
+    const dishes = useSelector(dishesSelectors.selectData);
+    const dishesLoading = useSelector(dishesSelectors.selectLoading);
+
+    const fetchAllDishes = () => dispatch(fetchDishes());
+
     return (
       <>
         <AutoCompleteInput
@@ -179,7 +232,9 @@ const AddMeal: React.FC<EmotionProps> = props => {
           updateCurrentValue={handleDishUpdate(dish.localId)}
           inputError={dishErrors.get(dish.localId)}
           disabled={!nullOrEmptyString(meal.id)}
-          convertFromApiType={convertFromDishApi}
+          allItems={dishes}
+          allItemsLoading={dishesLoading}
+          fetchAll={fetchAllDishes}
         />
         <div>
           <input
@@ -248,6 +303,8 @@ const AddMeal: React.FC<EmotionProps> = props => {
     };
   };
 
+  const fetchAllMeals = () => dispatch(fetchMeals());
+
   return (
     <>
       <NavBar />
@@ -262,11 +319,14 @@ const AddMeal: React.FC<EmotionProps> = props => {
                 <AutoCompleteInput
                   className="meal-name"
                   placeholder="Optional"
+                  disabled={!nullOrEmptyString(meal.id)}
                   getOptions={getMealOptions}
                   updateCurrentValue={handleMealUpdate}
                   currentValue={meal}
                   onDirty={setIsMealDirty}
-                  convertFromApiType={convertFromMealApi}
+                  allItems={meals}
+                  allItemsLoading={mealsLoading}
+                  fetchAll={fetchAllMeals}
                 />
                 <button onClick={handleMealClear}>Clear Meal</button>
               </div>
