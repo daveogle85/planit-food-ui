@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isNullOrUndefined } from 'util';
 import { v4 as uuid } from 'uuid';
@@ -67,6 +67,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const meals = useSelector(mealsSelectors.selectData);
   const mealsLoading = useSelector(mealsSelectors.selectLoading);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const getMealOptions = (text: string): Promise<ApiMeal[]> => {
     if (!isNullOrUndefined(meals)) {
@@ -185,7 +186,12 @@ const AddMeal: React.FC<EmotionProps> = props => {
 
   const handleAddMealToList = () => {
     const dishesToAdd = dishes.filter(d => !nullOrEmptyString(d.name));
-    const mealToAdd = { ...meal, dishes: dishesToAdd };
+    const notes = textAreaRef.current?.value;
+    const mealToAdd = {
+      ...meal,
+      dishes: dishesToAdd,
+      notes: nullOrEmptyString(notes) ? undefined : notes,
+    };
     dispatch(addMealToSelectedList(mealToAdd));
   };
 
@@ -355,7 +361,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
             </FeedbackElement>
             <div className="options">
               <h3>Notes</h3>
-              <textarea />
+              <textarea ref={textAreaRef} />
             </div>
             <div>
               <FeedbackElement state={validateMeal()}>
