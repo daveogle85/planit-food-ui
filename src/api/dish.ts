@@ -42,3 +42,23 @@ export const getDishById = (dishId: string) => async (
     return null;
   }
 };
+
+export const getAllDishes = () => async (
+  token?: string | null
+): Promise<Array<Dish>> => {
+  const requestPath = `${path}`;
+  if (nullOrEmptyString(token)) {
+    return [];
+  }
+
+  try {
+    const meals = await httpRequest<Array<ApiDish>, undefined>(
+      requestPath,
+      token!,
+      RestVerb.GET
+    );
+    return meals.map(convertFromDishApi);
+  } catch (e) {
+    return [];
+  }
+};

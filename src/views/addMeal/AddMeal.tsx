@@ -1,30 +1,34 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { isNullOrUndefined } from 'util';
 import { v4 as uuid } from 'uuid';
 
-import { searchForDish, getDishById } from '../../api/dish';
-import { searchForMeal, getMealById } from '../../api/meal';
-import { Dish, DishType, ApiDish } from '../../api/types/DishTypes';
-import { Meal, ApiMeal } from '../../api/types/MealTypes';
+import { getDishById, searchForDish } from '../../api/dish';
+import {
+  convertToLightApiMeal,
+  convertToLightApiDish,
+} from '../../api/helpers/convert';
+import { getMealById, searchForMeal } from '../../api/meal';
+import { ApiDish, Dish, DishType } from '../../api/types/DishTypes';
+import { ApiMeal, Meal } from '../../api/types/MealTypes';
 import AutoCompleteInput from '../../components/AutoCompleteInput/AutoCompleteInput';
 import FeedbackElement from '../../components/FeedbackInput/FeedbackElement';
 import List from '../../components/List/List';
 import Loading from '../../components/Loading/Loading';
 import NavBar from '../../components/NavBar/NavBar';
 import { authSelectors } from '../../ducks/auth/AuthReducer';
+import { dishesSelectors, fetchDishes } from '../../ducks/dishes/DishesReducer';
 import {
   addMealToSelectedList,
   listsSelectors,
 } from '../../ducks/lists/ListsReducer';
+import { fetchMeals, mealsSelectors } from '../../ducks/meals/MealsReducer';
 import { ErrorState, FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import { nullOrEmptyString } from '../../helpers/string';
 import { EmotionProps } from '../../styles/types';
 import { DishComponentProps } from './AddMealTypes';
 import { styledAddMeal } from './StyledAddMeal';
-import { mealsSelectors, fetchMeals } from '../../ducks/meals/MealsReducer';
-import { isNullOrUndefined } from 'util';
-import { convertToLightApiMeal } from '../../api/helpers/convert';
 
 function generateMealName(dishes: Array<Dish>): string {
   if (!dishes.length) {
@@ -199,8 +203,25 @@ const AddMeal: React.FC<EmotionProps> = props => {
   }
 
   const DishComponent = (props: DishComponentProps) => {
-    const getDishOptions = (text: string) => searchForDish(text)(token);
+    const getDishOptions = (text: string): Promise<ApiDish[]> => {
+      if (!isNullOrUndefined(dishes)) {
+        const foundDishes = dishes.filter(dish =>
+          dish.name?.toLowerCase().includes(text.toLowerCase())
+        );
+        return new Promise(res =>
+          res(foundDishes.map(convertToLightApiDish))
+        ) as Promise<ApiDish[]>;
+      }
+
+      return searchForDish(text)(token);
+    };
+
     const { dish } = props;
+    const dishes = useSelector(dishesSelectors.selectData);
+    const dishesLoading = useSelector(dishesSelectors.selectLoading);
+
+    const fetchAllDishes = () => dispatch(fetchDishes());
+
     return (
       <>
         <AutoCompleteInput
@@ -211,9 +232,9 @@ const AddMeal: React.FC<EmotionProps> = props => {
           updateCurrentValue={handleDishUpdate(dish.localId)}
           inputError={dishErrors.get(dish.localId)}
           disabled={!nullOrEmptyString(meal.id)}
-          allItems={[]}
-          allItemsLoading={false}
-          fetchAll={() => null}
+          allItems={dishes}
+          allItemsLoading={dishesLoading}
+          fetchAll={fetchAllDishes}
         />
         <div>
           <input

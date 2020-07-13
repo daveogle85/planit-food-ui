@@ -19,7 +19,8 @@ import {
   mockSetToastState,
   mockPopToastActions,
 } from '../helpers';
-import { setData } from '../../ducks/meals/MealsReducer';
+import { setData as setMeals } from '../../ducks/meals/MealsReducer';
+import { setData as setDishes } from '../../ducks/dishes/DishesReducer';
 
 describe('DaysReducer', () => {
   describe('reducer, actions and selectors', () => {
@@ -399,7 +400,8 @@ describe('DaysReducer', () => {
             ...mockDefaultList,
             meals: [...mockDefaultList.meals, mealToAdd],
           }),
-          setData(null),
+          setMeals(null),
+          setDishes(null),
           setPopped(true),
           mockSetToastState({
             status: FeedbackStatus.INFO,
