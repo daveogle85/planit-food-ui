@@ -29,6 +29,7 @@ import { nullOrEmptyString } from '../../helpers/string';
 import { EmotionProps } from '../../styles/types';
 import { DishComponentProps } from './AddMealTypes';
 import { styledAddMeal } from './StyledAddMeal';
+import { search } from '../../helpers/search';
 
 function generateMealName(dishes: Array<Dish>): string {
   if (!dishes.length) {
@@ -68,18 +69,32 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const mealsLoading = useSelector(mealsSelectors.selectLoading);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const mealSearch = search(searchForMeal, convertToLightApiMeal, token);
+  const dishSearch = search(searchForDish, convertToLightApiDish, token);
+  // Not stored in state as we don't want to update the view when these change
+  const prevMealSearch = {
+    text: '',
+    results: false,
+  };
+  const prevDishSearch = {
+    text: '',
+    results: false,
+  };
 
-  const getMealOptions = (text: string): Promise<ApiMeal[]> => {
-    if (!isNullOrUndefined(meals)) {
-      const foundMeals = meals.filter(meal =>
-        meal.name?.toLowerCase().includes(text.toLowerCase())
-      );
-      return new Promise(res =>
-        res(foundMeals.map(convertToLightApiMeal))
-      ) as Promise<ApiMeal[]>;
+  const getMealOptions = async (text: string) => {
+    const results = await mealSearch(
+      text,
+      meals,
+      prevMealSearch.results,
+      prevMealSearch.text
+    );
+
+    if (text !== prevMealSearch.text) {
+      prevMealSearch.text = text;
+      prevMealSearch.results = Boolean(results.length);
     }
 
-    return searchForMeal(text)(token);
+    return results;
   };
 
   const setDishesAndMealName = (dishes: Array<Dish>, newMeal?: Meal) => {
@@ -209,17 +224,20 @@ const AddMeal: React.FC<EmotionProps> = props => {
   }
 
   const DishComponent = (props: DishComponentProps) => {
-    const getDishOptions = (text: string): Promise<ApiDish[]> => {
-      if (!isNullOrUndefined(dishes)) {
-        const foundDishes = dishes.filter(dish =>
-          dish.name?.toLowerCase().includes(text.toLowerCase())
-        );
-        return new Promise(res =>
-          res(foundDishes.map(convertToLightApiDish))
-        ) as Promise<ApiDish[]>;
+    const getDishOptions = async (text: string) => {
+      const results = await dishSearch(
+        text,
+        dishes,
+        prevDishSearch.results,
+        prevDishSearch.text
+      );
+
+      if (prevDishSearch.text !== text) {
+        prevDishSearch.text = text;
+        prevDishSearch.results = Boolean(results.length);
       }
 
-      return searchForDish(text)(token);
+      return results;
     };
 
     const { dish } = props;
