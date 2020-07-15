@@ -390,7 +390,9 @@ const AddMeal: React.FC<EmotionProps> = props => {
                   Add Meal To List
                 </button>
               </FeedbackElement>
-              <button disabled={true}>Add Meal To Calendar</button>
+              <button disabled={validateMeal().status !== FeedbackStatus.WARN}>
+                Add Meal To Database
+              </button>
             </div>
           </div>
         </div>

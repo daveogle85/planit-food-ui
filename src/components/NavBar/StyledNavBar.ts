@@ -20,6 +20,18 @@ const navBarImageStyle = (props: CssProps) => css`
   }
 `;
 
+export const styledNavIcon = (NavIcon: React.ComponentType) =>
+  styled(NavIcon)`
+    border: ${props =>
+      props.theme.border.medium(props.theme.colours.background.darkGrey)};
+    ${navBarImageStyle}
+    ${centerFlex}
+    svg {
+      width: 25px;
+      height: 25px;
+    }
+  `;
+
 export const MenuButton = styled.div`
   display: flex;
   align-items: center;
@@ -30,9 +42,6 @@ export const MenuButton = styled.div`
   svg {
     position: relative;
     display: inline-block;
-    border: ${props =>
-      props.theme.border.medium(props.theme.colours.background.darkGrey)};
-    ${navBarImageStyle}
   }
   ${props => props.theme.mediaQueries.largeMobile} {
     .button-text {
