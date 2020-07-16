@@ -1,5 +1,6 @@
 export const navBar = '70px';
 export const listItem = '30px';
+export const inputHeight = '24px';
 export const NavBarImageSize = '50px';
 export const NavBarImageSizeMobile = '40px';
 export const loginButtonDim = {

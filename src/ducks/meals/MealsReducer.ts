@@ -1,8 +1,10 @@
-import { Meal } from '../../api/types/MealTypes';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '..';
+
+import { AppThunk, RootState } from '../';
+import { getAllMeals, updateMeal } from '../../api/meal';
+import { Meal } from '../../api/types/MealTypes';
+import { setData as setDishes } from '../dishes/DishesReducer';
 import dispatchApiAction from '../loading';
-import { getAllMeals } from '../../api/meal';
 
 type MealsSlice = {
   loading: boolean;
@@ -41,6 +43,19 @@ export const fetchMeals = (): AppThunk => async dispatch => {
       request: getAllMeals(),
       onSuccessAction: setData,
       onFailFallback: null,
+    })
+  );
+};
+
+export const saveMeal = (meal: Meal): AppThunk => async dispatch => {
+  const apiCall = dispatchApiAction(setLoading);
+  return await dispatch(
+    apiCall({
+      request: updateMeal(meal),
+      onSuccessAction: null,
+      onFailFallback: null,
+      onSuccessMessage: `"${meal.name}" successfully updated`,
+      additionalSuccessActions: [setData(null), setDishes(null)],
     })
   );
 };

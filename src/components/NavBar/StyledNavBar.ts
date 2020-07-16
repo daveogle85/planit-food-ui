@@ -47,9 +47,6 @@ export const MenuButton = styled.div`
     .button-text {
       display: block;
     }
-    svg {
-      display: none;
-    }
   }
 `;
 

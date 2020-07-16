@@ -16,6 +16,7 @@ export const styledAutoCompleteInput = (
     height: 100%;
     padding-left: 32px;
   }
+  
   .feedback-hidden > input {
     border: ${props =>
       props.theme.border.thin(props.theme.colours.background.hoverGrey)};

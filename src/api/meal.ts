@@ -2,7 +2,7 @@ import { httpRequest } from './helpers/http';
 import { nullOrEmptyString } from '../helpers/string';
 import { ApiMeal, Meal } from './types/MealTypes';
 import { RestVerb } from './helpers/types';
-import { convertFromMealApi } from './helpers/convert';
+import { convertFromMealApi, convertToApiMeal } from './helpers/convert';
 
 const path = '/meals';
 
@@ -60,5 +60,26 @@ export const getAllMeals = () => async (
     return meals.map(convertFromMealApi);
   } catch (e) {
     return [];
+  }
+};
+
+export const updateMeal = (meal: Meal) => async (
+  token?: string | null
+): Promise<Meal | null> => {
+  const requestPath = `${path}`;
+  if (nullOrEmptyString(token)) {
+    return null;
+  }
+
+  try {
+    const updatedMeal = await httpRequest<ApiMeal, ApiMeal>(
+      requestPath,
+      token!,
+      RestVerb.PUT,
+      convertToApiMeal(meal)
+    );
+    return convertFromMealApi(updatedMeal);
+  } catch (e) {
+    return null;
   }
 };
