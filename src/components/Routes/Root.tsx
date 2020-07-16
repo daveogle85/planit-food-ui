@@ -25,6 +25,7 @@ import Toast from '../Toast/Toast';
 import { CheckAuth } from './CheckAuth';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
+import EditDish from '../../views/editDish/EditDish';
 
 const CallBack: React.FC = props => {
   let history = useHistory();
@@ -72,14 +73,20 @@ const Routes: React.FC = () => {
         <ProtectedRoute
           {...defaultProtectedRouteProps}
           exact={true}
-          path="/addMeal"
+          path="/add/meal"
           component={AddMeal}
         />
         <ProtectedRoute
           {...defaultProtectedRouteProps}
           exact={true}
-          path="/editMeal"
+          path="/edit/meal"
           component={EditMeal}
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          exact={true}
+          path="/edit/dish"
+          component={EditDish}
         />
         <ProtectedRoute
           {...defaultProtectedRouteProps}

@@ -40,7 +40,7 @@ function NavBarRaw(props: EmotionProps) {
   let history = useHistory();
   const profileDropdownList = ['Logout'];
   const addDropdownList = ['Add A Meal'];
-  const editDropdownList = ['Edit A Meal'];
+  const editDropdownList = ['Edit A Meal', 'Edit A Dish'];
   const { logout } = useAuth0();
 
   const { component: ProfileDropdown } = useDropdown({
@@ -87,7 +87,7 @@ function NavBarRaw(props: EmotionProps) {
     defaultState: '',
     options: addDropdownList,
     onSelect: {
-      [addDropdownList[0]]: () => history.push('/addMeal'),
+      [addDropdownList[0]]: () => history.push('/add/meal'),
     },
   });
 
@@ -96,7 +96,8 @@ function NavBarRaw(props: EmotionProps) {
     defaultState: '',
     options: editDropdownList,
     onSelect: {
-      [editDropdownList[0]]: () => history.push('/editMeal'),
+      [editDropdownList[0]]: () => history.push('/edit/meal'),
+      [editDropdownList[1]]: () => history.push('/edit/dish'),
     },
   });
 
