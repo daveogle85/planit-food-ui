@@ -98,7 +98,6 @@ const Dishes: React.FC<EmotionProps & DishesProps> = props => {
         }
         return dish;
       });
-      //   setDishesAndMealName(newDishes);
       onDishUpdate(newDishes);
     }
   };
@@ -145,7 +144,6 @@ const Dishes: React.FC<EmotionProps & DishesProps> = props => {
           ? { ...dish, dishType: checked ? DishType.MAIN : DishType.SIDE }
           : dish
       );
-      // setDishesAndMealName([...newDishes]);
       onMainChecked(newDishes);
     };
 
