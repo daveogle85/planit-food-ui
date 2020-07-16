@@ -5,8 +5,6 @@ import { CssProps } from '../../styles/types';
 import { tabDim, navBar } from '../../styles/heights';
 import { pointer, unselectable, circularButton } from '../../styles/common';
 
-// const
-
 const expand = (props: CssProps) => css`
   .expand {
     margin-right: ${props.theme.spacing.small};

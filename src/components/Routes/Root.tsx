@@ -9,6 +9,7 @@ import {
   useHistory,
 } from 'react-router-dom';
 import { createStore } from 'redux';
+import { ModalProvider } from 'styled-react-modal';
 
 import { Global } from '@emotion/core';
 import css from '@emotion/css/macro';
@@ -16,14 +17,14 @@ import css from '@emotion/css/macro';
 import Auth0Provider from '../../contexts/auth0-context';
 import { globals, theme } from '../../styles/theme';
 import AddMeal from '../../views/addMeal/AddMeal';
+import Calendar from '../../views/calendar/Calendar';
+import EditMeal from '../../views/editMeal/EditMeal';
 import WeekView from '../../views/weekView/WeekView';
 import Login from '../Login/Login';
 import Toast from '../Toast/Toast';
 import { CheckAuth } from './CheckAuth';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
-import Calendar from '../../views/calendar/Calendar';
-import { ModalProvider } from 'styled-react-modal';
 
 const CallBack: React.FC = props => {
   let history = useHistory();
@@ -73,6 +74,12 @@ const Routes: React.FC = () => {
           exact={true}
           path="/addMeal"
           component={AddMeal}
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          exact={true}
+          path="/editMeal"
+          component={EditMeal}
         />
         <ProtectedRoute
           {...defaultProtectedRouteProps}

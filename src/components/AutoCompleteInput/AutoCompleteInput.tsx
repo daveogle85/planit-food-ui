@@ -20,6 +20,7 @@ import { styledAutoCompleteInput } from './StyledAutoCompleteInput';
 import { isNullOrUndefined } from 'util';
 import EyeIcon from '../../images/eye';
 import { colours } from '../../styles/colours';
+import css from '@emotion/css/macro';
 
 export function AutoCompleteInput<
   T extends AutoCompleteInputBaseType,
@@ -35,16 +36,17 @@ export function AutoCompleteInput<
     allItemsLoading,
     fetchAll,
     disabled,
+    allowUserDefinedInput,
   } = props;
   const ID_ATTRIBUTE = 'input-id';
   const defaultOption = ['No Option Found'];
   const [options, setOptions] = useState<Array<string | ApiT>>(defaultOption);
 
-  const [text, setText] = useState<string>(currentValue.name ?? '');
+  const [text, setText] = useState<string>(currentValue?.name ?? '');
   const [loading, setLoading] = useState(false);
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   const [optionLocked, setOptionLocked] = useState(
-    !nullOrEmptyString(currentValue.id)
+    !nullOrEmptyString(currentValue?.id)
   );
   const [dirty, setDirty] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,7 +55,7 @@ export function AutoCompleteInput<
   useOutsideAlerter(ref, () => setDropdownIsOpen(false));
 
   useEffect(() => {
-    if (currentValue.name !== debouncedSearchTerm) {
+    if (currentValue?.name !== debouncedSearchTerm && dropdownIsOpen) {
       const fetchOptions = async () => {
         setLoading(true);
         const options = nullOrEmptyString(debouncedSearchTerm)
@@ -64,10 +66,10 @@ export function AutoCompleteInput<
       };
       fetchOptions();
     }
-  }, [debouncedSearchTerm, getOptions, currentValue]);
+  }, [debouncedSearchTerm, getOptions, currentValue, dropdownIsOpen]);
 
   useEffect(() => {
-    setText(currentValue.name ?? '');
+    setText(currentValue?.name ?? '');
   }, [currentValue]);
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,11 +110,13 @@ export function AutoCompleteInput<
     } else if (!dropdownIsOpen) {
       // This only happens when we are not selecting from the list
       // So we clear the id
-      updateCurrentValue({
-        ...currentValue,
-        id: undefined,
-        name: debouncedSearchTerm,
-      });
+      currentValue == null
+        ? updateCurrentValue({ name: debouncedSearchTerm } as ApiT)
+        : updateCurrentValue({
+            ...currentValue,
+            id: undefined,
+            name: debouncedSearchTerm,
+          });
     }
   };
 
@@ -132,14 +136,21 @@ export function AutoCompleteInput<
       };
     }
 
-    return optionLocked
+    if (optionLocked) {
+      return {
+        status: FeedbackStatus.INFO,
+        message: 'Option Selected',
+      };
+    }
+
+    return allowUserDefinedInput
       ? {
-          status: FeedbackStatus.INFO,
-          message: 'Option Selected',
-        }
-      : {
           status: FeedbackStatus.WARN,
           message: 'Option will be added to Database',
+        }
+      : {
+          status: FeedbackStatus.ERROR,
+          message: 'Option must be selected from list',
         };
   };
 
@@ -165,6 +176,14 @@ export function AutoCompleteInput<
     </div>
   );
 
+  const inputPadding = disabled
+    ? css`
+        input {
+          padding-left: 4px;
+        }
+      `
+    : undefined;
+
   return (
     <div
       className={classNames('auto-complete-input', props.className)}
@@ -183,7 +202,7 @@ export function AutoCompleteInput<
         onBeforeOpen={handleRequestAllItems}
         listItem={modalListItem}
       />
-      <FeedbackElement state={getInfoState()}>
+      <FeedbackElement state={getInfoState()} styles={inputPadding}>
         <input
           type="text"
           placeholder={props.placeholder}

@@ -1,14 +1,14 @@
-import { ActionCreatorWithPayload, Action } from '@reduxjs/toolkit';
+import { Action, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
+import { nullOrEmptyString } from '../helpers/string';
 import { AppThunk, RootState } from './';
 import { authSelectors } from './auth/AuthReducer';
 import { popToast } from './toast/ToastReducer';
 import { FeedbackStatus } from './toast/ToastTypes';
-import { nullOrEmptyString } from '../helpers/string';
 
 type DispatchApiActionOptions<ApiReturnType> = {
   request: (token: string) => Promise<ApiReturnType>;
-  onSuccessAction: ActionCreatorWithPayload<ApiReturnType, string>;
+  onSuccessAction: ActionCreatorWithPayload<ApiReturnType, string> | null;
   onFailFallback: ApiReturnType;
   onSuccessMessage?: string;
   additionalSuccessActions?: Array<Action>;
@@ -39,7 +39,9 @@ export const dispatchApiAction = (
   try {
     const token = authSelectors.selectedToken(getState());
     const result = token ? await request(token) : onFailFallback;
-    dispatch(onSuccessAction(result));
+    if (onSuccessAction != null) {
+      dispatch(onSuccessAction(result));
+    }
 
     if (additionalSuccessActions?.length) {
       additionalSuccessActions.forEach(action => {
@@ -55,7 +57,9 @@ export const dispatchApiAction = (
       );
     }
   } catch (exception) {
-    dispatch(onSuccessAction(onFailFallback));
+    if (onSuccessAction != null) {
+      dispatch(onSuccessAction(onFailFallback));
+    }
     dispatch(
       popToast({
         status: FeedbackStatus.ERROR,

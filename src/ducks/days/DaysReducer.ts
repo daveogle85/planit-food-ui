@@ -76,7 +76,7 @@ const selectDataForCarousel = createSelector(selectData, data => {
 });
 
 const selectMealsAsEvents = createSelector(selectData, data =>
-  data.map(day => ({ title: day.meal.name, date: day.date }))
+  data.map(day => ({ title: day?.meal?.name, date: day?.date }))
 );
 
 export const {

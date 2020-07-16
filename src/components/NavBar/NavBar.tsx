@@ -1,13 +1,19 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { useAuth0 } from '../../contexts/auth0-context';
-import { EmotionProps } from '../../styles/types';
-import useDropdown from '../Dropdown/Dropdown';
-import { useHistory } from 'react-router-dom';
-import { styledNavBar, styledProfile, MenuButton } from './StyledNavBar';
+import CalendarIcon from '../../images/calendarIcon';
+import Edit from '../../images/edit';
 import Plus from '../../images/plus';
 import { colours } from '../../styles/colours';
-import CalendarIcon from '../../images/calendarIcon';
+import { EmotionProps } from '../../styles/types';
+import useDropdown from '../Dropdown/Dropdown';
+import {
+  MenuButton,
+  styledNavBar,
+  styledProfile,
+  styledNavIcon,
+} from './StyledNavBar';
 
 const ProfileRaw: React.FC<EmotionProps> = props => {
   const { user } = useAuth0();
@@ -24,10 +30,17 @@ const ProfileRaw: React.FC<EmotionProps> = props => {
 
 const Profile = styledProfile(ProfileRaw);
 
+const NavIconRaw: React.FC<EmotionProps> = props => (
+  <div className={props.className}>{props.children}</div>
+);
+
+const NavIcon = styledNavIcon(NavIconRaw);
+
 function NavBarRaw(props: EmotionProps) {
   let history = useHistory();
   const profileDropdownList = ['Logout'];
   const addDropdownList = ['Add A Meal'];
+  const editDropdownList = ['Edit A Meal'];
   const { logout } = useAuth0();
 
   const { component: ProfileDropdown } = useDropdown({
@@ -40,9 +53,11 @@ function NavBarRaw(props: EmotionProps) {
   });
 
   const StyledAdd: React.FC = props => (
-    <MenuButton title="Add Options">
-      <Plus crossColour={colours.background.darkGrey} />
-      <div className="button-text">Add Options</div>
+    <MenuButton title="View Add Options">
+      <NavIcon>
+        <Plus crossColour={colours.background.darkGrey} />
+      </NavIcon>
+      <div className="button-text">Add</div>
     </MenuButton>
   );
 
@@ -51,8 +66,19 @@ function NavBarRaw(props: EmotionProps) {
       title="Go To Calendar"
       onClick={() => history.push('/calendar')}
     >
-      <CalendarIcon fill={colours.background.darkGrey} />
+      <NavIcon>
+        <CalendarIcon fill={colours.background.darkGrey} />
+      </NavIcon>
       <div className="button-text">Calendar</div>
+    </MenuButton>
+  );
+
+  const StyledEdit: React.FC = props => (
+    <MenuButton title="View Edit Options">
+      <NavIcon>
+        <Edit fill={colours.background.darkGrey} />
+      </NavIcon>
+      <div className="button-text">Edit</div>
     </MenuButton>
   );
 
@@ -65,6 +91,15 @@ function NavBarRaw(props: EmotionProps) {
     },
   });
 
+  const { component: EditDropdown } = useDropdown({
+    label: StyledEdit,
+    defaultState: '',
+    options: editDropdownList,
+    onSelect: {
+      [editDropdownList[0]]: () => history.push('/editMeal'),
+    },
+  });
+
   return (
     <nav className={props.className}>
       <ul className="menu">
@@ -72,6 +107,9 @@ function NavBarRaw(props: EmotionProps) {
           Planit Food App
         </li>
         <div className="dd-menu-items">
+          <li className="dd-edit">
+            <EditDropdown />
+          </li>
           <li className="dd-calendar">
             <StyledCalendarButton />
           </li>

@@ -11,7 +11,7 @@ export const styledFeedbackInput = (
 ) => {
   const borderColour = getColourFromStatus(state);
   const iconStyle = css`
-    .feedback-icon {
+    > .feedback-icon {
       width: 13px;
       height: 13px;
       position: absolute;
@@ -27,7 +27,7 @@ export const styledFeedbackInput = (
   `;
 
   const messageStyle = css`
-    .feedback-icon:after {
+    > .feedback-icon:after {
       content: '${message}';
       display: none;
       position: absolute;

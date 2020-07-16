@@ -1,5 +1,7 @@
 import css from '@emotion/css/macro';
 import borderTheme from './border';
+import { inputHeight } from './heights';
+import { colours } from './colours';
 export const fullScreen = css`
   position: absolute;
   top: 0;
@@ -40,4 +42,15 @@ export const circularButton = css`
 
 export const unselectable = css`
   user-select: none;
+`;
+
+export const input = css`
+  :not([type='checkbox']) {
+    height: ${inputHeight};
+    width: 100%;
+    max-width: 500px;
+    padding-left: 4px;
+    border: ${borderTheme.medium(colours.background.darkGrey)};
+    border-radius: ${borderTheme.radius.medium};
+  }
 `;

@@ -2,7 +2,7 @@
 
 exports[`Week View renders correctly 1`] = `
 Array [
-  .emotion-5 {
+  .emotion-10 {
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -18,7 +18,7 @@ Array [
   z-index: 3;
 }
 
-.emotion-5 ul {
+.emotion-10 ul {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -33,7 +33,7 @@ Array [
   padding-left: 40px;
 }
 
-.emotion-5 ul li {
+.emotion-10 ul li {
   cursor: pointer;
   list-style-type: none;
   height: 100%;
@@ -52,15 +52,15 @@ Array [
   justify-content: center;
 }
 
-.emotion-5 ul li:hover:not(.app-title) {
+.emotion-10 ul li:hover:not(.app-title) {
   background-color: #f1f1f1;
 }
 
-.emotion-5 ul .app-title {
+.emotion-10 ul .app-title {
   white-space: nowrap;
 }
 
-.emotion-5 ul .dd-menu-items {
+.emotion-10 ul .dd-menu-items {
   position: relative;
   height: calc(100% - 0px);
   width: calc(100% - 0px);
@@ -74,51 +74,8 @@ Array [
   justify-content: flex-end;
 }
 
-.emotion-5 ul .dd-menu-items li:not(.dd-list-item) {
+.emotion-10 ul .dd-menu-items li:not(.dd-list-item) {
   margin-right: 8px;
-}
-
-.emotion-0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin: 0 8px;
-}
-
-.emotion-0 .button-text {
-  display: none;
-}
-
-.emotion-0 svg {
-  position: relative;
-  display: inline-block;
-  border: 2px solid #9b9797;
-  width: 40px;
-  height: 40px;
-  border-radius: 2em;
-}
-
-@media (min-width:768px) {
-  .emotion-0 svg {
-    margin-right: 8px;
-    width: 50px;
-    height: 50px;
-  }
-}
-
-@media (min-width:768px) {
-  .emotion-0 .button-text {
-    display: block;
-  }
-
-  .emotion-0 svg {
-    display: none;
-  }
 }
 
 .emotion-2 {
@@ -202,7 +159,66 @@ Array [
   line-height: 30px;
 }
 
-.emotion-3 {
+.emotion-1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 0 8px;
+}
+
+.emotion-1 .button-text {
+  display: none;
+}
+
+.emotion-1 svg {
+  position: relative;
+  display: inline-block;
+}
+
+@media (min-width:768px) {
+  .emotion-1 .button-text {
+    display: block;
+  }
+}
+
+.emotion-0 {
+  border: 2px solid #9b9797;
+  width: 40px;
+  height: 40px;
+  border-radius: 2em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+@media (min-width:768px) {
+  .emotion-0 {
+    margin-right: 8px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.emotion-0 svg {
+  width: 25px;
+  height: 25px;
+}
+
+.emotion-8 {
   cursor: pointer;
   display: -webkit-box;
   display: -webkit-flex;
@@ -211,7 +227,7 @@ Array [
   padding: 0 8px;
 }
 
-.emotion-3 div {
+.emotion-8 div {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -222,7 +238,7 @@ Array [
   align-items: center;
 }
 
-.emotion-3 .details {
+.emotion-8 .details {
   display: none;
   font-weight: 300;
   font-size: 15px;
@@ -240,7 +256,7 @@ Array [
 }
 
 @media (min-width:768px) {
-  .emotion-3 .details {
+  .emotion-8 .details {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -248,14 +264,14 @@ Array [
   }
 }
 
-.emotion-3 img {
+.emotion-8 img {
   width: 40px;
   height: 40px;
   border-radius: 2em;
 }
 
 @media (min-width:768px) {
-  .emotion-3 img {
+  .emotion-8 img {
     margin-right: 8px;
     width: 50px;
     height: 50px;
@@ -263,7 +279,7 @@ Array [
 }
 
 <nav
-    className="emotion-5"
+    className="emotion-10"
   >
     <ul
       className="menu"
@@ -278,28 +294,82 @@ Array [
         className="dd-menu-items"
       >
         <li
+          className="dd-edit"
+        >
+          <div
+            className="dd-wrapper emotion-2"
+          >
+            <div
+              className="dd-header"
+              onClick={[Function]}
+            >
+              <div
+                className="emotion-1"
+                title="View Edit Options"
+              >
+                <div
+                  className="emotion-0"
+                >
+                  <svg
+                    fill="#9b9797"
+                    height="26px"
+                    viewBox="0 0 26 26"
+                    width="26px"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M 20.09375 0.25 C 19.5 0.246094 18.917969 0.457031 18.46875 0.90625 L 17.46875 1.9375 L 24.0625 8.5625 L 25.0625 7.53125 C 25.964844 6.628906 25.972656 5.164063 25.0625 4.25 L 21.75 0.9375 C 21.292969 0.480469 20.6875 0.253906 20.09375 0.25 Z M 16.34375 2.84375 L 14.78125 4.34375 L 21.65625 11.21875 L 23.25 9.75 Z M 13.78125 5.4375 L 2.96875 16.15625 C 2.71875 16.285156 2.539063 16.511719 2.46875 16.78125 L 0.15625 24.625 C 0.0507813 24.96875 0.144531 25.347656 0.398438 25.601563 C 0.652344 25.855469 1.03125 25.949219 1.375 25.84375 L 9.21875 23.53125 C 9.582031 23.476563 9.882813 23.222656 10 22.875 L 20.65625 12.3125 L 19.1875 10.84375 L 8.25 21.8125 L 3.84375 23.09375 L 2.90625 22.15625 L 4.25 17.5625 L 15.09375 6.75 Z M 16.15625 7.84375 L 5.1875 18.84375 L 6.78125 19.1875 L 7 20.65625 L 18 9.6875 Z"
+                    />
+                  </svg>
+                </div>
+                <div
+                  className="button-text"
+                >
+                  Edit
+                </div>
+              </div>
+            </div>
+            <div>
+              <ul
+                className="dd-list"
+              >
+                <li
+                  className="dd-list-item"
+                  onClick={[Function]}
+                >
+                  Edit A Meal
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li
           className="dd-calendar"
         >
           <div
-            className="emotion-0"
+            className="emotion-1"
             onClick={[Function]}
             title="Go To Calendar"
           >
-            <svg
-              fill="#9b9797"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              className="emotion-0"
             >
-              <path
-                d="M0 0h24v24H0z"
-                fill="none"
-              />
-              <path
-                d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"
-              />
-            </svg>
+              <svg
+                fill="#9b9797"
+                height="24"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                />
+                <path
+                  d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"
+                />
+              </svg>
+            </div>
             <div
               className="button-text"
             >
@@ -318,35 +388,39 @@ Array [
               onClick={[Function]}
             >
               <div
-                className="emotion-0"
-                title="Add Options"
+                className="emotion-1"
+                title="View Add Options"
               >
-                <svg
-                  id="svg1"
-                  version="1.0"
-                  viewBox="0 0 60 60"
-                  x="0"
-                  y="0"
+                <div
+                  className="emotion-0"
                 >
-                  <path
-                    d="m23.78 23.78v-13.999c0-1.9588 0.536-3.55 1.607-4.7741 1.071-1.2546 2.601-1.8819 4.59-1.8819s3.519 0.6273 4.59 1.8819c1.102 1.2241 1.653 2.8153 1.653 4.7737v13.999h13.816c2.019 0 3.611 0.551 4.773 1.653 1.194 1.071 1.791 2.586 1.791 4.544 0 1.989-0.597 3.534-1.791 4.636-1.162 1.102-2.754 1.652-4.773 1.652h-13.816v13.954c0 1.989-0.551 3.596-1.653 4.82-1.101 1.224-2.632 1.836-4.59 1.836s-3.488-0.612-4.59-1.836c-1.071-1.224-1.607-2.831-1.607-4.82v-13.954h-13.816c-1.9582 0-3.5494-0.596-4.7735-1.79-1.1934-1.224-1.7901-2.723-1.7901-4.498 0-1.958 0.5814-3.473 1.7442-4.544 1.1935-1.102 2.8-1.653 4.8196-1.653h13.816z"
-                    fill="none"
-                    id="path1092"
-                    stroke="#ffffff"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={5}
-                  />
-                  <path
-                    d="m23.78 23.78v-13.999c0-1.9588 0.536-3.55 1.607-4.7741 1.071-1.2546 2.601-1.8819 4.59-1.8819s3.519 0.6273 4.59 1.8819c1.102 1.2241 1.653 2.8153 1.653 4.7737v13.999h13.816c2.019 0 3.611 0.551 4.773 1.653 1.194 1.071 1.791 2.586 1.791 4.544 0 1.989-0.597 3.534-1.791 4.636-1.162 1.102-2.754 1.652-4.773 1.652h-13.816v13.954c0 1.989-0.551 3.596-1.653 4.82-1.101 1.224-2.632 1.836-4.59 1.836s-3.488-0.612-4.59-1.836c-1.071-1.224-1.607-2.831-1.607-4.82v-13.954h-13.816c-1.9582 0-3.5494-0.596-4.7735-1.79-1.1934-1.224-1.7901-2.723-1.7901-4.498 0-1.958 0.5814-3.473 1.7442-4.544 1.1935-1.102 2.8-1.653 4.8196-1.653h13.816z"
-                    fill="#9b9797"
-                    id="path837"
-                  />
-                </svg>
+                  <svg
+                    id="svg1"
+                    version="1.0"
+                    viewBox="0 0 60 60"
+                    x="0"
+                    y="0"
+                  >
+                    <path
+                      d="m23.78 23.78v-13.999c0-1.9588 0.536-3.55 1.607-4.7741 1.071-1.2546 2.601-1.8819 4.59-1.8819s3.519 0.6273 4.59 1.8819c1.102 1.2241 1.653 2.8153 1.653 4.7737v13.999h13.816c2.019 0 3.611 0.551 4.773 1.653 1.194 1.071 1.791 2.586 1.791 4.544 0 1.989-0.597 3.534-1.791 4.636-1.162 1.102-2.754 1.652-4.773 1.652h-13.816v13.954c0 1.989-0.551 3.596-1.653 4.82-1.101 1.224-2.632 1.836-4.59 1.836s-3.488-0.612-4.59-1.836c-1.071-1.224-1.607-2.831-1.607-4.82v-13.954h-13.816c-1.9582 0-3.5494-0.596-4.7735-1.79-1.1934-1.224-1.7901-2.723-1.7901-4.498 0-1.958 0.5814-3.473 1.7442-4.544 1.1935-1.102 2.8-1.653 4.8196-1.653h13.816z"
+                      fill="none"
+                      id="path1092"
+                      stroke="#ffffff"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={5}
+                    />
+                    <path
+                      d="m23.78 23.78v-13.999c0-1.9588 0.536-3.55 1.607-4.7741 1.071-1.2546 2.601-1.8819 4.59-1.8819s3.519 0.6273 4.59 1.8819c1.102 1.2241 1.653 2.8153 1.653 4.7737v13.999h13.816c2.019 0 3.611 0.551 4.773 1.653 1.194 1.071 1.791 2.586 1.791 4.544 0 1.989-0.597 3.534-1.791 4.636-1.162 1.102-2.754 1.652-4.773 1.652h-13.816v13.954c0 1.989-0.551 3.596-1.653 4.82-1.101 1.224-2.632 1.836-4.59 1.836s-3.488-0.612-4.59-1.836c-1.071-1.224-1.607-2.831-1.607-4.82v-13.954h-13.816c-1.9582 0-3.5494-0.596-4.7735-1.79-1.1934-1.224-1.7901-2.723-1.7901-4.498 0-1.958 0.5814-3.473 1.7442-4.544 1.1935-1.102 2.8-1.653 4.8196-1.653h13.816z"
+                      fill="#9b9797"
+                      id="path837"
+                    />
+                  </svg>
+                </div>
                 <div
                   className="button-text"
                 >
-                  Add Options
+                  Add
                 </div>
               </div>
             </div>
@@ -375,7 +449,7 @@ Array [
               onClick={[Function]}
             >
               <div
-                className="emotion-3"
+                className="emotion-8"
                 title="Logout"
               >
                 <img
