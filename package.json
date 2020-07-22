@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.10.0",
+    "@auth0/auth0-spa-js": "^1.11.0",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "@fullcalendar/daygrid": "^5.1.0",
