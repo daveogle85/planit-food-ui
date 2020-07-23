@@ -14,6 +14,8 @@ import EditItem from '../../components/EditItem/EditItem';
 import { searchForDish, getDishById } from '../../api/dish';
 import { dishesSelectors, fetchDishes } from '../../ducks/dishes/DishesReducer';
 import { Ingredient } from '../../api/types/IngredientsTypes';
+import { styledEditDish } from './StyledEditDish';
+import Ingredients from '../../components/Ingredients/Ingredients';
 
 const EditDish: React.FC<EmotionProps> = props => {
   const token = useSelector(authSelectors.selectedToken);
@@ -24,12 +26,12 @@ const EditDish: React.FC<EmotionProps> = props => {
   const [isDishEdited, setIsDishEdited] = useState(false);
   const allDishes = useSelector(dishesSelectors.selectData);
   const [ingredients, setIngredients] = useState<Array<Ingredient> | null>([]);
-  //   const [ingredientErrors, setIngredientErrors] = useState(
-  //     new Map<string, string>()
-  //   );
+  const [ingredientErrors, setIngredientErrors] = useState(
+    new Map<string, string>()
+  );
   const dishSearch = search(searchForDish, convertToLightApiDish, token);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  //   const dishNameInputRef = useRef<HTMLInputElement>(null);
+  const dishNameInputRef = useRef<HTMLInputElement>(null);
 
   const handleDishClear = async () => {
     setDish(null);
@@ -37,33 +39,40 @@ const EditDish: React.FC<EmotionProps> = props => {
     setIsDishEdited(false);
   };
 
-  //   const handleDishReset = () => {
-  //     setEditedMeal(null);
-  //     setDishes(meal?.dishes ?? []);
-  //     setIsMealEdited(false);
-  //   };
+  const handleDishReset = () => {
+    setEditedDish(null);
+    setIngredients(dish?.ingredients ?? []);
+    if (dishNameInputRef.current?.value) {
+      dishNameInputRef.current.value = '';
+    }
 
-  //   const handleDishSave = () => {
-  //     const editedMealName = mealNameInputRef.current?.value.trim();
-  //     const updatedMealName = nullOrEmptyString(editedMealName)
-  //       ? editedMeal?.name
-  //       : editedMealName;
-  //     const updatedSearchName = updatedMealName?.toLowerCase();
-  //     const updatedNotes = textAreaRef.current?.value.trim();
-  //     dispatch(
-  //       saveMeal({
-  //         localId: editedMeal?.id ?? '1',
-  //         ...editedMeal,
-  //         dishes,
-  //         name: updatedMealName,
-  //         searchName: updatedSearchName,
-  //         notes: updatedNotes,
-  //       })
-  //     );
-  //     setEditedMeal(null);
-  //     setMeal(null);
-  //     setDishes([]);
-  //   };
+    if (textAreaRef.current?.value) {
+      textAreaRef.current.value = dish?.notes ?? '';
+    }
+    setIsDishEdited(false);
+  };
+
+  const handleDishSave = () => {
+    //     const editedMealName = mealNameInputRef.current?.value.trim();
+    //     const updatedMealName = nullOrEmptyString(editedMealName)
+    //       ? editedMeal?.name
+    //       : editedMealName;
+    //     const updatedSearchName = updatedMealName?.toLowerCase();
+    //     const updatedNotes = textAreaRef.current?.value.trim();
+    //     dispatch(
+    //       saveMeal({
+    //         localId: editedMeal?.id ?? '1',
+    //         ...editedMeal,
+    //         dishes,
+    //         name: updatedMealName,
+    //         searchName: updatedSearchName,
+    //         notes: updatedNotes,
+    //       })
+    //     );
+    //     setEditedMeal(null);
+    //     setMeal(null);
+    //     setDishes([]);
+  };
 
   const handleDishUpdate = async (dishToUpdate: Dish | ApiDish | null) => {
     const inDatabase = !nullOrEmptyString(dishToUpdate?.id);
@@ -77,7 +86,7 @@ const EditDish: React.FC<EmotionProps> = props => {
     } else {
       let ingredientsToUpdate: Array<Ingredient> = [];
 
-      // go and fetch the full meal.
+      // go and fetch the full dish.
       const fullDish = await getDishById(dishToUpdate.id!)(token);
       if (fullDish) {
         ingredientsToUpdate = fullDish.ingredients ?? [];
@@ -92,43 +101,46 @@ const EditDish: React.FC<EmotionProps> = props => {
     }
   };
 
-  //   const handleIngredientUpdate = (newDishes: Array<Dish>) => {
-  //     const dishesEdited = newDishes.reduce((edited, newDish) => {
-  //       const foundDish = dishes.find(dish => dish.id === newDish.id);
-  //       return (
-  //         edited ||
-  //         isNullOrUndefined(foundDish) ||
-  //         foundDish.dishType !== newDish.dishType
-  //       );
-  //     }, false);
+  const handleIngredientUpdate = (newIngredients: Array<Dish>) => {
+    const ingredientsEdited = newIngredients.reduce((edited, newIngredient) => {
+      const foundDish = (ingredients || []).find(
+        i => i.id === newIngredient.id
+      );
+      return (
+        edited || isNullOrUndefined(foundDish)
+        // foundDish.dishType !== newIngredient.dishType
+      );
+    }, false);
 
-  //     setIsMealEdited(dishesEdited || newDishes.length !== dishes.length);
-  //     setDishes(newDishes);
-  //   };
+    setIsDishEdited(
+      ingredientsEdited || newIngredients.length !== Ingredients.length
+    );
+    setIngredients(newIngredients);
+  };
 
   const fetchAllDishes = () => dispatch(fetchDishes());
 
-  //   const handleMealNameInputChange = (
-  //     event:
-  //       | React.ChangeEvent<HTMLInputElement>
-  //       | React.ChangeEvent<HTMLTextAreaElement>
-  //   ) => {
-  //     const text = event.target.value;
-  //     const mealNameChanged = !nullOrEmptyString(text.trim());
-  //     if (mealNameChanged !== isMealEdited) {
-  //       setIsMealEdited(mealNameChanged);
-  //     }
-  //   };
+  const handleNotesInputChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const text = event.target.value;
+    const notesChanged = text.trim() !== dish?.notes;
+    if (notesChanged !== isDishEdited) {
+      setIsDishEdited(notesChanged);
+    }
+  };
 
-  //   const handleNotesInputChange = (
-  //     event: React.ChangeEvent<HTMLTextAreaElement>
-  //   ) => {
-  //     const text = event.target.value;
-  //     const notesChanged = text.trim() !== meal?.notes;
-  //     if (notesChanged !== isMealEdited) {
-  //       setIsMealEdited(notesChanged);
-  //     }
-  //   };
+  const handleDishNameInputChange = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const text = event.target.value;
+    const dishNameChanged = !nullOrEmptyString(text.trim());
+    if (dishNameChanged !== isDishEdited) {
+      setIsDishEdited(dishNameChanged);
+    }
+  };
 
   return (
     <>
@@ -143,9 +155,37 @@ const EditDish: React.FC<EmotionProps> = props => {
         fetchAllItems={fetchAllDishes}
         handleItemClear={handleDishClear}
         isItemEdited={isDishEdited}
-      />
+      >
+        <div className={props.className}>
+          <h3>Dish Name</h3>
+          <input
+            className="edit-dish-name"
+            onChange={handleDishNameInputChange}
+            placeholder={dish?.name}
+            ref={dishNameInputRef}
+          />
+          <Ingredients
+            ingredients={ingredients}
+            ingredientErrors={ingredientErrors}
+            setIngredientErrors={setIngredientErrors}
+            onIngredientUpdate={handleIngredientUpdate}
+          />
+          <div className="options">
+            <h3>Notes</h3>
+            <textarea ref={textAreaRef} onChange={handleNotesInputChange} />
+          </div>
+          <button
+            className="save-changes"
+            disabled={!isDishEdited}
+            onClick={handleDishSave}
+          >
+            Save Changes
+          </button>
+          <button onClick={handleDishReset}>Reset</button>
+        </div>
+      </EditItem>
     </>
   );
 };
 
-export default EditDish;
+export default styledEditDish(EditDish);

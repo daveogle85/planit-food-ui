@@ -52,12 +52,12 @@ export const getAllDishes = () => async (
   }
 
   try {
-    const meals = await httpRequest<Array<ApiDish>, undefined>(
+    const dishes = await httpRequest<Array<ApiDish>, undefined>(
       requestPath,
       token!,
       RestVerb.GET
     );
-    return meals.map(convertFromDishApi);
+    return dishes.map(convertFromDishApi);
   } catch (e) {
     return [];
   }

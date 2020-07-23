@@ -43,6 +43,14 @@ const EditMeal: React.FC<EmotionProps> = props => {
   const handleMealReset = () => {
     setEditedMeal(null);
     setDishes(meal?.dishes ?? []);
+    if (mealNameInputRef.current?.value) {
+      mealNameInputRef.current.value = '';
+    }
+
+    if (textAreaRef.current?.value) {
+      textAreaRef.current.value = meal?.notes ?? '';
+    }
+
     setIsMealEdited(false);
   };
 
