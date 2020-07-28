@@ -38,7 +38,7 @@
     "styled-react-modal": "^2.0.1",
     "typescript": "^3.9.7",
     "typescript-styled-plugin": "^0.15.0",
-    "uuid": "^8.2.0"
+    "uuid": "^8.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
