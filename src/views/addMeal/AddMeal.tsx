@@ -126,7 +126,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
     setMeal(defaultMeal);
     setDishesAndMealName(defaultDishes, defaultMeal);
     setIsMealDirty(false);
-    setNotes(''); //Test
+    setNotes('');
   };
 
   const handleAddMealToList = () => {
