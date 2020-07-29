@@ -2,7 +2,7 @@ import css from '@emotion/css/macro';
 
 import styled from '../../styles/theme';
 import { CssProps } from '../../styles/types';
-import { tabDim, navBar } from '../../styles/heights';
+import { tabDim } from '../../styles/heights';
 import { pointer, unselectable, circularButton } from '../../styles/common';
 
 const expand = (props: CssProps) => css`
@@ -88,7 +88,7 @@ export const styleListComponent = <T>(ListComponent: T) =>
     border-bottom-left-radius: ${props => props.theme.border.radius.full};
     background-color: ${props => props.theme.colours.background.weekViewPurple};
     position: absolute;
-    top: ${navBar};
+    top: 0;
     bottom: 0;
     width: 0;
     max-width: calc(100% - ${tabDim.width}px);

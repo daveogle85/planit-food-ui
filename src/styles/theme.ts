@@ -4,7 +4,6 @@ import styled, { CreateStyled } from '@emotion/styled/macro';
 import border from './border';
 import { colours } from './colours';
 import { fullScreen } from './common';
-import { navBar } from './heights';
 
 export const breakpoints = {
   smallMobile: 576,
@@ -70,10 +69,6 @@ export const globals = css`
   html,
   body {
     height: 100%;
-  }
-
-  #root {
-    margin-top: ${navBar};
   }
 
   input[type='text'] {

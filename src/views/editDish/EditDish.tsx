@@ -5,7 +5,7 @@ import { isNullOrUndefined } from 'util';
 import { convertToLightApiDish } from '../../api/helpers/convert';
 import { Dish, ApiDish } from '../../api/types/DishTypes';
 
-import NavBar from '../../components/NavBar/NavBar';
+import Page from '../../components/Page/Page';
 import { authSelectors } from '../../ducks/auth/AuthReducer';
 import search from '../../helpers/search';
 import { nullOrEmptyString } from '../../helpers/string';
@@ -58,14 +58,6 @@ const EditDish: React.FC<EmotionProps> = props => {
       : editedDishName;
     const updatedSearchName = updatedDishName?.toLowerCase();
     const updatedNotes = notes.trim();
-    console.log({
-      ...editedDish,
-      name: updatedDishName,
-      searchName: updatedSearchName,
-      notes: updatedNotes,
-      ingredients,
-    });
-
     dispatch(
       saveDish({
         localId: editedDish?.id ?? '1',
@@ -152,46 +144,47 @@ const EditDish: React.FC<EmotionProps> = props => {
 
   return (
     <>
-      <NavBar />
-      <EditItem
-        itemName="Dish"
-        search={dishSearch}
-        allItems={allDishes}
-        isLoading={isLoading}
-        selectedItem={dish}
-        handleItemUpdate={handleDishUpdate}
-        fetchAllItems={fetchAllDishes}
-        handleItemClear={handleDishClear}
-        isItemEdited={isDishEdited}
-      >
-        <div className={props.className}>
-          <h3>Dish Name</h3>
-          <input
-            className="edit-dish-name"
-            onChange={handleDishNameInputChange}
-            placeholder={dish?.name}
-            value={dishName}
-          />
-          <Ingredients
-            ingredients={ingredients}
-            ingredientErrors={ingredientErrors}
-            onIngredientUpdate={handleIngredientUpdate}
-            setIngredientErrors={setIngredientErrors}
-          />
-          <div className="options">
-            <h3>Notes</h3>
-            <textarea value={notes} onChange={handleNotesInputChange} />
+      <Page>
+        <EditItem
+          itemName="Dish"
+          search={dishSearch}
+          allItems={allDishes}
+          isLoading={isLoading}
+          selectedItem={dish}
+          handleItemUpdate={handleDishUpdate}
+          fetchAllItems={fetchAllDishes}
+          handleItemClear={handleDishClear}
+          isItemEdited={isDishEdited}
+        >
+          <div className={props.className}>
+            <h3>Dish Name</h3>
+            <input
+              className="edit-dish-name"
+              onChange={handleDishNameInputChange}
+              placeholder={dish?.name}
+              value={dishName}
+            />
+            <Ingredients
+              ingredients={ingredients}
+              ingredientErrors={ingredientErrors}
+              onIngredientUpdate={handleIngredientUpdate}
+              setIngredientErrors={setIngredientErrors}
+            />
+            <div className="options">
+              <h3>Notes</h3>
+              <textarea value={notes} onChange={handleNotesInputChange} />
+            </div>
+            <button
+              className="save-changes"
+              disabled={!isDishEdited}
+              onClick={handleDishSave}
+            >
+              Save Changes
+            </button>
+            <button onClick={handleDishReset}>Reset</button>
           </div>
-          <button
-            className="save-changes"
-            disabled={!isDishEdited}
-            onClick={handleDishSave}
-          >
-            Save Changes
-          </button>
-          <button onClick={handleDishReset}>Reset</button>
-        </div>
-      </EditItem>
+        </EditItem>
+      </Page>
     </>
   );
 };

@@ -20,7 +20,7 @@ import AddMeal from '../../views/addMeal/AddMeal';
 import Calendar from '../../views/calendar/Calendar';
 import EditMeal from '../../views/editMeal/EditMeal';
 import WeekView from '../../views/weekView/WeekView';
-import Login from '../Login/Login';
+import Login from '../../views/Login/Login';
 import Toast from '../Toast/Toast';
 import { CheckAuth } from './CheckAuth';
 import ProtectedRoute from './ProtectedRoute';

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isNullOrUndefined } from 'util';
 
@@ -8,7 +8,7 @@ import { Dish } from '../../api/types/DishTypes';
 import { ApiMeal, Meal } from '../../api/types/MealTypes';
 import Dishes, { defaultDish } from '../../components/Dishes/Dishes';
 import EditItem from '../../components/EditItem/EditItem';
-import NavBar from '../../components/NavBar/NavBar';
+import Page from '../../components/Page/Page';
 import { authSelectors } from '../../ducks/auth/AuthReducer';
 import {
   fetchMeals,
@@ -31,8 +31,8 @@ const EditMeal: React.FC<EmotionProps> = props => {
   const [dishes, setDishes] = useState([defaultDish]);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
   const mealSearch = search(searchForMeal, convertToLightApiMeal, token);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const mealNameInputRef = useRef<HTMLInputElement>(null);
+  const [notes, setNotes] = useState('');
+  const [mealName, setMealName] = useState('');
 
   const handleMealClear = async () => {
     setMeal(null);
@@ -43,24 +43,18 @@ const EditMeal: React.FC<EmotionProps> = props => {
   const handleMealReset = () => {
     setEditedMeal(meal);
     setDishes(meal?.dishes ?? []);
-    if (mealNameInputRef.current?.value) {
-      mealNameInputRef.current.value = '';
-    }
-
-    if (textAreaRef.current?.value) {
-      textAreaRef.current.value = meal?.notes ?? '';
-    }
-
+    setNotes(meal?.notes ?? '');
+    setMealName('');
     setIsMealEdited(false);
   };
 
   const handleMealSave = () => {
-    const editedMealName = mealNameInputRef.current?.value.trim();
+    const editedMealName = mealName.trim();
     const updatedMealName = nullOrEmptyString(editedMealName)
       ? editedMeal?.name
       : editedMealName;
     const updatedSearchName = updatedMealName?.toLowerCase();
-    const updatedNotes = textAreaRef.current?.value.trim();
+    const updatedNotes = notes.trim();
     dispatch(
       saveMeal({
         localId: editedMeal?.id ?? '1',
@@ -94,9 +88,7 @@ const EditMeal: React.FC<EmotionProps> = props => {
         dishesToUpdate = fullMeal.dishes ?? [];
         setMeal(fullMeal);
         setEditedMeal(fullMeal);
-        if (textAreaRef.current) {
-          textAreaRef.current.value = fullMeal.notes ?? '';
-        }
+        setNotes(fullMeal.notes ?? '');
       }
 
       setDishes(dishesToUpdate);
@@ -129,6 +121,7 @@ const EditMeal: React.FC<EmotionProps> = props => {
     if (mealNameChanged !== isMealEdited) {
       setIsMealEdited(mealNameChanged);
     }
+    setMealName(text);
   };
 
   const handleNotesInputChange = (
@@ -139,51 +132,53 @@ const EditMeal: React.FC<EmotionProps> = props => {
     if (notesChanged !== isMealEdited) {
       setIsMealEdited(notesChanged);
     }
+    setNotes(text);
   };
 
   return (
     <>
-      <NavBar />
-      <EditItem
-        itemName="Meal"
-        search={mealSearch}
-        allItems={meals}
-        isLoading={isLoading}
-        selectedItem={meal}
-        handleItemUpdate={handleMealUpdate}
-        fetchAllItems={fetchAllMeals}
-        handleItemClear={handleMealClear}
-        isItemEdited={isMealEdited}
-      >
-        <div className={props.className}>
-          <h3>Meal Name</h3>
-          <input
-            className="edit-meal-name"
-            onChange={handleMealNameInputChange}
-            placeholder={meal?.name}
-            ref={mealNameInputRef}
-          />
-          <Dishes
-            dishes={dishes}
-            disabled={false}
-            onDishUpdate={handleDishUpdate}
-            dishErrors={dishErrors}
-            setDishErrors={setDishErrors}
-          />
-          <div className="options">
-            <h3>Notes</h3>
-            <textarea ref={textAreaRef} onChange={handleNotesInputChange} />
+      <Page>
+        <EditItem
+          itemName="Meal"
+          search={mealSearch}
+          allItems={meals}
+          isLoading={isLoading}
+          selectedItem={meal}
+          handleItemUpdate={handleMealUpdate}
+          fetchAllItems={fetchAllMeals}
+          handleItemClear={handleMealClear}
+          isItemEdited={isMealEdited}
+        >
+          <div className={props.className}>
+            <h3>Meal Name</h3>
+            <input
+              className="edit-meal-name"
+              onChange={handleMealNameInputChange}
+              placeholder={meal?.name}
+              value={mealName}
+            />
+            <Dishes
+              dishes={dishes}
+              disabled={false}
+              onDishUpdate={handleDishUpdate}
+              dishErrors={dishErrors}
+              setDishErrors={setDishErrors}
+            />
+            <div className="options">
+              <h3>Notes</h3>
+              <textarea value={notes} onChange={handleNotesInputChange} />
+            </div>
+            <button
+              className="save-changes"
+              disabled={!isMealEdited}
+              onClick={handleMealSave}
+            >
+              Save Changes
+            </button>
+            <button onClick={handleMealReset}>Reset</button>
           </div>
-          <button
-            className="save-changes"
-            disabled={!isMealEdited}
-            onClick={handleMealSave}
-          >
-            Save Changes
-          </button>
-          <button onClick={handleMealReset}>Reset</button>
-        </div>
-      </EditItem>
+        </EditItem>
+      </Page>
     </>
   );
 };

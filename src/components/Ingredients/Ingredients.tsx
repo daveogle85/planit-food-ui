@@ -195,6 +195,7 @@ const Ingredients: React.FC<EmotionProps & IngredientsProps> = props => {
         <select
           className="unit-type"
           name="unit-type"
+          defaultValue={unit}
           onChange={e =>
             handleUnitSelected(
               ingredient.localId,
@@ -203,7 +204,7 @@ const Ingredients: React.FC<EmotionProps & IngredientsProps> = props => {
           }
         >
           {Object.values(Unit).map(u => (
-            <option value={u} key={u} selected={unit === u}>
+            <option value={u} key={u}>
               {unitToText[u]}
             </option>
           ))}
