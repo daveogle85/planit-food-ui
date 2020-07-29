@@ -208,9 +208,6 @@ const AddMeal: React.FC<EmotionProps> = props => {
               onDishUpdate={setDishesAndMealName}
               dishErrors={dishErrors}
               setDishErrors={setDishErrors}
-              onMainChecked={setDishesAndMealName}
-              onDishAdded={setDishesAndMealName}
-              onDishDeleted={setDishesAndMealName}
             />
             <div className="options">
               <h3>Notes</h3>

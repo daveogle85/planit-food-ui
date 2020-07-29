@@ -2,7 +2,7 @@ import { ApiDish, Dish } from './types/DishTypes';
 import { httpRequest } from './helpers/http';
 import { nullOrEmptyString } from '../helpers/string';
 import { RestVerb } from './helpers/types';
-import { convertFromDishApi } from './helpers/convert';
+import { convertFromDishApi, convertToApiDish } from './helpers/convert';
 
 const path = '/dishes';
 
@@ -60,5 +60,26 @@ export const getAllDishes = () => async (
     return dishes.map(convertFromDishApi);
   } catch (e) {
     return [];
+  }
+};
+
+export const updateDish = (dish: Dish) => async (
+  token?: string | null
+): Promise<Dish | null> => {
+  const requestPath = `${path}`;
+  if (nullOrEmptyString(token)) {
+    return null;
+  }
+
+  try {
+    const updatedDish = await httpRequest<ApiDish, ApiDish>(
+      requestPath,
+      token!,
+      RestVerb.PUT,
+      convertToApiDish(dish)
+    );
+    return convertFromDishApi(updatedDish);
+  } catch (e) {
+    return null;
   }
 };

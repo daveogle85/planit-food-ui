@@ -1,12 +1,12 @@
 import { Ingredient } from '../../api/types/IngredientsTypes';
 
 export type IngredientsProps = {
-  ingredients: Array<Ingredient> | null;
+  ingredients: Array<Ingredient>;
   ingredientErrors: Map<string, string>;
   setIngredientErrors: React.Dispatch<
     React.SetStateAction<Map<string, string>>
   >;
-  onIngredientUpdate: (newDishes: Array<Ingredient>) => void;
+  onIngredientUpdate: (newIngredients: Array<Ingredient>) => void;
 };
 
 export type IngredientComponentProps = {

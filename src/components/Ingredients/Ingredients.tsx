@@ -1,10 +1,17 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { isNullOrUndefined } from 'util';
+import { v4 as uuid } from 'uuid';
 
 import { convertToApiIngredient } from '../../api/helpers/convert';
-import { searchForIngredient, getIngredientById } from '../../api/ingredient';
-import { ApiIngredient, Ingredient } from '../../api/types/IngredientsTypes';
+import { getIngredientById, searchForIngredient } from '../../api/ingredient';
+import {
+  ApiIngredient,
+  Ingredient,
+  Unit,
+  unitToText,
+} from '../../api/types/IngredientsTypes';
 import { authSelectors } from '../../ducks/auth/AuthReducer';
 import {
   fetchIngredients,
@@ -12,12 +19,17 @@ import {
 } from '../../ducks/ingredients/IngredientsReducer';
 import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import search from '../../helpers/search';
+import { nullOrEmptyString } from '../../helpers/string';
 import { EmotionProps } from '../../styles/types';
 import AutoCompleteInput from '../AutoCompleteInput/AutoCompleteInput';
 import FeedbackElement from '../FeedbackInput/FeedbackElement';
 import { IngredientComponentProps, IngredientsProps } from './IngredientsTypes';
 import { styleIngredients } from './StyledIngredients';
-import { nullOrEmptyString } from '../../helpers/string';
+
+const defaultIngredient: Ingredient = {
+  localId: uuid(),
+  name: '',
+};
 
 const Ingredients: React.FC<EmotionProps & IngredientsProps> = props => {
   const {
@@ -26,12 +38,6 @@ const Ingredients: React.FC<EmotionProps & IngredientsProps> = props => {
     ingredientErrors,
     onIngredientUpdate,
     setIngredientErrors,
-    //   onDishUpdate,
-    //   dishErrors,
-    //   setDishErrors,
-    //   onMainChecked,
-    //   onDishAdded,
-    //   onDishDeleted,
   } = props;
   const dispatch = useDispatch();
   const token = useSelector(authSelectors.selectedToken);
@@ -49,13 +55,76 @@ const Ingredients: React.FC<EmotionProps & IngredientsProps> = props => {
     status: FeedbackStatus.HIDDEN,
   };
 
+  const handleAddIngredient = () => {
+    const newIngredients = [...ingredients];
+    newIngredients.push({ ...defaultIngredient, localId: uuid() });
+    onIngredientUpdate(newIngredients);
+  };
+
+  function updateIngredientErrors() {
+    const errorsToRemove: Array<string> = [];
+    const errors = new Map(ingredientErrors);
+    errors.forEach((_, key) => {
+      const duplicates = ingredients.filter(
+        ingredient => ingredient.localId === key
+      );
+      if (duplicates.length <= 1) {
+        errorsToRemove.push(key);
+      }
+    });
+    errorsToRemove.forEach(err => errors.delete(err));
+    setIngredientErrors(errors);
+  }
+
+  const handleIngredientUpdate = (oldId: string) => async (
+    ingredientToUpdate: Ingredient | ApiIngredient | null
+  ) => {
+    const ingredientInDatabase = !nullOrEmptyString(ingredientToUpdate?.id);
+    const fullIngredient = isNullOrUndefined(ingredientToUpdate)
+      ? defaultIngredient
+      : ingredientInDatabase
+      ? await getIngredientById(ingredientToUpdate.id!)(token)
+      : (ingredientToUpdate as Ingredient);
+
+    if (fullIngredient) {
+      let nameCount = 0;
+      updateIngredientErrors();
+      const newIngredients = ingredients.map(i => {
+        if (nameCount > 0) {
+          const errors = new Map(ingredientErrors);
+          errors.set(
+            fullIngredient.localId,
+            'Ingredients must have unique names'
+          );
+          setIngredientErrors(errors);
+        }
+
+        if (i.name === fullIngredient.name) {
+          nameCount++;
+        }
+
+        if (i.localId === oldId) {
+          return fullIngredient;
+        }
+        return i;
+      });
+      onIngredientUpdate(newIngredients);
+    }
+  };
+
+  const handleDeleteIngredient = (ingredientId: string) => {
+    const newIngredients = ingredients.filter(i => i.localId !== ingredientId);
+    onIngredientUpdate(newIngredients);
+  };
+
+  const fetchAllIngredients = () => dispatch(fetchIngredients());
+
   const IngredientComponent = (props: IngredientComponentProps) => {
     const { ingredient } = props;
     const allIngredients = useSelector(ingredientsSelectors.selectData);
     const ingredientsLoading = useSelector(ingredientsSelectors.selectLoading);
-    // const allDishes = useSelector(dishesSelectors.selectData);
-    // const dishesLoading = useSelector(dishesSelectors.selectLoading);
-
+    const [quantity, setQuantity] = useState(ingredient.quantity ?? 0);
+    const [unit, setUnit] = useState(ingredient.unit ?? Unit.UNIT);
     const getIngredientOptions = async (
       text: string
     ): Promise<Array<ApiIngredient>> => {
@@ -74,70 +143,26 @@ const Ingredients: React.FC<EmotionProps & IngredientsProps> = props => {
       return results;
     };
 
-    function updateIngredientErrors() {
-      const errorsToRemove: Array<string> = [];
-      const errors = new Map(ingredientErrors);
-      errors.forEach((_, key) => {
-        const duplicates = (ingredients ?? []).filter(
-          ingredient => ingredient.localId === key
-        );
-        if (duplicates.length <= 1) {
-          errorsToRemove.push(key);
-        }
-      });
-      errorsToRemove.forEach(err => errors.delete(err));
-      setIngredientErrors(errors);
-    }
-
-    const handleIngredientUpdate = (oldId: string) => async (
-      ingredientToUpdate: Ingredient | ApiIngredient | null
-    ) => {
-      let newIngredients: Array<Ingredient> = [];
-      const ingredientInDatabase =
-        ingredientToUpdate != null &&
-        !nullOrEmptyString(ingredientToUpdate?.id);
-      const fullIngredient = ingredientInDatabase
-        ? await getIngredientById(ingredientToUpdate!.id!)(token)
-        : (ingredientToUpdate as Ingredient | null);
-
-      if (fullIngredient != null) {
-        let nameCount = 0;
-        updateIngredientErrors();
-        newIngredients = (ingredients ?? []).map(ingredient => {
-          if (nameCount > 0) {
-            const errors = new Map(ingredientErrors);
-            errors.set(
-              fullIngredient.localId ?? '',
-              'Dishes must have unique names'
-            );
-            setIngredientErrors(errors);
-          }
-
-          if (ingredient.name === fullIngredient.name) {
-            nameCount++;
-          }
-
-          if (ingredient.localId === oldId) {
-            return fullIngredient;
-          }
-          return ingredient;
-        });
-      } else {
-        newIngredients = (ingredients ?? []).filter(i => i.localId !== oldId);
-      }
-      onIngredientUpdate(newIngredients);
+    const handleQuantityChanged = (ingredientId: string, quantity: number) => {
+      onIngredientUpdate(
+        ingredients.map(i =>
+          i.localId === ingredientId
+            ? {
+                ...i,
+                quantity,
+              }
+            : i
+        )
+      );
+      setQuantity(quantity);
     };
 
-    // const handleMainChecked = (id: string, checked: boolean) => {
-    //   const newDishes = dishes.map(dish =>
-    //     dish.localId === id
-    //       ? { ...dish, dishType: checked ? DishType.MAIN : DishType.SIDE }
-    //       : dish
-    //   );
-    //   onMainChecked(newDishes);
-    // };
-
-    const fetchAllIngredients = () => dispatch(fetchIngredients());
+    const handleUnitSelected = (ingredientId: string, unit: Unit) => {
+      onIngredientUpdate(
+        ingredients.map(i => (i.localId === ingredientId ? { ...i, unit } : i))
+      );
+      setUnit(unit);
+    };
 
     return (
       <>
@@ -154,19 +179,39 @@ const Ingredients: React.FC<EmotionProps & IngredientsProps> = props => {
           fetchAll={fetchAllIngredients}
           allowUserDefinedInput={true}
         />
-        <div>
+        <div className="quantity">
           <input
             name="quantity"
             type="number"
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            //   handleMainChecked(dish.localId, e.currentTarget.checked)
-            // }
+            value={quantity ?? 0}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleQuantityChanged(
+                ingredient.localId,
+                Number(e.currentTarget.value)
+              )
+            }
           />
         </div>
+        <select
+          className="unit-type"
+          name="unit-type"
+          onChange={e =>
+            handleUnitSelected(
+              ingredient.localId,
+              e.currentTarget.value as Unit
+            )
+          }
+        >
+          {Object.values(Unit).map(u => (
+            <option value={u} key={u} selected={unit === u}>
+              {unitToText[u]}
+            </option>
+          ))}
+        </select>
         <div className="delete-ingredient">
           <button
             disabled={false}
-            // onClick={() => handleDeleteDish(props.dish.localId)}
+            onClick={() => handleDeleteIngredient(ingredient.localId)}
           >
             -
           </button>
@@ -183,17 +228,19 @@ const Ingredients: React.FC<EmotionProps & IngredientsProps> = props => {
       >
         <div className="ingredients">
           <h3>Ingredients</h3>
-          <div className="dishes-grid">
+          <div className="ingredients-grid">
             <div>Ingredient Name</div>
             <div>Quantity</div>
+            <div>Unit</div>
             <div>Delete</div>
             {ingredients?.map(ingredient => (
               <IngredientComponent
-                key={ingredient.name}
+                key={ingredient.localId}
                 ingredient={ingredient}
               />
             ))}
           </div>
+          <button onClick={handleAddIngredient}>Add Ingredient</button>
         </div>
       </FeedbackElement>
     </>

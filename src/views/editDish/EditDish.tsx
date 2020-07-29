@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isNullOrUndefined } from 'util';
 
@@ -12,7 +12,11 @@ import { nullOrEmptyString } from '../../helpers/string';
 import { EmotionProps } from '../../styles/types';
 import EditItem from '../../components/EditItem/EditItem';
 import { searchForDish, getDishById } from '../../api/dish';
-import { dishesSelectors, fetchDishes } from '../../ducks/dishes/DishesReducer';
+import {
+  dishesSelectors,
+  fetchDishes,
+  saveDish,
+} from '../../ducks/dishes/DishesReducer';
 import { Ingredient } from '../../api/types/IngredientsTypes';
 import { styledEditDish } from './StyledEditDish';
 import Ingredients from '../../components/Ingredients/Ingredients';
@@ -25,13 +29,13 @@ const EditDish: React.FC<EmotionProps> = props => {
   const [editedDish, setEditedDish] = useState<Dish | null>(null);
   const [isDishEdited, setIsDishEdited] = useState(false);
   const allDishes = useSelector(dishesSelectors.selectData);
-  const [ingredients, setIngredients] = useState<Array<Ingredient> | null>([]);
+  const [ingredients, setIngredients] = useState<Array<Ingredient>>([]);
   const [ingredientErrors, setIngredientErrors] = useState(
     new Map<string, string>()
   );
   const dishSearch = search(searchForDish, convertToLightApiDish, token);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const dishNameInputRef = useRef<HTMLInputElement>(null);
+  const [notes, setNotes] = useState('');
+  const [dishName, setDishName] = useState('');
 
   const handleDishClear = async () => {
     setDish(null);
@@ -40,38 +44,41 @@ const EditDish: React.FC<EmotionProps> = props => {
   };
 
   const handleDishReset = () => {
-    setEditedDish(null);
+    setEditedDish(dish);
     setIngredients(dish?.ingredients ?? []);
-    if (dishNameInputRef.current?.value) {
-      dishNameInputRef.current.value = '';
-    }
-
-    if (textAreaRef.current?.value) {
-      textAreaRef.current.value = dish?.notes ?? '';
-    }
+    setDishName('');
+    setNotes(dish?.notes ?? '');
     setIsDishEdited(false);
   };
 
   const handleDishSave = () => {
-    //     const editedMealName = mealNameInputRef.current?.value.trim();
-    //     const updatedMealName = nullOrEmptyString(editedMealName)
-    //       ? editedMeal?.name
-    //       : editedMealName;
-    //     const updatedSearchName = updatedMealName?.toLowerCase();
-    //     const updatedNotes = textAreaRef.current?.value.trim();
-    //     dispatch(
-    //       saveMeal({
-    //         localId: editedMeal?.id ?? '1',
-    //         ...editedMeal,
-    //         dishes,
-    //         name: updatedMealName,
-    //         searchName: updatedSearchName,
-    //         notes: updatedNotes,
-    //       })
-    //     );
-    //     setEditedMeal(null);
-    //     setMeal(null);
-    //     setDishes([]);
+    const editedDishName = dishName.trim();
+    const updatedDishName = nullOrEmptyString(editedDishName)
+      ? editedDish?.name
+      : editedDishName;
+    const updatedSearchName = updatedDishName?.toLowerCase();
+    const updatedNotes = notes.trim();
+    console.log({
+      ...editedDish,
+      name: updatedDishName,
+      searchName: updatedSearchName,
+      notes: updatedNotes,
+      ingredients,
+    });
+
+    dispatch(
+      saveDish({
+        localId: editedDish?.id ?? '1',
+        ...editedDish,
+        name: updatedDishName,
+        searchName: updatedSearchName,
+        notes: updatedNotes,
+        ingredients,
+      })
+    );
+    setEditedDish(null);
+    setDish(null);
+    setIngredients([]);
   };
 
   const handleDishUpdate = async (dishToUpdate: Dish | ApiDish | null) => {
@@ -92,23 +99,22 @@ const EditDish: React.FC<EmotionProps> = props => {
         ingredientsToUpdate = fullDish.ingredients ?? [];
         setDish(fullDish);
         setEditedDish(fullDish);
-        if (textAreaRef.current) {
-          textAreaRef.current.value = fullDish.notes ?? '';
-        }
+        setNotes(fullDish.notes ?? '');
       }
 
       setIngredients(ingredientsToUpdate);
     }
   };
 
-  const handleIngredientUpdate = (newIngredients: Array<Dish>) => {
+  const handleIngredientUpdate = (newIngredients: Array<Ingredient>) => {
     const ingredientsEdited = newIngredients.reduce((edited, newIngredient) => {
-      const foundDish = (ingredients || []).find(
+      const foundIngredient = (ingredients || []).find(
         i => i.id === newIngredient.id
       );
       return (
-        edited || isNullOrUndefined(foundDish)
-        // foundDish.dishType !== newIngredient.dishType
+        edited ||
+        isNullOrUndefined(foundIngredient) ||
+        foundIngredient.quantity !== newIngredient.quantity
       );
     }, false);
 
@@ -128,6 +134,7 @@ const EditDish: React.FC<EmotionProps> = props => {
     if (notesChanged !== isDishEdited) {
       setIsDishEdited(notesChanged);
     }
+    setNotes(text);
   };
 
   const handleDishNameInputChange = (
@@ -140,6 +147,7 @@ const EditDish: React.FC<EmotionProps> = props => {
     if (dishNameChanged !== isDishEdited) {
       setIsDishEdited(dishNameChanged);
     }
+    setDishName(text);
   };
 
   return (
@@ -162,17 +170,17 @@ const EditDish: React.FC<EmotionProps> = props => {
             className="edit-dish-name"
             onChange={handleDishNameInputChange}
             placeholder={dish?.name}
-            ref={dishNameInputRef}
+            value={dishName}
           />
           <Ingredients
             ingredients={ingredients}
             ingredientErrors={ingredientErrors}
-            setIngredientErrors={setIngredientErrors}
             onIngredientUpdate={handleIngredientUpdate}
+            setIngredientErrors={setIngredientErrors}
           />
           <div className="options">
             <h3>Notes</h3>
-            <textarea ref={textAreaRef} onChange={handleNotesInputChange} />
+            <textarea value={notes} onChange={handleNotesInputChange} />
           </div>
           <button
             className="save-changes"

@@ -41,7 +41,7 @@ const EditMeal: React.FC<EmotionProps> = props => {
   };
 
   const handleMealReset = () => {
-    setEditedMeal(null);
+    setEditedMeal(meal);
     setDishes(meal?.dishes ?? []);
     if (mealNameInputRef.current?.value) {
       mealNameInputRef.current.value = '';
@@ -169,9 +169,6 @@ const EditMeal: React.FC<EmotionProps> = props => {
             onDishUpdate={handleDishUpdate}
             dishErrors={dishErrors}
             setDishErrors={setDishErrors}
-            onMainChecked={handleDishUpdate}
-            onDishAdded={handleDishUpdate}
-            onDishDeleted={handleDishUpdate}
           />
           <div className="options">
             <h3>Notes</h3>
