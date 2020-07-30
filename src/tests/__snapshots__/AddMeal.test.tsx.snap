@@ -11,6 +11,10 @@ exports[`Add Meal View renders correctly 1`] = `
   font-size: 20px;
 }
 
+.emotion-18 .meal-name {
+  margin-bottom: 20px;
+}
+
 .emotion-18 label {
   padding-right: 8px;
 }
@@ -35,6 +39,10 @@ exports[`Add Meal View renders correctly 1`] = `
 .emotion-18 .title {
   font-weight: 700;
   font-size: 20px;
+}
+
+.emotion-18 .meal-name {
+  margin-bottom: 20px;
 }
 
 .emotion-18 label {
@@ -702,7 +710,6 @@ exports[`Add Meal View renders correctly 1`] = `
   grid-auto-rows: 30px;
   grid-gap: 8px;
   margin-bottom: 20px;
-  padding-bottom: 8px;
 }
 
 .emotion-16 .dishes-grid .delete-dish > button {
