@@ -9,7 +9,7 @@ import {
 } from '../../ducks/days/DaysReducer';
 import { EmotionProps } from '../../styles/types';
 import DayCardCarousel from '../../components/Carousel/DayCardCarousel';
-import NavBar from '../../components/NavBar/NavBar';
+import Page from '../../components/Page/Page';
 import { styledWeekView } from './StyledWeekView';
 import Loading from '../../components/Loading/Loading';
 
@@ -28,12 +28,13 @@ const WeekView: React.FC<EmotionProps> = props => {
   }, [dispatch, token]);
   return (
     <>
-      <NavBar />
-      <div className={classNames('WeekView', props.className)}>
-        <Loading isLoading={loadingDays}>
-          <DayCardCarousel days={days} />
-        </Loading>
-      </div>
+      <Page>
+        <div className={classNames('WeekView', props.className)}>
+          <Loading isLoading={loadingDays}>
+            <DayCardCarousel days={days} />
+          </Loading>
+        </div>
+      </Page>
     </>
   );
 };

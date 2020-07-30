@@ -23,7 +23,7 @@ exports[`FeedbackElement disable 1`] = `
   height: calc(100% - 6px);
 }
 
-.emotion-0 .feedback-icon {
+.emotion-0 > .feedback-icon {
   width: 13px;
   height: 13px;
   position: absolute;
@@ -48,7 +48,7 @@ exports[`FeedbackElement disable 1`] = `
   cursor: pointer;
 }
 
-.emotion-0 .feedback-icon:after {
+.emotion-0 > .feedback-icon:after {
   content: 'A disabled message';
   display: none;
   position: absolute;
@@ -103,7 +103,7 @@ exports[`FeedbackElement error 1`] = `
   height: calc(100% - 6px);
 }
 
-.emotion-0 .feedback-icon {
+.emotion-0 > .feedback-icon {
   width: 13px;
   height: 13px;
   position: absolute;
@@ -128,7 +128,7 @@ exports[`FeedbackElement error 1`] = `
   cursor: pointer;
 }
 
-.emotion-0 .feedback-icon:after {
+.emotion-0 > .feedback-icon:after {
   content: 'An Error Message';
   display: none;
   position: absolute;
@@ -183,7 +183,7 @@ exports[`FeedbackElement hidden 1`] = `
   height: calc(100% - 6px);
 }
 
-.emotion-0 .feedback-icon {
+.emotion-0 > .feedback-icon {
   width: 13px;
   height: 13px;
   position: absolute;
@@ -208,7 +208,7 @@ exports[`FeedbackElement hidden 1`] = `
   cursor: pointer;
 }
 
-.emotion-0 .feedback-icon:after {
+.emotion-0 > .feedback-icon:after {
   content: '';
   display: none;
   position: absolute;
@@ -258,7 +258,7 @@ exports[`FeedbackElement info 1`] = `
   height: calc(100% - 6px);
 }
 
-.emotion-0 .feedback-icon {
+.emotion-0 > .feedback-icon {
   width: 13px;
   height: 13px;
   position: absolute;
@@ -283,7 +283,7 @@ exports[`FeedbackElement info 1`] = `
   cursor: pointer;
 }
 
-.emotion-0 .feedback-icon:after {
+.emotion-0 > .feedback-icon:after {
   content: 'An Information message';
   display: none;
   position: absolute;
@@ -338,7 +338,7 @@ exports[`FeedbackElement warn 1`] = `
   height: calc(100% - 6px);
 }
 
-.emotion-0 .feedback-icon {
+.emotion-0 > .feedback-icon {
   width: 13px;
   height: 13px;
   position: absolute;
@@ -363,7 +363,7 @@ exports[`FeedbackElement warn 1`] = `
   cursor: pointer;
 }
 
-.emotion-0 .feedback-icon:after {
+.emotion-0 > .feedback-icon:after {
   content: 'A Warning message';
   display: none;
   position: absolute;

@@ -9,6 +9,7 @@ import {
   useHistory,
 } from 'react-router-dom';
 import { createStore } from 'redux';
+import { ModalProvider } from 'styled-react-modal';
 
 import { Global } from '@emotion/core';
 import css from '@emotion/css/macro';
@@ -16,13 +17,15 @@ import css from '@emotion/css/macro';
 import Auth0Provider from '../../contexts/auth0-context';
 import { globals, theme } from '../../styles/theme';
 import AddMeal from '../../views/addMeal/AddMeal';
+import Calendar from '../../views/calendar/Calendar';
+import EditMeal from '../../views/editMeal/EditMeal';
 import WeekView from '../../views/weekView/WeekView';
-import Login from '../Login/Login';
+import Login from '../../views/Login/Login';
 import Toast from '../Toast/Toast';
 import { CheckAuth } from './CheckAuth';
 import ProtectedRoute from './ProtectedRoute';
 import { ProtectedRouteProps } from './RoutesTypes';
-import Calendar from '../../views/calendar/Calendar';
+import EditDish from '../../views/editDish/EditDish';
 
 const CallBack: React.FC = props => {
   let history = useHistory();
@@ -44,12 +47,14 @@ const Root = ({ store }: { store: ReturnType<typeof createStore> }) => (
         `}
       />
       <ThemeProvider theme={theme}>
-        <CheckAuth>
-          <Router>
-            <Routes />
-          </Router>
-          <Toast />
-        </CheckAuth>
+        <ModalProvider>
+          <CheckAuth>
+            <Router>
+              <Routes />
+            </Router>
+            <Toast />
+          </CheckAuth>
+        </ModalProvider>
       </ThemeProvider>
     </Provider>
   </Auth0Provider>
@@ -68,8 +73,20 @@ const Routes: React.FC = () => {
         <ProtectedRoute
           {...defaultProtectedRouteProps}
           exact={true}
-          path="/addMeal"
+          path="/add/meal"
           component={AddMeal}
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          exact={true}
+          path="/edit/meal"
+          component={EditMeal}
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          exact={true}
+          path="/edit/dish"
+          component={EditDish}
         />
         <ProtectedRoute
           {...defaultProtectedRouteProps}

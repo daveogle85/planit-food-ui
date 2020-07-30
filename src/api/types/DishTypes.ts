@@ -1,4 +1,4 @@
-import { Ingredient } from './IngredientsTypes';
+import { Ingredient, ApiIngredient } from './IngredientsTypes';
 
 export enum DishType {
   MAIN = 'MAIN',
@@ -13,9 +13,10 @@ export type ApiDish = {
   dishType?: DishType;
   notes?: string;
   cookingTime?: number;
-  ingredients?: Array<Ingredient>;
+  ingredients?: Array<ApiIngredient>;
 };
 
-export type Dish = ApiDish & {
+export type Dish = Omit<ApiDish, 'ingredients'> & {
   localId: string;
+  ingredients?: Array<Ingredient>;
 };

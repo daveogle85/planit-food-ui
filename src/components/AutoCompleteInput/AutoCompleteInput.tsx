@@ -4,8 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 
+import ListModal from '../../components/Modal/ListModal';
 import LoadingSpinner from '../../components/Spinner/Spinner';
-import { FeedbackStatus, ErrorState } from '../../ducks/toast/ToastTypes';
+import { ErrorState, FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import useOutsideAlerter from '../../helpers/clickedOutside';
 import useDebounce from '../../helpers/debounce';
 import { nullOrEmptyString } from '../../helpers/string';
@@ -16,6 +17,10 @@ import {
   AutoCompleteInputProps,
 } from './AutoCompleteInputTypes';
 import { styledAutoCompleteInput } from './StyledAutoCompleteInput';
+import { isNullOrUndefined } from 'util';
+import EyeIcon from '../../images/eye';
+import { colours } from '../../styles/colours';
+import css from '@emotion/css/macro';
 
 export function AutoCompleteInput<
   T extends AutoCompleteInputBaseType,
@@ -27,25 +32,30 @@ export function AutoCompleteInput<
     currentValue,
     onDirty,
     inputError,
-    convertFromApiType,
+    allItems,
+    allItemsLoading,
+    fetchAll,
+    disabled,
+    allowUserDefinedInput,
   } = props;
   const ID_ATTRIBUTE = 'input-id';
   const defaultOption = ['No Option Found'];
   const [options, setOptions] = useState<Array<string | ApiT>>(defaultOption);
 
-  const [text, setText] = useState<string>(currentValue.name ?? '');
+  const [text, setText] = useState<string>(currentValue?.name ?? '');
   const [loading, setLoading] = useState(false);
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   const [optionLocked, setOptionLocked] = useState(
-    !nullOrEmptyString(currentValue.id)
+    !nullOrEmptyString(currentValue?.id)
   );
   const [dirty, setDirty] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const debouncedSearchTerm = useDebounce(text, 250);
   useOutsideAlerter(ref, () => setDropdownIsOpen(false));
 
   useEffect(() => {
-    if (currentValue.name !== debouncedSearchTerm) {
+    if (currentValue?.name !== debouncedSearchTerm && dropdownIsOpen) {
       const fetchOptions = async () => {
         setLoading(true);
         const options = nullOrEmptyString(debouncedSearchTerm)
@@ -56,17 +66,16 @@ export function AutoCompleteInput<
       };
       fetchOptions();
     }
-  }, [debouncedSearchTerm, getOptions, currentValue]);
+  }, [debouncedSearchTerm, getOptions, currentValue, dropdownIsOpen]);
 
   useEffect(() => {
-    setText(currentValue.name ?? '');
+    setText(currentValue?.name ?? '');
   }, [currentValue]);
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newText = event.currentTarget.value;
     setDropdownIsOpen(newText !== '');
     setText(newText);
-
     const newDirty = !nullOrEmptyString(newText);
     if (newDirty !== dirty) {
       handleDirtyChange(newDirty);
@@ -90,21 +99,24 @@ export function AutoCompleteInput<
     setText(newText);
     if (option) {
       setOptionLocked(true);
-      const localOption = convertFromApiType(option);
-      updateCurrentValue(localOption);
+      updateCurrentValue(option);
     }
     setDropdownIsOpen(false);
   };
 
   const handleBlur = () => {
-    if (!dropdownIsOpen) {
+    if (optionLocked) {
+      updateCurrentValue(null);
+    } else if (!dropdownIsOpen) {
       // This only happens when we are not selecting from the list
       // So we clear the id
-      updateCurrentValue({
-        ...currentValue,
-        id: undefined,
-        name: debouncedSearchTerm,
-      });
+      currentValue == null
+        ? updateCurrentValue({ name: debouncedSearchTerm } as ApiT)
+        : updateCurrentValue({
+            ...currentValue,
+            id: undefined,
+            name: debouncedSearchTerm,
+          });
     }
   };
 
@@ -124,28 +136,78 @@ export function AutoCompleteInput<
       };
     }
 
-    return optionLocked
+    if (optionLocked) {
+      return {
+        status: FeedbackStatus.INFO,
+        message: 'Option Selected',
+      };
+    }
+
+    return allowUserDefinedInput
       ? {
-          status: FeedbackStatus.INFO,
-          message: 'Option Selected',
-        }
-      : {
           status: FeedbackStatus.WARN,
           message: 'Option will be added to Database',
+        }
+      : {
+          status: FeedbackStatus.ERROR,
+          message: 'Option must be selected from list',
         };
   };
+
+  const setModalOpen = () => setIsModalOpen(true);
+  const setModalClose = () => setIsModalOpen(false);
+
+  const handleRequestAllItems = () => {
+    if (isNullOrUndefined(allItems)) {
+      fetchAll();
+    }
+  };
+
+  const handleMealSelectedFromModalList = (item: T) => () => {
+    setText(item.name ?? text);
+    setOptionLocked(true);
+    updateCurrentValue(item);
+    setModalClose();
+  };
+
+  const modalListItem = (item: T) => (
+    <div key={item.id} onClick={handleMealSelectedFromModalList(item)}>
+      {item.name}
+    </div>
+  );
+
+  const inputPadding = disabled
+    ? css`
+        input {
+          padding-left: 4px;
+        }
+      `
+    : undefined;
 
   return (
     <div
       className={classNames('auto-complete-input', props.className)}
       ref={ref}
     >
-      <FeedbackElement state={getInfoState()}>
+      {!disabled && (
+        <div className="view-all" title="View All Meals" onClick={setModalOpen}>
+          <EyeIcon fill={colours.eyeIconBlue} />
+        </div>
+      )}
+      <ListModal
+        isOpen={isModalOpen}
+        closeModal={setModalClose}
+        listItems={allItems}
+        isLoading={allItemsLoading}
+        onBeforeOpen={handleRequestAllItems}
+        listItem={modalListItem}
+      />
+      <FeedbackElement state={getInfoState()} styles={inputPadding}>
         <input
           type="text"
           placeholder={props.placeholder}
           value={text}
-          disabled={props.disabled}
+          disabled={disabled}
           onChange={handleTextChange}
           onBlur={handleBlur}
         />

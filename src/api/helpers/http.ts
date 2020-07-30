@@ -3,7 +3,7 @@ import { RestVerb, Options } from './types';
 async function fetchWithTimeout(
   url: string,
   options: Options,
-  timeout = 10000
+  timeout = 30000
 ): Promise<Response> {
   const controller = new AbortController();
   const { signal } = controller;

@@ -62,14 +62,23 @@ export const globals = css`
   html,
   #root,
   body {
-    height: 100%;
     margin: 0;
     ${fullScreen}
+  }
+
+  html,
+  body {
+    height: 100%;
   }
 
   input[type='text'] {
     border-radius: ${theme.border.radius.medium};
     padding-left: ${theme.spacing.xSmall};
+  }
+
+  button {
+    border: ${theme.border.thin(theme.colours.background.backgroundGrey)};
+    border-radius: ${theme.border.radius.medium};
   }
 `;
 
