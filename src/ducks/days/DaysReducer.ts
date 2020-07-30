@@ -12,6 +12,7 @@ import {
 import { updateObject } from '../../helpers/object';
 import { setSelectedMeal } from '../lists/ListsReducer';
 import dispatchApiAction from '../loading';
+import { setSelectedDay } from '../calendar/CalendarReducer';
 
 type DaysSlice = {
   loading: boolean;
@@ -155,7 +156,7 @@ export const addDayToCalendar = (day: Day): AppThunk => async dispatch => {
       request,
       onSuccessAction: setData,
       onSuccessMessage: `${day.meal.name} added to ${day.date}`,
-      additionalSuccessActions: [setSelectedMeal(null)],
+      additionalSuccessActions: [setSelectedMeal(null), setSelectedDay(null)],
       onFailFallback: [],
     })
   );

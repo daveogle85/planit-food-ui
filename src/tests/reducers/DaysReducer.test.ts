@@ -16,6 +16,7 @@ import { FeedbackStatus } from '../../ducks/toast/ToastTypes';
 import { dispatchWithTimeout, mockSetToastState } from '../helpers';
 import { Day } from '../../api/types/DayTypes';
 import { setSelectedMeal } from '../../ducks/lists/ListsReducer';
+import { setSelectedDay } from '../../ducks/calendar/CalendarReducer';
 
 describe('DaysReducer', () => {
   describe('getDayCardRange', () => {
@@ -504,6 +505,7 @@ describe('DaysReducer', () => {
           setLoading(true),
           setData([testDay]),
           setSelectedMeal(null),
+          setSelectedDay(null),
           setPopped(true),
           mockSetToastState({
             status: FeedbackStatus.INFO,
