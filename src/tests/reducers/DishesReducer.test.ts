@@ -6,6 +6,7 @@ import reducer, {
   dishesSelectors,
   setData,
 } from '../../ducks/dishes/DishesReducer';
+import { setData as setIngredients } from '../../ducks/ingredients/IngredientsReducer';
 import { RootState } from '../../ducks';
 import { dispatchWithTimeout, mockSetToastState } from '../helpers';
 import { setPopped } from '../../ducks/toast/ToastReducer';
@@ -106,6 +107,84 @@ describe('DishesReducer', () => {
         const expectedActions = [
           setLoading(true),
           setData(null),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.ERROR,
+            message: 'test exception',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+
+    describe('saveDish', () => {
+      const mockStore = configureMockStore([thunk]);
+      it('should save a dish with no error', async () => {
+        const testDish = {
+          id: 'dish-1',
+          localId: 'dish-1',
+          name: 'my dish',
+        };
+        const mockPromise = new Promise(res => res(testDish));
+        jest.mock('../../api/dish', () => ({
+          __esModule: true,
+          updateDish: jest.fn().mockReturnValueOnce(() => mockPromise),
+        }));
+        const { saveDish } = require('../../ducks/dishes/DishesReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          dishes: {
+            loading: false,
+            data: null,
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(store.dispatch, saveDish(testDish));
+        const expectedActions = [
+          setLoading(true),
+          setData(null),
+          setIngredients(null),
+          setPopped(true),
+          mockSetToastState({
+            status: FeedbackStatus.INFO,
+            message: '"my dish" successfully updated',
+          }),
+          setLoading(false),
+          setPopped(false),
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+
+      it('should save a dish with an error', async () => {
+        const testDish = {
+          id: 'dish-1',
+          localId: 'dish-1',
+          name: 'my dish',
+        };
+        jest.mock('../../api/dish', () => ({
+          __esModule: true,
+          updateDish: jest.fn().mockReturnValueOnce(() => {
+            throw new Error('test exception');
+          }),
+        }));
+        const { saveDish } = require('../../ducks/dishes/DishesReducer');
+        const initialState = {
+          auth: {
+            token: '123',
+          },
+          dishes: {
+            loading: false,
+            data: [],
+          },
+        };
+        const store = mockStore(initialState);
+        await dispatchWithTimeout(store.dispatch, saveDish(testDish));
+        const expectedActions = [
+          setLoading(true),
           setPopped(true),
           mockSetToastState({
             status: FeedbackStatus.ERROR,
