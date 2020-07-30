@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AppThunk, RootState } from '../';
-import { getAllDishes } from '../../api/dish';
+import { getAllDishes, updateDish } from '../../api/dish';
 import { Dish } from '../../api/types/DishTypes';
+import { setData as setIngredients } from '../ingredients/IngredientsReducer';
 import dispatchApiAction from '../loading';
 
 type DishesSlice = {
@@ -42,6 +43,19 @@ export const fetchDishes = (): AppThunk => async dispatch => {
       request: getAllDishes(),
       onSuccessAction: setData,
       onFailFallback: null,
+    })
+  );
+};
+
+export const saveDish = (dish: Dish): AppThunk => async dispatch => {
+  const apiCall = dispatchApiAction(setLoading);
+  return await dispatch(
+    apiCall({
+      request: updateDish(dish),
+      onSuccessAction: null,
+      onFailFallback: null,
+      onSuccessMessage: `"${dish.name}" successfully updated`,
+      additionalSuccessActions: [setData(null), setIngredients(null)],
     })
   );
 };

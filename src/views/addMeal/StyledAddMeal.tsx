@@ -8,6 +8,10 @@ export const styledAddMeal = (AddMeal: React.ComponentType) => styled(AddMeal)`
     font-size: ${props => props.theme.font.size.large};
   }
 
+  .meal-name {
+    margin-bottom: ${props => props.theme.spacing.medium};
+  }
+
   label {
     padding-right: ${props => props.theme.spacing.small};
   }

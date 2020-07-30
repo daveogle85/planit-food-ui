@@ -32,9 +32,6 @@ const Dishes: React.FC<EmotionProps & DishesProps> = props => {
     onDishUpdate,
     dishErrors,
     setDishErrors,
-    onMainChecked,
-    onDishAdded,
-    onDishDeleted,
   } = props;
   const dispatch = useDispatch();
   const token = useSelector(authSelectors.selectedToken);
@@ -104,7 +101,7 @@ const Dishes: React.FC<EmotionProps & DishesProps> = props => {
 
   const handleDeleteDish = (dishId: string) => {
     const newDishes = dishes.filter(dish => dish.localId !== dishId);
-    onDishDeleted(newDishes);
+    onDishUpdate(newDishes);
   };
 
   const handleAddDish = () => {
@@ -114,7 +111,7 @@ const Dishes: React.FC<EmotionProps & DishesProps> = props => {
       name: '',
       dishType: dishes.length === 0 ? DishType.MAIN : DishType.SIDE,
     });
-    onDishAdded(newDishes);
+    onDishUpdate(newDishes);
   };
 
   const DishComponent = (props: DishComponentProps) => {
@@ -144,7 +141,7 @@ const Dishes: React.FC<EmotionProps & DishesProps> = props => {
           ? { ...dish, dishType: checked ? DishType.MAIN : DishType.SIDE }
           : dish
       );
-      onMainChecked(newDishes);
+      onDishUpdate(newDishes);
     };
 
     const fetchAllDishes = () => dispatch(fetchDishes());
@@ -178,7 +175,7 @@ const Dishes: React.FC<EmotionProps & DishesProps> = props => {
         <div className="delete-dish">
           <button
             disabled={disabled}
-            onClick={() => handleDeleteDish(props.dish.localId)}
+            onClick={() => handleDeleteDish(dish.localId)}
           >
             -
           </button>

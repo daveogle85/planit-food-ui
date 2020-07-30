@@ -62,9 +62,13 @@ export const globals = css`
   html,
   #root,
   body {
-    height: 100%;
     margin: 0;
     ${fullScreen}
+  }
+
+  html,
+  body {
+    height: 100%;
   }
 
   input[type='text'] {

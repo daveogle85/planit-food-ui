@@ -5,7 +5,7 @@ type ApiSearch<ApiT> = (
   searchText: string
 ) => (token: string | null | undefined) => Promise<Array<ApiT>>;
 
-type SearchFunction = <T extends { name?: string }, ApiT>(
+export type SearchFunction = <T extends { name?: string }, ApiT>(
   apiSearch: ApiSearch<ApiT>,
   convertLocalResult: (result: T) => ApiT,
   token?: string | null

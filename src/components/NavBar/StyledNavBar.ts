@@ -51,8 +51,9 @@ export const MenuButton = styled.div`
 `;
 
 export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
-  position: relative;
+  position: fixed;
   display: flex;
+  background-color: ${props => props.theme.colours.white};
   top: 0;
   left: 0;
   right: 0;

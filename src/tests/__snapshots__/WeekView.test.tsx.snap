@@ -1,13 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Week View renders correctly 1`] = `
-Array [
-  .emotion-10 {
-  position: relative;
+.emotion-12 {
+  height: 100%;
+  background-color: #7f53ac;
+  background-image: linear-gradient( 315deg, #7f53ac 0%, #647dee 74% );
+  height: 100%;
+  background-color: #7f53ac;
+  background-image: linear-gradient( 315deg, #7f53ac 0%, #647dee 74% );
+}
+
+.emotion-13 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 70px;
+}
+
+.emotion-10 {
+  position: fixed;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  background-color: #fff;
   top: 0;
   left: 0;
   right: 0;
@@ -278,7 +296,40 @@ Array [
   }
 }
 
-<nav
+.emotion-11 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 20px;
+  border-radius: 0.3em;
+}
+
+.emotion-11 .react-multi-carousel-track {
+  height: 100%;
+}
+
+.emotion-11 .react-multi-carousel-item {
+  height: 90%;
+}
+
+.emotion-11 .react-multiple-carousel__arrow {
+  bottom: 0;
+}
+
+.emotion-11 .react-multiple-carousel__arrow--right {
+  right: 0;
+}
+
+.emotion-11 .react-multiple-carousel__arrow--left {
+  left: 0;
+}
+
+<div
+  className="emotion-13 planit-food-pg"
+>
+  <nav
     className="emotion-10"
   >
     <ul
@@ -338,6 +389,12 @@ Array [
                   onClick={[Function]}
                 >
                   Edit A Meal
+                </li>
+                <li
+                  className="dd-list-item"
+                  onClick={[Function]}
+                >
+                  Edit A Dish
                 </li>
               </ul>
             </div>
@@ -480,55 +537,12 @@ Array [
         </li>
       </div>
     </ul>
-  </nav>,
-  .emotion-1 {
-  position: relative;
-  height: calc(100% - 70px);
-  width: calc(100% - 0px);
-  background-color: #7f53ac;
-  background-image: linear-gradient(315deg,#7f53ac 0%,#647dee 74%);
-  position: relative;
-  height: calc(100% - 70px);
-  width: calc(100% - 0px);
-  background-color: #7f53ac;
-  background-image: linear-gradient(315deg,#7f53ac 0%,#647dee 74%);
-}
-
-.emotion-0 {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 20px;
-  border-radius: 0.3em;
-}
-
-.emotion-0 .react-multi-carousel-track {
-  height: 100%;
-}
-
-.emotion-0 .react-multi-carousel-item {
-  height: 90%;
-}
-
-.emotion-0 .react-multiple-carousel__arrow {
-  bottom: 0;
-}
-
-.emotion-0 .react-multiple-carousel__arrow--right {
-  right: 0;
-}
-
-.emotion-0 .react-multiple-carousel__arrow--left {
-  left: 0;
-}
-
-<div
-    className="WeekView emotion-1"
+  </nav>
+  <div
+    className="WeekView emotion-12"
   >
     <div
-      className="react-multi-carousel-list carousel-container emotion-0"
+      className="react-multi-carousel-list carousel-container emotion-11"
     >
       <ul
         className="react-multi-carousel-track "
@@ -549,6 +563,6 @@ Array [
         }
       />
     </div>
-  </div>,
-]
+  </div>
+</div>
 `;

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isNullOrUndefined } from 'util';
 import { v4 as uuid } from 'uuid';
@@ -13,7 +13,7 @@ import AutoCompleteInput from '../../components/AutoCompleteInput/AutoCompleteIn
 import FeedbackElement from '../../components/FeedbackInput/FeedbackElement';
 import List from '../../components/List/List';
 import Loading from '../../components/Loading/Loading';
-import NavBar from '../../components/NavBar/NavBar';
+import Page from '../../components/Page/Page';
 import { authSelectors } from '../../ducks/auth/AuthReducer';
 import {
   addMealToSelectedList,
@@ -58,7 +58,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
   const meals = useSelector(mealsSelectors.selectData);
   const mealsLoading = useSelector(mealsSelectors.selectLoading);
   const [dishErrors, setDishErrors] = useState(new Map<string, string>());
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [notes, setNotes] = useState('');
   const mealSearch = search(searchForMeal, convertToLightApiMeal, token);
   // Not stored in state as we don't want to update the view when these change
   const prevMealSearch = {
@@ -107,9 +107,7 @@ const AddMeal: React.FC<EmotionProps> = props => {
       if (fullMeal) {
         dishesToUpdate = fullMeal.dishes ?? [];
         setMeal(fullMeal);
-        if (textAreaRef.current) {
-          textAreaRef.current.value = fullMeal.notes ?? '';
-        }
+        setNotes(fullMeal.notes ?? '');
       }
     } else {
       // If meal not in database clear out the dishes if we have just
@@ -128,11 +126,11 @@ const AddMeal: React.FC<EmotionProps> = props => {
     setMeal(defaultMeal);
     setDishesAndMealName(defaultDishes, defaultMeal);
     setIsMealDirty(false);
+    setNotes('');
   };
 
   const handleAddMealToList = () => {
     const dishesToAdd = dishes.filter(d => !nullOrEmptyString(d.name));
-    const notes = textAreaRef.current?.value;
     const mealToAdd = {
       ...meal,
       dishes: dishesToAdd,
@@ -175,66 +173,73 @@ const AddMeal: React.FC<EmotionProps> = props => {
 
   const fetchAllMeals = () => dispatch(fetchMeals());
 
+  const handleNotesInputChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setNotes(event.target.value);
+  };
+
   return (
     <>
-      <NavBar />
-      <List onMealDelete={handleMealClear} />
-      <Loading isLoading={loadingLists}>
-        <div className={classNames('AddMeal', props.className)}>
-          <h2 className="title">Add A New Meal</h2>
-          <div>
-            <div className="meal">
-              <label htmlFor="mealname">Meal name</label>
-              <div>
-                <AutoCompleteInput
-                  className="meal-name"
-                  placeholder="Optional"
+      <Page>
+        <List onMealDelete={handleMealClear} />
+        <Loading isLoading={loadingLists}>
+          <div className={classNames('AddMeal', props.className)}>
+            <h2 className="title">Add A New Meal</h2>
+            <div>
+              <div className="meal">
+                <label htmlFor="mealname">Meal name</label>
+                <div>
+                  <AutoCompleteInput
+                    className="meal-name"
+                    placeholder="Optional"
+                    disabled={!nullOrEmptyString(meal.id)}
+                    getOptions={getMealOptions}
+                    updateCurrentValue={handleMealUpdate}
+                    currentValue={meal}
+                    onDirty={setIsMealDirty}
+                    allItems={meals}
+                    allItemsLoading={mealsLoading}
+                    fetchAll={fetchAllMeals}
+                    allowUserDefinedInput={true}
+                  />
+                  <button onClick={handleMealClear}>Clear Meal</button>
+                </div>
+              </div>
+              <Dishes
+                dishes={dishes}
+                disabled={!nullOrEmptyString(meal.id)}
+                onDishUpdate={setDishesAndMealName}
+                dishErrors={dishErrors}
+                setDishErrors={setDishErrors}
+              />
+              <div className="options">
+                <h3>Notes</h3>
+                <textarea
                   disabled={!nullOrEmptyString(meal.id)}
-                  getOptions={getMealOptions}
-                  updateCurrentValue={handleMealUpdate}
-                  currentValue={meal}
-                  onDirty={setIsMealDirty}
-                  allItems={meals}
-                  allItemsLoading={mealsLoading}
-                  fetchAll={fetchAllMeals}
-                  allowUserDefinedInput={true}
+                  onChange={handleNotesInputChange}
+                  value={notes}
                 />
-                <button onClick={handleMealClear}>Clear Meal</button>
+              </div>
+              <div>
+                <FeedbackElement state={validateMeal()}>
+                  <button
+                    disabled={validateMeal().status === FeedbackStatus.ERROR}
+                    onClick={handleAddMealToList}
+                  >
+                    Add Meal To List
+                  </button>
+                </FeedbackElement>
+                <button
+                  disabled={validateMeal().status !== FeedbackStatus.WARN}
+                >
+                  Add Meal To Database
+                </button>
               </div>
             </div>
-            <Dishes
-              dishes={dishes}
-              disabled={!nullOrEmptyString(meal.id)}
-              onDishUpdate={setDishesAndMealName}
-              dishErrors={dishErrors}
-              setDishErrors={setDishErrors}
-              onMainChecked={setDishesAndMealName}
-              onDishAdded={setDishesAndMealName}
-              onDishDeleted={setDishesAndMealName}
-            />
-            <div className="options">
-              <h3>Notes</h3>
-              <textarea
-                disabled={!nullOrEmptyString(meal.id)}
-                ref={textAreaRef}
-              />
-            </div>
-            <div>
-              <FeedbackElement state={validateMeal()}>
-                <button
-                  disabled={validateMeal().status === FeedbackStatus.ERROR}
-                  onClick={handleAddMealToList}
-                >
-                  Add Meal To List
-                </button>
-              </FeedbackElement>
-              <button disabled={validateMeal().status !== FeedbackStatus.WARN}>
-                Add Meal To Database
-              </button>
-            </div>
           </div>
-        </div>
-      </Loading>
+        </Loading>
+      </Page>
     </>
   );
 };

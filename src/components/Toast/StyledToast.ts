@@ -30,6 +30,8 @@ export const styledToast = (state: FeedbackStatus) => {
     .message {
       padding: ${theme.spacing.medium};
       padding-top: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   `;
 

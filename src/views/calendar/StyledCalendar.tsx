@@ -1,6 +1,5 @@
 import styled, { theme } from '../../styles/theme';
-import { fullScreen, pointer } from '../../styles/common';
-import { navBar } from '../../styles/heights';
+import { pointer } from '../../styles/common';
 
 import css from '@emotion/css/macro';
 
@@ -23,8 +22,6 @@ export const feedbackStyles = css`
 
 export const styledCalendar = (Calendar: React.ComponentType) =>
   styled(Calendar)`
-    ${fullScreen}
-    top: ${navBar};
     padding: ${props => props.theme.spacing.small};
     padding-top: ${props => props.theme.spacing.medium};
 
@@ -69,5 +66,4 @@ export const styledCalendar = (Calendar: React.ComponentType) =>
       line-height: 12px;
       ${pointer}
     }
-
   `;

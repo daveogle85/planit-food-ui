@@ -34,7 +34,6 @@ export const styleDishes = (Dishes: React.ComponentType) => styled(Dishes)`
     grid-auto-rows: ${listItem};
     grid-gap: ${props => props.theme.spacing.small};
     margin-bottom: ${props => props.theme.spacing.medium};
-    padding-bottom: ${props => props.theme.spacing.small};
     ${styledDish}
   }
 `;

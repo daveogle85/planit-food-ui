@@ -15,7 +15,7 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { Meal } from '../../api/types/MealTypes';
 import FeedbackElement from '../../components/FeedbackInput/FeedbackElement';
 import List from '../../components/List/List';
-import NavBar from '../../components/NavBar/NavBar';
+import Page from '../../components/Page/Page';
 import {
   calendarSelectors,
   setIsEditMode,
@@ -131,43 +131,44 @@ const Calendar: React.FC<EmotionProps> = props => {
 
   return (
     <>
-      <NavBar />
-      <List onMealSelect={handleMealSelect} />
-      <div className={classNames(props.className, { isEditMode })}>
-        <FeedbackElement
-          className="calendar-feedback"
-          state={{
-            status: isEditMode ? FeedbackStatus.WARN : FeedbackStatus.HIDDEN,
-            message: 'Calendar is in Edit Mode',
-          }}
-          styles={feedbackStyles}
-        >
-          <PlanitFoodCalendar
-            plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            dateClick={handleDateClick}
-            height={'auto'}
-            selectable={true}
-            datesSet={fetchMeals}
-            events={meals}
-            unselectAuto={false}
-            select={handleSelect}
-            eventContent={renderEvent}
-            customButtons={{
-              edit: {
-                text: `${isEditMode ? 'Disable' : 'Enable'} edit mode`,
-                click: handleEditClicked,
-              },
+      <Page>
+        <List onMealSelect={handleMealSelect} />
+        <div className={classNames(props.className, { isEditMode })}>
+          <FeedbackElement
+            className="calendar-feedback"
+            state={{
+              status: isEditMode ? FeedbackStatus.WARN : FeedbackStatus.HIDDEN,
+              message: 'Calendar is in Edit Mode',
             }}
-            selectAllow={selectAllow}
-            headerToolbar={{
-              start: 'title',
-              center: 'prev edit next',
-              end: '',
-            }}
-          />
-        </FeedbackElement>
-      </div>
+            styles={feedbackStyles}
+          >
+            <PlanitFoodCalendar
+              plugins={[dayGridPlugin, interactionPlugin]}
+              initialView="dayGridMonth"
+              dateClick={handleDateClick}
+              height={'auto'}
+              selectable={true}
+              datesSet={fetchMeals}
+              events={meals}
+              unselectAuto={false}
+              select={handleSelect}
+              eventContent={renderEvent}
+              customButtons={{
+                edit: {
+                  text: `${isEditMode ? 'Disable' : 'Enable'} edit mode`,
+                  click: handleEditClicked,
+                },
+              }}
+              selectAllow={selectAllow}
+              headerToolbar={{
+                start: 'title',
+                center: 'prev edit next',
+                end: '',
+              }}
+            />
+          </FeedbackElement>
+        </div>
+      </Page>
     </>
   );
 };
