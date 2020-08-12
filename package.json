@@ -7,7 +7,7 @@
     "@emotion/core": "^10.0.34",
     "@emotion/styled": "^10.0.27",
     "@fullcalendar/daygrid": "^5.1.0",
-    "@fullcalendar/interaction": "^5.1.0",
+    "@fullcalendar/interaction": "^5.2.0",
     "@fullcalendar/react": "^5.1.0",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^5.11.3",

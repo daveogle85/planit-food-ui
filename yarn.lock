@@ -1252,6 +1252,13 @@
   dependencies:
     tslib "^2.0.0"
 
+"@fullcalendar/common@~5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/common/-/common-5.2.0.tgz#49dff00f5104daaa00a8a556be394cacec3fadb7"
+  integrity sha512-fh2Mp09lzIwlh3AJT5xw1r4jFKMOGRmdpmzJX+qvv3BJrg7P6ze4FLhoIpDRe13wmUpQuQEznk9pY99eFGxVXQ==
+  dependencies:
+    tslib "^2.0.0"
+
 "@fullcalendar/daygrid@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.1.0.tgz#4f8cb30e99ff00600f064645942d21e8f668c946"
@@ -1260,12 +1267,12 @@
     "@fullcalendar/common" "~5.1.0"
     tslib "^2.0.0"
 
-"@fullcalendar/interaction@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-5.1.0.tgz#0e7c6fe17bf8532de2c994bde5fc6e9220c71a89"
-  integrity sha512-RuCtsVFXvGYk4vYz3Aq9+G8SMOG6iX+xNJmHELdmPfAatHTVyUSCD4GznxR1/fzUu74mb98X01DVkLwSB+78oA==
+"@fullcalendar/interaction@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-5.2.0.tgz#56755c366bc85339264c8ae90c5f8e0639129560"
+  integrity sha512-nuAjr/oRGWvFnvXO27UjKpXu6kRavDv1aecX5pgID2+F0rlOuWASUuQARRfzaV4Vjo4dWk+rR3OC/+PtV/wWow==
   dependencies:
-    "@fullcalendar/common" "~5.1.0"
+    "@fullcalendar/common" "~5.2.0"
     tslib "^2.0.0"
 
 "@fullcalendar/react@^5.1.0":
