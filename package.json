@@ -32,7 +32,7 @@
     "react-multi-carousel": "^2.5.5",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "3.4.2",
     "react-test-renderer": "^16.13.1",
     "styled-components": "^5.1.1",
     "styled-react-modal": "^2.0.1",
