@@ -12,6 +12,7 @@ const header = css`
 const main = (props: CssProps) => css`
   .dc-main {
     margin-left: ${props.theme.spacing.large};
+    margin-right: ${props.theme.spacing.large};
   }
 
   .dc-notes {
