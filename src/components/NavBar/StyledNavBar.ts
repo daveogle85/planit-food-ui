@@ -69,7 +69,8 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
     position: relative;
     width: 100%;
     margin: 0;
-    padding-left: 40px;
+    padding-left: 16px;
+
     li {
       ${pointer}
       list-style-type: none;
@@ -77,12 +78,29 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
       min-width: 30px;
       ${centerFlex}
     }
+
     li:hover:not(.app-title) {
       background-color: ${props => props.theme.colours.background.hoverGrey};
     }
+
+    .app-title:not(.small-mobile) {
+      display: none;
+    }
+
+    ${props => props.theme.mediaQueries.xSmallMobile} {
+      padding-left: 40px;
+      .small-mobile {
+        display: none;
+      }
+      .app-title:not(.small-mobile) {
+        display: flex;
+      }
+    }
+
     .app-title {
       white-space: nowrap;
     }
+
     .dd-menu-items {
       ${fullScreenRelative()}
       display: flex;

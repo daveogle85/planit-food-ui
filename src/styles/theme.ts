@@ -6,6 +6,7 @@ import { colours } from './colours';
 import { fullScreen } from './common';
 
 export const breakpoints = {
+  xSmallMobile: 418,
   smallMobile: 576,
   largeMobile: 768,
   tablet: 992,

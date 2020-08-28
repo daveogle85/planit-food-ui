@@ -107,6 +107,12 @@ function NavBarRaw(props: EmotionProps) {
         <li className="app-title" onClick={() => history.push('/')}>
           Planit Food App
         </li>
+        <li
+          className="app-title small-mobile"
+          onClick={() => history.push('/')}
+        >
+          PF
+        </li>
         <div className="dd-menu-items">
           <li className="dd-edit">
             <EditDropdown />
