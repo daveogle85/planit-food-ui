@@ -24,6 +24,7 @@ export const colours = {
     hoverGrey: '#f1f1f1',
     whiteSmoke: '#f5f5f5',
     mealCardBlue: '#e6fcff',
+    logoBlue: '#1b62a0',
   },
   text: { pink: 'hotpink' },
 };

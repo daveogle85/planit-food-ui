@@ -83,18 +83,20 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
       background-color: ${props => props.theme.colours.background.hoverGrey};
     }
 
-    .app-title:not(.small-mobile) {
+    .title-text {
       display: none;
     }
 
     ${props => props.theme.mediaQueries.xSmallMobile} {
       padding-left: 40px;
-      .small-mobile {
-        display: none;
+      .title-text {
+        display: block;
       }
-      .app-title:not(.small-mobile) {
-        display: flex;
-      }
+    }
+
+    .logo-img {
+      width: 70px;
+      height: 70px;
     }
 
     .app-title {
