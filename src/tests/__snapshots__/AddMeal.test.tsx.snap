@@ -104,7 +104,7 @@ exports[`Add Meal View renders correctly 1`] = `
   position: relative;
   width: 100%;
   margin: 0;
-  padding-left: 40px;
+  padding-left: 16px;
 }
 
 .emotion-10 ul li {
@@ -128,6 +128,25 @@ exports[`Add Meal View renders correctly 1`] = `
 
 .emotion-10 ul li:hover:not(.app-title) {
   background-color: #f1f1f1;
+}
+
+.emotion-10 ul .title-text {
+  display: none;
+}
+
+@media (min-width:418px) {
+  .emotion-10 ul {
+    padding-left: 40px;
+  }
+
+  .emotion-10 ul .title-text {
+    display: block;
+  }
+}
+
+.emotion-10 ul .logo-img {
+  width: 70px;
+  height: 70px;
 }
 
 .emotion-10 ul .app-title {
@@ -795,7 +814,16 @@ exports[`Add Meal View renders correctly 1`] = `
         className="app-title"
         onClick={[Function]}
       >
-        Planit Food App
+        <img
+          alt="app logo"
+          className="logo-img"
+          src="logo.png"
+        />
+        <div
+          className="title-text button-text"
+        >
+          Planit Food
+        </div>
       </li>
       <div
         className="dd-menu-items"
