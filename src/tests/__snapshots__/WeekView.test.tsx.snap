@@ -48,7 +48,7 @@ exports[`Week View renders correctly 1`] = `
   position: relative;
   width: 100%;
   margin: 0;
-  padding-left: 16px;
+  padding-left: 2px;
 }
 
 .emotion-10 ul li {
@@ -86,6 +86,10 @@ exports[`Week View renders correctly 1`] = `
   .emotion-10 ul .title-text {
     display: block;
   }
+
+  .emotion-10 ul .logo-img {
+    padding-right: 4px;
+  }
 }
 
 .emotion-10 ul .logo-img {
@@ -94,6 +98,7 @@ exports[`Week View renders correctly 1`] = `
 }
 
 .emotion-10 ul .app-title {
+  min-width: unset;
   white-space: nowrap;
 }
 

@@ -1,7 +1,7 @@
-import css from '@emotion/css/macro';
-import borderTheme from './border';
-import { inputHeight } from './heights';
-import { colours } from './colours';
+import css from "@emotion/css/macro";
+import borderTheme from "./border";
+import { inputHeight } from "./heights";
+import { colours } from "./colours";
 export const fullScreen = css`
   position: absolute;
   top: 0;
@@ -11,8 +11,8 @@ export const fullScreen = css`
 `;
 
 export const fullScreenRelative = (
-  heightOffset = '0px',
-  widthOffset = '0px'
+  heightOffset = "0px",
+  widthOffset = "0px"
 ) => css`
   position: relative;
   height: calc(100% - ${heightOffset});
@@ -45,7 +45,7 @@ export const unselectable = css`
 `;
 
 export const input = css`
-  :not([type='checkbox']) {
+  :not([type="checkbox"]) {
     height: ${inputHeight};
     width: 100%;
     max-width: 500px;

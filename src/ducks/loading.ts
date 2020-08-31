@@ -1,10 +1,10 @@
-import { Action, ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { Action, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
-import { nullOrEmptyString } from '../helpers/string';
-import { AppThunk, RootState } from './';
-import { authSelectors } from './auth/AuthReducer';
-import { popToast } from './toast/ToastReducer';
-import { FeedbackStatus } from './toast/ToastTypes';
+import { nullOrEmptyString } from "../helpers/string";
+import { AppThunk, RootState } from "./";
+import { authSelectors } from "./auth/AuthReducer";
+import { popToast } from "./toast/ToastReducer";
+import { FeedbackStatus } from "./toast/ToastTypes";
 
 type DispatchApiActionOptions<ApiReturnType> = {
   request: (token: string) => Promise<ApiReturnType>;
@@ -44,7 +44,7 @@ export const dispatchApiAction = (
     }
 
     if (additionalSuccessActions?.length) {
-      additionalSuccessActions.forEach(action => {
+      additionalSuccessActions.forEach((action) => {
         dispatch(action);
       });
     }

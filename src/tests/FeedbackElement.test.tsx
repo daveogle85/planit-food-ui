@@ -1,13 +1,13 @@
-import serializer from 'jest-emotion';
-import React from 'react';
-import renderer from 'react-test-renderer';
-import FeedbackElement from '../components/FeedbackInput/FeedbackElement';
-import { FeedbackStatus } from '../ducks/toast/ToastTypes';
+import serializer from "jest-emotion";
+import React from "react";
+import renderer from "react-test-renderer";
+import FeedbackElement from "../components/FeedbackInput/FeedbackElement";
+import { FeedbackStatus } from "../ducks/toast/ToastTypes";
 
 expect.addSnapshotSerializer(serializer);
 
-describe('FeedbackElement', () => {
-  it('hidden', () => {
+describe("FeedbackElement", () => {
+  it("hidden", () => {
     const view = renderer
       .create(
         <FeedbackElement
@@ -22,13 +22,13 @@ describe('FeedbackElement', () => {
     expect(view).toMatchSnapshot();
   });
 
-  it('error', () => {
+  it("error", () => {
     const view = renderer
       .create(
         <FeedbackElement
           state={{
             status: FeedbackStatus.ERROR,
-            message: 'An Error Message',
+            message: "An Error Message",
           }}
         >
           <div>Error</div>
@@ -38,13 +38,13 @@ describe('FeedbackElement', () => {
     expect(view).toMatchSnapshot();
   });
 
-  it('warn', () => {
+  it("warn", () => {
     const view = renderer
       .create(
         <FeedbackElement
           state={{
             status: FeedbackStatus.WARN,
-            message: 'A Warning message',
+            message: "A Warning message",
           }}
         >
           <div>Warn</div>
@@ -54,13 +54,13 @@ describe('FeedbackElement', () => {
     expect(view).toMatchSnapshot();
   });
 
-  it('info', () => {
+  it("info", () => {
     const view = renderer
       .create(
         <FeedbackElement
           state={{
             status: FeedbackStatus.INFO,
-            message: 'An Information message',
+            message: "An Information message",
           }}
         >
           <div>Info</div>
@@ -70,13 +70,13 @@ describe('FeedbackElement', () => {
     expect(view).toMatchSnapshot();
   });
 
-  it('disable', () => {
+  it("disable", () => {
     const view = renderer
       .create(
         <FeedbackElement
           state={{
             status: FeedbackStatus.DISABLED,
-            message: 'A disabled message',
+            message: "A disabled message",
           }}
         >
           <div>Disabled</div>
