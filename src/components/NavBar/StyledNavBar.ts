@@ -5,6 +5,7 @@ import {
   navBar,
   NavBarImageSize,
   NavBarImageSizeMobile,
+  logo,
 } from '../../styles/heights';
 import styled from '../../styles/theme';
 import { CssProps } from '../../styles/types';
@@ -95,8 +96,8 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
     }
 
     .logo-img {
-      width: 70px;
-      height: 70px;
+      width: ${logo};
+      height: ${logo};
     }
 
     .app-title {

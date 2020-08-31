@@ -1,11 +1,12 @@
 export const navBar = '70px';
+export const logo = '70px';
 export const listItem = '30px';
 export const inputHeight = '24px';
 export const NavBarImageSize = '50px';
 export const NavBarImageSizeMobile = '40px';
 export const loginButtonDim = {
-  height: '30px',
-  width: '130px',
+  height: '60px',
+  width: '150px',
 };
 export const loginModalDim = {
   height: '500px',

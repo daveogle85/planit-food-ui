@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 import { useAuth0 } from '../../contexts/auth0-context';
 import Google from '../../images/google';
+import logo from '../../images/logo.png';
 import { EmotionProps } from '../../styles/types';
 import { LoginProps } from './LoginTypes';
 import { styledLogin, styledLoginButton } from './StyledLogin';
@@ -36,8 +37,11 @@ export const Login: React.FC<LoginProps> = (props: LoginProps) => {
   return (
     <div className={props.className}>
       <div className="login-window">
-        <div className="text">Please login to continue</div>
-        <LoginButton />
+        <img className="logo-img" src={logo} alt="app logo" />
+        <div className="login-action">
+          <div className="text">Please login to continue</div>
+          <LoginButton />
+        </div>
       </div>
     </div>
   );
