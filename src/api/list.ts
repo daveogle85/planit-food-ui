@@ -1,10 +1,10 @@
-import { httpRequest } from './helpers/http';
-import { List, ApiList } from './types/ListTypes';
-import { Meal } from './types/MealTypes';
-import { convertFromMealApi, convertToListApiRequest } from './helpers/convert';
-import { RestVerb } from './helpers/types';
+import { httpRequest } from "./helpers/http";
+import { List, ApiList } from "./types/ListTypes";
+import { Meal } from "./types/MealTypes";
+import { convertFromMealApi, convertToListApiRequest } from "./helpers/convert";
+import { RestVerb } from "./helpers/types";
 
-const listPath = '/lists';
+const listPath = "/lists";
 
 const getLists = () => (token: string): Promise<Array<List>> => {
   const requestPath = `${listPath}`;
@@ -39,7 +39,7 @@ export const updateList = (list: List) => async (
 export const updateMealInList = (list: List, meal: Meal) => (
   token: string
 ): Promise<List> => {
-  const meals = list.meals.filter(m => m.id !== meal.id);
+  const meals = list.meals.filter((m) => m.id !== meal.id);
   meals.push(meal);
   return updateList({ ...list, meals })(token);
 };

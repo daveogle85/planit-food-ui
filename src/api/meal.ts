@@ -1,10 +1,10 @@
-import { httpRequest } from './helpers/http';
-import { nullOrEmptyString } from '../helpers/string';
-import { ApiMeal, Meal } from './types/MealTypes';
-import { RestVerb } from './helpers/types';
-import { convertFromMealApi, convertToApiMeal } from './helpers/convert';
+import { httpRequest } from "./helpers/http";
+import { nullOrEmptyString } from "../helpers/string";
+import { ApiMeal, Meal } from "./types/MealTypes";
+import { RestVerb } from "./helpers/types";
+import { convertFromMealApi, convertToApiMeal } from "./helpers/convert";
 
-const path = '/meals';
+const path = "/meals";
 
 export const searchForMeal = (mealSearchText: string) => async (
   token?: string | null

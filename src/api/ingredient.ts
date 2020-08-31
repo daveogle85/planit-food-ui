@@ -1,10 +1,10 @@
-import { ApiIngredient, Ingredient } from './types/IngredientsTypes';
-import { nullOrEmptyString } from '../helpers/string';
-import { httpRequest } from './helpers/http';
-import { RestVerb } from './helpers/types';
-import { convertFromIngredientApi } from './helpers/convert';
+import { ApiIngredient, Ingredient } from "./types/IngredientsTypes";
+import { nullOrEmptyString } from "../helpers/string";
+import { httpRequest } from "./helpers/http";
+import { RestVerb } from "./helpers/types";
+import { convertFromIngredientApi } from "./helpers/convert";
 
-const path = '/ingredients';
+const path = "/ingredients";
 
 export const searchForIngredient = (ingredientSearchText: string) => async (
   token?: string | null

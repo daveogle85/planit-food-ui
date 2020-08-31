@@ -1,5 +1,5 @@
-import React from 'react';
-import { EmotionProps } from '../styles/types';
+import React from "react";
+import { EmotionProps } from "../styles/types";
 
 const Edit = (
   props: EmotionProps & {
@@ -8,7 +8,7 @@ const Edit = (
 ) => {
   return (
     <svg
-      fill={props.fill ? props.fill : '#000000'}
+      fill={props.fill ? props.fill : "#000000"}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 26 26"
       width="26px"

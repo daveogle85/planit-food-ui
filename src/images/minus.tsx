@@ -1,5 +1,5 @@
-import React from 'react';
-import { EmotionProps } from '../styles/types';
+import React from "react";
+import { EmotionProps } from "../styles/types";
 
 const Minus = (
   props: EmotionProps & {
@@ -14,8 +14,8 @@ const Minus = (
       y="0px"
       fill={props.colour ? props.colour : undefined}
       viewBox="0 0 83 83"
-      enableBackground={'new 0 0 83 83'}
-      xmlSpace={'preserve'}
+      enableBackground={"new 0 0 83 83"}
+      xmlSpace={"preserve"}
     >
       <g>
         <path

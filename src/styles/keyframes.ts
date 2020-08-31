@@ -1,5 +1,5 @@
-import { keyframes } from '@emotion/core';
-import { theme } from './theme';
+import { keyframes } from "@emotion/core";
+import { theme } from "./theme";
 
 export const bounce = keyframes`
     40% { transform: scale(1.4); }
