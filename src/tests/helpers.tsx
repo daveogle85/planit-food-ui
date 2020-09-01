@@ -1,12 +1,12 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
-import { ThemeProvider } from 'emotion-theming';
-import { theme } from '../styles/theme';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import { FeedbackStatus, ErrorState } from '../ducks/toast/ToastTypes';
-import { setPopped } from '../ducks/toast/ToastReducer';
-import { Dispatch } from '@reduxjs/toolkit';
+import React from "react";
+import renderer from "react-test-renderer";
+import { ThemeProvider } from "emotion-theming";
+import { theme } from "../styles/theme";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import { FeedbackStatus, ErrorState } from "../ducks/toast/ToastTypes";
+import { setPopped } from "../ducks/toast/ToastReducer";
+import { Dispatch } from "@reduxjs/toolkit";
 
 export function renderWithTheme(component: any, store?: Object) {
   const middlewares: any[] = [];
@@ -34,7 +34,7 @@ export const mockDate = (currentDate: Date) => {
 
 export const mockPopToastPayload = {
   status: FeedbackStatus.WARN,
-  message: 'test',
+  message: "test",
 };
 
 export async function dispatchWithTimeout(dispatch: Dispatch, action: any) {
@@ -45,7 +45,7 @@ export async function dispatchWithTimeout(dispatch: Dispatch, action: any) {
 export function mockSetToastState(toastState: ErrorState) {
   return {
     payload: toastState,
-    type: 'toast/setToastState',
+    type: "toast/setToastState",
   };
 }
 

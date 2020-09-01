@@ -1,31 +1,31 @@
-import serializer from 'jest-emotion';
-import React from 'react';
+import serializer from "jest-emotion";
+import React from "react";
 
-import { styledWeekView } from '../views/weekView/StyledWeekView';
-import WeekView from '../views/weekView/WeekView';
-import { renderWithTheme } from './helpers';
-import { RootState } from '../ducks';
+import { styledWeekView } from "../views/weekView/StyledWeekView";
+import WeekView from "../views/weekView/WeekView";
+import { renderWithTheme } from "./helpers";
+import { RootState } from "../ducks";
 
-jest.mock('../contexts/auth0-context', () => ({
+jest.mock("../contexts/auth0-context", () => ({
   useAuth0: jest.fn().mockReturnValue({
     loginWithRedirect: jest.fn(),
     loading: false,
     isAuthenticated: false,
     user: {
-      picture: '',
+      picture: "",
     },
   }),
 }));
 
 expect.addSnapshotSerializer(serializer);
-test('Week View renders correctly', () => {
+test("Week View renders correctly", () => {
   const mockStore: RootState = {
     days: {
       loading: false,
       data: [],
       week: [],
     },
-    auth: { isAuthenticated: true, token: '' },
+    auth: { isAuthenticated: true, token: "" },
   };
   const TestWeekView = styledWeekView(WeekView as any);
   const view = renderWithTheme(<TestWeekView />, mockStore).toJSON();

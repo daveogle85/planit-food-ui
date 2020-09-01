@@ -8,7 +8,7 @@ export const removeEmpty = <T extends {}>(obj: T): Partial<T> =>
     Object.entries(obj)
       .filter(([_, v]) => v != null)
       .map(([k, v]) => {
-        return typeof v === 'object' && !(v instanceof Array)
+        return typeof v === "object" && !(v instanceof Array)
           ? [k, removeEmpty(v!)]
           : [k, v];
       }) as unknown[][]
@@ -25,7 +25,7 @@ export const updateObject = <T extends {}>(obj: T, update: T): T => {
 
   return Object.fromEntries(
     Object.entries(combinedObject).map(([k, v]) => {
-      if (typeof v === 'object' && v != null && !(v instanceof Array)) {
+      if (typeof v === "object" && v != null && !(v instanceof Array)) {
         return update.hasOwnProperty(k)
           ? [k, updateObject(v, update[k as keyof T] as Object)]
           : [k, v];

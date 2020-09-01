@@ -1,26 +1,26 @@
-import { DayRange } from '../api/types/DayTypes';
+import { DayRange } from "../api/types/DayTypes";
 
 const days = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 
 var parseOptions = {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
+  year: "numeric",
+  month: "long",
+  day: "numeric",
 };
 
 export const getDayOfWeek = (day: number) => days[day];
 
 export const parseDateAsFormattedString = (date: string | Date) => {
-  const newDate = typeof date === 'string' ? new Date(date) : date;
-  return newDate.toLocaleString('en-US', parseOptions);
+  const newDate = typeof date === "string" ? new Date(date) : date;
+  return newDate.toLocaleString("en-US", parseOptions);
 };
 
 export const dateToISOString = (date: Date): string =>
@@ -32,7 +32,7 @@ export const isDayWithinRange = (
 ): boolean => {
   const givenStartDate = new Date(givenRange.startDate);
   const givenEndDate = new Date(givenRange.endDate);
-  const dayDate = new Date(day ?? '');
+  const dayDate = new Date(day ?? "");
   if (
     isNaN(givenStartDate.getTime()) ||
     isNaN(givenEndDate.getTime()) ||

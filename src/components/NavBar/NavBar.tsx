@@ -14,6 +14,7 @@ import {
   styledProfile,
   styledNavIcon,
 } from './StyledNavBar';
+import logo from '../../images/logo.png';
 
 const ProfileRaw: React.FC<EmotionProps> = props => {
   const { user } = useAuth0();
@@ -105,7 +106,8 @@ function NavBarRaw(props: EmotionProps) {
     <nav className={props.className}>
       <ul className="menu">
         <li className="app-title" onClick={() => history.push('/')}>
-          Planit Food App
+          <img className="logo-img" src={logo} alt="app logo" />
+          <div className="title-text button-text">Planit Food</div>
         </li>
         <div className="dd-menu-items">
           <li className="dd-edit">

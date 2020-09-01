@@ -5,6 +5,7 @@ import {
   navBar,
   NavBarImageSize,
   NavBarImageSizeMobile,
+  logo,
 } from '../../styles/heights';
 import styled from '../../styles/theme';
 import { CssProps } from '../../styles/types';
@@ -69,7 +70,8 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
     position: relative;
     width: 100%;
     margin: 0;
-    padding-left: 40px;
+    padding-left: ${props => props.theme.spacing.xxSmall};
+
     li {
       ${pointer}
       list-style-type: none;
@@ -77,12 +79,36 @@ export const styledNavBar = (NavBar: React.ComponentType) => styled(NavBar)`
       min-width: 30px;
       ${centerFlex}
     }
+
     li:hover:not(.app-title) {
       background-color: ${props => props.theme.colours.background.hoverGrey};
     }
+
+    .title-text {
+      display: none;
+    }
+
+    ${props => props.theme.mediaQueries.xSmallMobile} {
+      padding-left: 40px;
+      .title-text {
+        display: block;
+      }
+
+      .logo-img {
+        padding-right: ${props => props.theme.spacing.xSmall};
+      }
+    }
+
+    .logo-img {
+      width: ${logo};
+      height: ${logo};
+    }
+
     .app-title {
+      min-width: unset;
       white-space: nowrap;
     }
+
     .dd-menu-items {
       ${fullScreenRelative()}
       display: flex;

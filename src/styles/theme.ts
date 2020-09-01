@@ -1,11 +1,12 @@
-import css from '@emotion/css/macro';
-import styled, { CreateStyled } from '@emotion/styled/macro';
+import css from "@emotion/css/macro";
+import styled, { CreateStyled } from "@emotion/styled/macro";
 
-import border from './border';
-import { colours } from './colours';
-import { fullScreen } from './common';
+import border from "./border";
+import { colours } from "./colours";
+import { fullScreen } from "./common";
 
 export const breakpoints = {
+  xSmallMobile: 418,
   smallMobile: 576,
   largeMobile: 768,
   tablet: 992,
@@ -34,20 +35,20 @@ export const theme = {
       black: 900,
     },
     size: {
-      xSmall: '8px',
-      small: '12px',
-      medium: '15px',
-      large: '20px',
+      xSmall: "8px",
+      small: "12px",
+      medium: "15px",
+      large: "20px",
     },
   },
   border,
   spacing: {
-    xxSmall: '2px',
-    xSmall: '4px',
-    small: '8px',
-    medium: '20px',
-    large: '30px',
-    xLarge: '40px',
+    xxSmall: "2px",
+    xSmall: "4px",
+    small: "8px",
+    medium: "20px",
+    large: "30px",
+    xLarge: "40px",
   },
   colours,
   zIndex: {
@@ -71,7 +72,7 @@ export const globals = css`
     height: 100%;
   }
 
-  input[type='text'] {
+  input[type="text"] {
     border-radius: ${theme.border.radius.medium};
     padding-left: ${theme.spacing.xSmall};
   }

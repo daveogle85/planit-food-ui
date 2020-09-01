@@ -1,4 +1,4 @@
-import { useRef, useState, useLayoutEffect } from 'react';
+import { useRef, useState, useLayoutEffect } from "react";
 
 export const useOutOfBounds = () => {
   const ref = useRef<HTMLDivElement>(null);

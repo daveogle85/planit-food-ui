@@ -1,22 +1,35 @@
 import { centerFlex, fullScreen, pointer } from '../../styles/common';
+import { loginButtonDim, loginModalDim } from '../../styles/heights';
 import { bounce } from '../../styles/keyframes';
 import styled from '../../styles/theme';
-import { loginButtonDim, loginModalDim } from '../../styles/heights';
 
 export const styledLogin = (Login: React.ComponentType) => styled(Login)`
-  background-color: ${props => props.theme.colours.background.backgroundGrey};
+  background-color: ${props => props.theme.colours.background.logoBlue};
   ${centerFlex}
   ${fullScreen}
   .login-window {
-    background-color: ${props => props.theme.colours.background.modalTeal};
+    background-color: ${props => props.theme.colours.background.backgroundGrey};
     border-radius: ${props => props.theme.border.radius.medium};
-    ${centerFlex}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: ${props => props.theme.spacing.medium};
     flex-direction: column;
     width: ${loginModalDim.width};
     height: ${loginModalDim.height};
 
+    .logo-img {
+      max-width: 200px;
+    }
+
+    .login-action {
+      ${centerFlex};
+      flex-direction: column;
+    }
+
     .text {
-      margin-bottom: ${props => props.theme.spacing.large};
+      color: ${props => props.theme.colours.background.backgroundWhite};
+      margin-bottom: ${props => props.theme.spacing.small};
     }
   }
 `;
@@ -36,7 +49,7 @@ export const styledLoginButton = (LoginButton: React.ComponentType) => styled(
   ${centerFlex}
   width: ${loginButtonDim.width};
   height: ${loginButtonDim.height};
-  background-color: ${props => props.theme.colours.background.backgroundGrey};
+  background-color: ${props => props.theme.colours.background.logoBlue};
   border-radius: ${props => props.theme.border.radius.medium};
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -56,13 +69,13 @@ export const styledLoginButton = (LoginButton: React.ComponentType) => styled(
     content: '';
     left: 0;
     justify-content: flex-end;
-    background-color: ${props => props.theme.colours.background.backgroundGrey};
+    background-color: ${props => props.theme.colours.background.logoBlue};
   }
   &:after {
     content: '';
     right: 0;
     justify-content: flex-start;
-    background-color: ${props => props.theme.colours.background.backgroundGrey};
+    background-color: ${props => props.theme.colours.background.logoBlue};
   }
   &:hover {
     background-color: ${props => props.theme.colours.white};

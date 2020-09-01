@@ -1,17 +1,17 @@
-import { Day, DayRange, ApiDay } from './types/DayTypes';
-import { httpRequest } from './helpers/http';
-import { removeEmpty } from '../helpers/object';
-import { RestVerb } from './helpers/types';
-import { convertFromDayApi, convertToLightApiDay } from './helpers/convert';
+import { Day, DayRange, ApiDay } from "./types/DayTypes";
+import { httpRequest } from "./helpers/http";
+import { removeEmpty } from "../helpers/object";
+import { RestVerb } from "./helpers/types";
+import { convertFromDayApi, convertToLightApiDay } from "./helpers/convert";
 
-const dayPath = '/days';
+const dayPath = "/days";
 
 const getDaysByRange = (range: DayRange, includeDishes?: boolean) => async (
   token: string
 ): Promise<Array<Day>> => {
   const requestPath = `${dayPath}?startDate=${range.startDate}&endDate=${
     range.endDate
-  }${Boolean(includeDishes) ? '&includeDishes=true' : ''}`;
+  }${Boolean(includeDishes) ? "&includeDishes=true" : ""}`;
   const days = await httpRequest<Array<Day>, undefined>(
     requestPath,
     token,

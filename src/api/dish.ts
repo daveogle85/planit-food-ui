@@ -1,10 +1,10 @@
-import { ApiDish, Dish } from './types/DishTypes';
-import { httpRequest } from './helpers/http';
-import { nullOrEmptyString } from '../helpers/string';
-import { RestVerb } from './helpers/types';
-import { convertFromDishApi, convertToApiDish } from './helpers/convert';
+import { ApiDish, Dish } from "./types/DishTypes";
+import { httpRequest } from "./helpers/http";
+import { nullOrEmptyString } from "../helpers/string";
+import { RestVerb } from "./helpers/types";
+import { convertFromDishApi, convertToApiDish } from "./helpers/convert";
 
-const path = '/dishes';
+const path = "/dishes";
 
 export const searchForDish = (dishSearchText: string) => async (
   token?: string | null

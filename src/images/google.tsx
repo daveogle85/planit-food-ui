@@ -1,5 +1,5 @@
-import React from 'react';
-import { EmotionProps } from '../styles/types';
+import React from "react";
+import { EmotionProps } from "../styles/types";
 
 const Google = (props: EmotionProps) => {
   return (

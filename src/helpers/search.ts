@@ -1,5 +1,5 @@
-import { nullOrEmptyString } from './string';
-import { isNullOrUndefined } from 'util';
+import { nullOrEmptyString } from "./string";
+import { isNullOrUndefined } from "util";
 
 type ApiSearch<ApiT> = (
   searchText: string
@@ -48,14 +48,14 @@ export const search: SearchFunction = (
     }
     result =
       lowerCaseSearchText.length === 1
-        ? localItems.filter(item =>
+        ? localItems.filter((item) =>
             item.name?.toLowerCase().startsWith(lowerCaseSearchText)
           )
-        : localItems.filter(item =>
+        : localItems.filter((item) =>
             item.name?.toLowerCase().includes(lowerCaseSearchText)
           );
   }
-  return new Promise(res => res(result!.map(convertLocalResult)));
+  return new Promise((res) => res(result!.map(convertLocalResult)));
 };
 
 export default search;
