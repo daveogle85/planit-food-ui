@@ -393,7 +393,7 @@ exports[`Add Meal View renders correctly 1`] = `
   bottom: 0;
   width: 0;
   max-width: calc(100% - 40px);
-  z-index: 2;
+  z-index: 3;
   -webkit-transition: 0.5s;
   transition: 0.5s;
 }
