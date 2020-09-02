@@ -4,10 +4,10 @@ exports[`Week View renders correctly 1`] = `
 .emotion-12 {
   height: 100%;
   background-color: #7f53ac;
-  background-image: linear-gradient( 315deg, #7f53ac 0%, #647dee 74% );
+  background-image: linear-gradient( 315deg, #7f53ac 0%, #1b62a0 74% );
   height: 100%;
   background-color: #7f53ac;
-  background-image: linear-gradient( 315deg, #7f53ac 0%, #647dee 74% );
+  background-image: linear-gradient( 315deg, #7f53ac 0%, #1b62a0 74% );
 }
 
 .emotion-13 {

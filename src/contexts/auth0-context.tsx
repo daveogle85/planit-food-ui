@@ -1,11 +1,11 @@
 // https://auth0.com/blog/modern-full-stack-development-with-nestjs-react-typescript-and-mongodb-part-2/
 
-import React, { Component, createContext, useContext } from "react";
+import React, { Component, createContext, useContext } from 'react';
 
 import createAuth0Client, {
   Auth0Client,
   Auth0ClientOptions,
-} from "@auth0/auth0-spa-js";
+} from '@auth0/auth0-spa-js';
 
 interface ContextValueType {
   isAuthenticated?: boolean;
@@ -30,7 +30,7 @@ interface IState {
   auth0Client: any;
   loading: boolean;
   isAuthenticated: boolean;
-  token: ContextValueType["token"];
+  token: ContextValueType['token'];
   user: {} | null;
 }
 
@@ -61,7 +61,7 @@ export class Auth0Provider extends Component<{}, IState> {
     const auth0Client = await createAuth0Client(this.config);
     this.setState({ auth0Client });
     // check to see if they have been redirected after login
-    if (window.location.search.includes("code=")) {
+    if (window.location.search.includes('code=')) {
       return this.handleRedirectCallback();
     }
     const isAuthenticated = await auth0Client.isAuthenticated();
@@ -96,7 +96,11 @@ export class Auth0Provider extends Component<{}, IState> {
       getTokenSilently: (...p: any) =>
         auth0Client.getTokenSilently(...p, { audience: this.config.audience }),
       getIdTokenClaims: (...p: any) => auth0Client.getIdTokenClaims(...p),
-      logout: (...p: any) => auth0Client.logout(...p),
+      logout: (...p: any) =>
+        auth0Client.logout({
+          ...p,
+          returnTo: `${process.env.REACT_APP_AUTH0_LOGOUT_REDIRECT}`,
+        }),
     };
     return (
       <Auth0Context.Provider value={configObject}>

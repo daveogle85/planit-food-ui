@@ -92,7 +92,7 @@ export const styleListComponent = <T>(ListComponent: T) =>
     bottom: 0;
     width: 0;
     max-width: calc(100% - ${tabDim.width}px);
-    z-index: ${props => props.theme.zIndex.two};
+    z-index: ${props => props.theme.zIndex.three};
     transition: 0.5s;
     ${tab}
 

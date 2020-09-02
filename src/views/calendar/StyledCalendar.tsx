@@ -34,6 +34,13 @@ export const styledCalendar = (Calendar: React.ComponentType) =>
       padding: ${props => props.theme.spacing.xSmall};
     }
 
+    .fc-button-primary,
+    .fc-h-event {
+      background-color: ${props => props.theme.colours.background.logoBlue};
+      border: ${props =>
+        props.theme.border.thin(props.theme.colours.background.logoBlue)};
+    }
+
     .fc-header-toolbar {
       display: flex;
       flex-direction: column;
