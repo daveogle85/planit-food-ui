@@ -8,6 +8,6 @@ export const styledWeekView = (WeekView: React.ComponentType) => styled(
   background-image: linear-gradient(
     315deg,
     ${props => props.theme.colours.background.weekViewPurple} 0%,
-    ${props => props.theme.colours.background.weekViewBlue} 74%
+    ${props => props.theme.colours.background.logoBlue} 74%
   );
 `;
