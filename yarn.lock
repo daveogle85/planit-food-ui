@@ -1245,19 +1245,19 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@fullcalendar/common@~5.3.0", "@fullcalendar/common@~5.3.1":
+"@fullcalendar/common@~5.3.1":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@fullcalendar/common/-/common-5.3.1.tgz#9193032cf88f12ebcd8337ef6e98b23fbbbf04ca"
   integrity sha512-2PREEpiFQSDN5MNdoD/OkpJ+d7FPtN2TwTJMsuq3fTjmj3nM+utrxBmUr9a2F6WWW1X+xGU5nHQA52vhqIiQOQ==
   dependencies:
     tslib "^2.0.0"
 
-"@fullcalendar/daygrid@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.3.0.tgz#d3107a32c4f9c3e1a4bb7084f5fc310b1f92a2d0"
-  integrity sha512-YDE7Pnxf+jkkQjogYPEgHDn4mahgUl2eNJRSytQOBJDVrsWcR/nAXI0PhsWHKi86BZVviEiEjzuLv+e4jeIVCg==
+"@fullcalendar/daygrid@^5.3.2":
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.3.2.tgz#c12160fb76729f13dc423c0db12664969ef01af0"
+  integrity sha512-BK+YIecF3q9d/+6lAnf6WiJEEs7Wpa/mu9gXpkEf8vn4nl2bicPHUwykg5dUMCBy7ADAkDoL7VuBVi0XBRtPYw==
   dependencies:
-    "@fullcalendar/common" "~5.3.0"
+    "@fullcalendar/common" "~5.3.1"
     tslib "^2.0.0"
 
 "@fullcalendar/interaction@^5.3.1":
