@@ -1268,12 +1268,12 @@
     "@fullcalendar/common" "~5.3.1"
     tslib "^2.0.0"
 
-"@fullcalendar/react@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-5.3.0.tgz#0d6958b2b0cd5453cb19dd726248d097be36bfa2"
-  integrity sha512-mRvU15dqDH29GGGx+JOFEGV7ZXkj+K+gg9aIiLC78geXPH3878OKw56EmNcr5mDXJDjHb5ma47ZqIfQUyTZqiQ==
+"@fullcalendar/react@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-5.3.1.tgz#b7b86f6b2dc8315b51d4c05663e4e4aef9ff680a"
+  integrity sha512-CuZSaOniy9XmISRMJcN241dGBUDIOMHU5RCCISjahIDZb7+qmQvSC572GYh3P4iYzoiMLMUtNU9flXvxASCUVw==
   dependencies:
-    "@fullcalendar/common" "~5.3.0"
+    "@fullcalendar/common" "~5.3.1"
     tslib "^2.0.0"
 
 "@hapi/address@2.x.x":
