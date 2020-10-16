@@ -28,7 +28,7 @@
     "emotion-theming": "^10.0.27",
     "jest-emotion": "^10.0.32",
     "react": "^16.14.0",
-    "react-dom": "^16.13.1",
+    "react-dom": "^16.14.0",
     "react-multi-carousel": "^2.5.5",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
