@@ -10,7 +10,7 @@
     "@fullcalendar/interaction": "^5.3.1",
     "@fullcalendar/react": "^5.3.1",
     "@reduxjs/toolkit": "^1.4.0",
-    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^10.4.9",
     "@testing-library/user-event": "^12.1.10",
     "@types/classnames": "^2.2.10",
